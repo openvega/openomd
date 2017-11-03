@@ -13,54 +13,13 @@
   <packaging>nar</packaging>
 
   <build>
+    <defaultGoal>deploy</defaultGoal>
     <plugins>
       <plugin>
         <groupId>com.github.maven-nar</groupId>
         <artifactId>nar-maven-plugin</artifactId>
-        <configuration>
-          <libraries>
-            <library>
-              <type>static</type>
-            </library>
-          </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <executions>
-          <execution>
-            <id>sbe</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>java</executable>
-              <arguments>
-                <argument>-Dsbe.target.language=cpp</argument>
-                <argument>-Dsbe.output.dir=src/main/include</argument>
-                <argument>-classpath</argument>
-                <classpath/>
-                <argument>uk.co.real_logic.sbe.SbeTool</argument>
-                <argument>src/nar/resources/noarch/omdc-sbe.xml</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
+        <extensions>true</extensions>
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>uk.co.real-logic</groupId>
-      <artifactId>sbe-all</artifactId>
-    </dependency>
-  </dependencies>
 </project>

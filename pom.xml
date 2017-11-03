@@ -17,7 +17,13 @@
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->
     <wpcap.win.version>4.1.2</wpcap.win.version>
   </properties>
-
+  <distributionManagement>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>snapshots</name>
+      <url>http://hkvmmarapppro02:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
   <profiles>
     <profile>
       <id>linux</id>
