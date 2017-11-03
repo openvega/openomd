@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<messageSchema xmlns:ns2="http://www.fixprotocol.org/ns/simple/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" package="omdc.sbe" id="1" version="1" semanticVersion="FIX5SP2" description="OMDD sbe" byteOrder="littleEndian">
+  <types>
+    <type name="CHAR" description="char" primitiveType="char"/>
+    <type name="Int16" description="int16" primitiveType="int16"/>
+    <type name="Int32" description="int32" primitiveType="int32"/>
+    <type name="Int32NULL" presence="optional" nullValue="2147483647" primitiveType="int32"/>
+    <type name="Int32Or1" presence="optional" nullValue="1" primitiveType="int32"/>
+    <type name="Int64NULL" presence="optional" nullValue="9223372036854775807" primitiveType="int64"/>
+    <type name="Int8" description="int8" primitiveType="int8"/>
+    <type name="Int8NULL" description="Integer 8 with a null value" presence="optional" nullValue="127" primitiveType="int8"/>
+    <type name="NewSeqNo" description="NewSeqNo" presence="constant" length="4" primitiveType="uint32" semanticType="Int">1</type>
+    <type name="uInt16" description="uInt16" primitiveType="uint16"/>
+    <type name="uInt32" description="uInt32" primitiveType="uint32"/>
+    <type name="uInt32NULL" description="uInt32NULL" presence="optional" nullValue="4294967295" primitiveType="uint32"/>
+    <type name="uInt64" description="uInt64" primitiveType="uint64"/>
+    <type name="uInt64NULL" description="uInt64NULL" presence="optional" nullValue="18446744073709551615" primitiveType="uint64"/>
+    <type name="uInt8" description="uInt8" primitiveType="uint8"/>
+    <type name="uInt8NULL" description="uInt8NULL" presence="optional" nullValue="255" primitiveType="uint8"/>
+    <type name="FillerT3" length="3" primitiveType="char" semanticType="String"/>
+    <type name="FillerT2" primitiveType="int32"/>
+    <composite name="groupSize" description="Repeating group dimension" semanticType="NumInGroup">
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
+      <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+    </composite>
+    <composite name="messageHeader" description="Template ID and length of message root">
+      <type name="msgSize" primitiveType="uint16" description="Length of entire message, including binary header in number of bytes"/>
+      <type name="blockLength" primitiveType="uint16" description="Number of message"/>
+      <type name="templateId" primitiveType="uint16" description="filler"/>
+      <type name="schemaId" primitiveType="uint16" description="Message Seq Num"/>
+      <type name="version" primitiveType="uint16" description="Send time"/>
+    </composite>
+  </types>
+  <message name="AggregateOrderBookUpdate" id="53" description="AggregateOrderBookUpdate" semanticType="4">
+    <field name="SecurityCode" id="101" type="uint32" description="SecurityCode" semanticType="Int"/>
+    <field name="Filler3" id="102" type="FillerT3" description="Filler"/>
+    <group name="NoEntries" id="104" description="NoEntries" dimensionType="groupSize">
+      <field name="AggregateQuantity" id="105" type="uint64" description="AggregateQuantity" semanticType="Int"/>
+      <field name="Price" id="106" type="int32" description="Price" semanticType="Int"/>
+      <field name="NumberOfOrders" id="107" type="uint32" description="Num of Orders" semanticType="Int"/>
+      <field name="Side" id="108" type="uint16" description="Side" semanticType="Int"/>
+      <field name="PriceLevel" id="109" type="uint8" description="PriceLevel" semanticType="Int"/>
+      <field name="UpdateAction" id="110" type="uint8" description="UpdateAction" semanticType="Int"/>
+    </group>
+  </message>
+  <message name="AddOrder" id="30" description="AddOrder" semanticType="4">
+    <field name="SecurityCode" id="101" type="uint32" description="SecurityCode" semanticType="Int"/>
+    <field name="OrderId" id="202" type="uint64" description="OrderId" semanticType="Int"/>
+    <field name="Price" id="106" type="int32" description="Price" semanticType="Int"/>
+    <field name="Quantity" id="203" type="uint32" description="Quantity" semanticType="Int"/>
+    <field name="Side" id="108" type="uint16" description="Side" semanticType="Int"/>
+    <field name="OrderType" id="204" type="char" description="orderType" semanticType="char"/>
+    <field name="Filler" id="205" type="char" description="filler" semanticType="Int"/>
+    <field name="OrderBookPosition" id="206" type="int32" description="OrderBookPosition" semanticType="Int"/>
+  </message>
+  <message name="ModifyOrder" id="31" description="ModifyOrder" semanticType="4">
+    <field name="SecurityCode" id="101" type="uint32" description="SecurityCode" semanticType="Int"/>
+    <field name="OrderId" id="202" type="uint64" description="OrderId" semanticType="Int"/>
+    <field name="Quantity" id="203" type="uint32" description="Quantity" semanticType="Int"/>
+    <field name="Side" id="108" type="uint16" description="Side" semanticType="Int"/>
+    <field name="Filler2" id="205" type="FillerT2" description="filler" semanticType="Int"/>
+    <field name="OrderBookPosition" id="206" type="int32" description="OrderBookPosition" semanticType="Int"/>
+  </message>
+  <message name="DeleteOrder" id="32" description="DeleteOrder" semanticType="4">
+    <field name="SecurityCode" id="101" type="uint32" description="SecurityCode" semanticType="Int"/>
+    <field name="OrderId" id="202" type="uint64" description="OrderId" semanticType="Int"/>
+    <field name="Side" id="108" type="uint16" description="Side" semanticType="Int"/>
+  </message>
+</messageSchema>
