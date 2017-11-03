@@ -24,6 +24,9 @@
     <Xml Include="src\nar\resources\noarch\omdc-sbe.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="pom-gen.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\include\openomd\parser.h">

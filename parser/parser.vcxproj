@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="pom-gen.xml" />
     <Xml Include="pom.xml">
       <SubType>Designer</SubType>
     </Xml>
