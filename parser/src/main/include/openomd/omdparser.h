@@ -32,7 +32,7 @@ class parser_api OmdParser
     }
 
     template <typename _Callback>
-    static void process(char* data, size_t bytesRecvd, _Callback& callback)
+    static void parse(char* data, size_t bytesRecvd, _Callback& callback)
     {
         if (bytesRecvd >= sizeof(PktHdr))
         {
