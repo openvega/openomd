@@ -170,6 +170,11 @@
         <artifactId>sbe-all</artifactId>
         <version>${sbe.version}</version>
       </dependency>
+      <dependency>
+        <groupId>uk.co.real-logic</groupId>
+        <artifactId>sbe-tool</artifactId>
+        <version>${sbe.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <modules>

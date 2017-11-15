@@ -24,6 +24,7 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="src\nar\resources\noarch\omdc-sbe.xml" />
+    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h" />
@@ -32,8 +33,18 @@
     <ClInclude Include="src\main\include\omdc_sbe\GroupSize.h" />
     <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h" />
     <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\AddOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\DeleteOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\MessageHeader.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\ModifyOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\RefreshComplete.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionBase.h" />
+    <ClInclude Include="src\main\include\openomd\multicastutil.h" />
     <ClInclude Include="src\main\include\openomd\omdparser.h" />
     <ClInclude Include="src\main\include\openomd\parser.h" />
+    <ClInclude Include="src\main\include\sbe\sbe.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\c\omdparser.cpp" />
@@ -117,7 +128,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>..\copydll.bat $(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,7 +148,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>..\copydll.bat $(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,7 +172,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>..\copydll.bat $(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -182,7 +196,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>..\copydll.bat $(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

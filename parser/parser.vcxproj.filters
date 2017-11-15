@@ -16,6 +16,12 @@
     <Filter Include="Header Files\sbe">
       <UniqueIdentifier>{1d0b02c2-dc91-45d8-90f4-69c9ba9b774c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\sbe\omdc">
+      <UniqueIdentifier>{9e850203-c45f-4d0a-8525-4bf403c5b45b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sbe\omdd">
+      <UniqueIdentifier>{d529ead5-cf1c-4b90-9a73-1c99521727db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pom.xml">
@@ -27,6 +33,9 @@
     <Xml Include="pom-gen.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\include\openomd\parser.h">
@@ -36,22 +45,52 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h">
-      <Filter>Header Files\sbe</Filter>
+      <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h">
-      <Filter>Header Files\sbe</Filter>
+      <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\DeleteOrder.h">
-      <Filter>Header Files\sbe</Filter>
+      <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\GroupSize.h">
-      <Filter>Header Files\sbe</Filter>
+      <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h">
-      <Filter>Header Files\sbe</Filter>
+      <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h">
+      <Filter>Header Files\sbe\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\AddOrder.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\DeleteOrder.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\MessageHeader.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\ModifyOrder.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\RefreshComplete.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionBase.h">
+      <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\sbe\sbe.h">
       <Filter>Header Files\sbe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\multicastutil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
