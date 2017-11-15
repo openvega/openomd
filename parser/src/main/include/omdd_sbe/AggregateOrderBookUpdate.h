@@ -1,6 +1,6 @@
 /* Generated SBE (Simple Binary Encoding) message codec */
-#ifndef _OMDC_SBE_AGGREGATEORDERBOOKUPDATE_H_
-#define _OMDC_SBE_AGGREGATEORDERBOOKUPDATE_H_
+#ifndef _OMDD_SBE_AGGREGATEORDERBOOKUPDATE_H_
+#define _OMDD_SBE_AGGREGATEORDERBOOKUPDATE_H_
 
 #if defined(SBE_HAVE_CMATH)
 /* cmath needed for std::numeric_limits<double>::quiet_NaN() */
@@ -35,7 +35,7 @@
 
 using namespace sbe;
 
-namespace omdc {
+namespace omdd {
 namespace sbe {
 
 class AggregateOrderBookUpdate
@@ -119,7 +119,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
     {
-        return (std::uint16_t)53;
+        return (std::uint16_t)353;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeSchemaId() SBE_NOEXCEPT
@@ -190,35 +190,35 @@ public:
         return m_actingVersion;
     }
 
-    static SBE_CONSTEXPR std::uint16_t securityCodeId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t orderbookIDId() SBE_NOEXCEPT
     {
         return 101;
     }
 
-    static SBE_CONSTEXPR std::uint64_t securityCodeSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderbookIDSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool securityCodeInActingVersion() SBE_NOEXCEPT
+    bool orderbookIDInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= securityCodeSinceVersion();
+        return m_actingVersion >= orderbookIDSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t securityCodeEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderbookIDEncodingOffset() SBE_NOEXCEPT
     {
          return 0;
     }
 
 
-    static const char *SecurityCodeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *OrderbookIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -231,32 +231,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint32_t securityCodeNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT32;
     }
 
-    static SBE_CONSTEXPR std::uint32_t securityCodeMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDMinValue() SBE_NOEXCEPT
     {
         return 0;
     }
 
-    static SBE_CONSTEXPR std::uint32_t securityCodeMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDMaxValue() SBE_NOEXCEPT
     {
         return 4294967294;
     }
 
-    static SBE_CONSTEXPR std::size_t securityCodeEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderbookIDEncodingLength() SBE_NOEXCEPT
     {
         return 4;
     }
 
-    std::uint32_t securityCode() const
+    std::uint32_t orderbookID() const
     {
         return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::uint32_t *)(m_buffer + m_offset + 0)));
     }
 
-    AggregateOrderBookUpdate &securityCode(const std::uint32_t value)
+    AggregateOrderBookUpdate &orderbookID(const std::uint32_t value)
     {
         *((std::uint32_t *)(m_buffer + m_offset + 0)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
         return *this;
@@ -763,40 +763,112 @@ public:
             return "";
         }
 
-        static SBE_CONSTEXPR std::uint16_t sideNullValue() SBE_NOEXCEPT
+        static SBE_CONSTEXPR std::uint8_t sideNullValue() SBE_NOEXCEPT
         {
-            return SBE_NULLVALUE_UINT16;
+            return SBE_NULLVALUE_UINT8;
         }
 
-        static SBE_CONSTEXPR std::uint16_t sideMinValue() SBE_NOEXCEPT
+        static SBE_CONSTEXPR std::uint8_t sideMinValue() SBE_NOEXCEPT
         {
-            return (std::uint16_t)0;
+            return (std::uint8_t)0;
         }
 
-        static SBE_CONSTEXPR std::uint16_t sideMaxValue() SBE_NOEXCEPT
+        static SBE_CONSTEXPR std::uint8_t sideMaxValue() SBE_NOEXCEPT
         {
-            return (std::uint16_t)65534;
+            return (std::uint8_t)254;
         }
 
         static SBE_CONSTEXPR std::size_t sideEncodingLength() SBE_NOEXCEPT
         {
-            return 2;
+            return 1;
         }
 
-        std::uint16_t side() const
+        std::uint8_t side() const
         {
-            return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 16)));
+            return (*((std::uint8_t *)(m_buffer + m_offset + 16)));
         }
 
-        NoEntries &side(const std::uint16_t value)
+        NoEntries &side(const std::uint8_t value)
         {
-            *((std::uint16_t *)(m_buffer + m_offset + 16)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+            *((std::uint8_t *)(m_buffer + m_offset + 16)) = (value);
+            return *this;
+        }
+
+        static SBE_CONSTEXPR std::uint16_t fillerId() SBE_NOEXCEPT
+        {
+            return 109;
+        }
+
+        static SBE_CONSTEXPR std::uint64_t fillerSinceVersion() SBE_NOEXCEPT
+        {
+             return 0;
+        }
+
+        bool fillerInActingVersion() SBE_NOEXCEPT
+        {
+    #if defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wtautological-compare"
+    #endif
+            return m_actingVersion >= fillerSinceVersion();
+    #if defined(__clang__)
+    #pragma clang diagnostic pop
+    #endif
+        }
+
+        static SBE_CONSTEXPR std::size_t fillerEncodingOffset() SBE_NOEXCEPT
+        {
+             return 17;
+        }
+
+
+        static const char *FillerMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+        {
+            switch (metaAttribute)
+            {
+                case MetaAttribute::EPOCH: return "unix";
+                case MetaAttribute::TIME_UNIT: return "nanosecond";
+                case MetaAttribute::SEMANTIC_TYPE: return "Int";
+                case MetaAttribute::PRESENCE: return "required";
+            }
+
+            return "";
+        }
+
+        static SBE_CONSTEXPR char fillerNullValue() SBE_NOEXCEPT
+        {
+            return (char)0;
+        }
+
+        static SBE_CONSTEXPR char fillerMinValue() SBE_NOEXCEPT
+        {
+            return (char)32;
+        }
+
+        static SBE_CONSTEXPR char fillerMaxValue() SBE_NOEXCEPT
+        {
+            return (char)126;
+        }
+
+        static SBE_CONSTEXPR std::size_t fillerEncodingLength() SBE_NOEXCEPT
+        {
+            return 1;
+        }
+
+        char filler() const
+        {
+            return (*((char *)(m_buffer + m_offset + 17)));
+        }
+
+        NoEntries &filler(const char value)
+        {
+            *((char *)(m_buffer + m_offset + 17)) = (value);
             return *this;
         }
 
         static SBE_CONSTEXPR std::uint16_t priceLevelId() SBE_NOEXCEPT
         {
-            return 109;
+            return 110;
         }
 
         static SBE_CONSTEXPR std::uint64_t priceLevelSinceVersion() SBE_NOEXCEPT
@@ -868,7 +940,7 @@ public:
 
         static SBE_CONSTEXPR std::uint16_t updateActionId() SBE_NOEXCEPT
         {
-            return 110;
+            return 111;
         }
 
         static SBE_CONSTEXPR std::uint64_t updateActionSinceVersion() SBE_NOEXCEPT
@@ -940,7 +1012,7 @@ public:
 
         static SBE_CONSTEXPR std::uint16_t filler4Id() SBE_NOEXCEPT
         {
-            return 111;
+            return 112;
         }
 
         static SBE_CONSTEXPR std::uint64_t filler4SinceVersion() SBE_NOEXCEPT
