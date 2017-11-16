@@ -55,6 +55,10 @@ class parser_api OmdParser
                     break;
                 case omdd::sbe::AggregateOrderBookUpdate::sbeTemplateId():
                     process<omdd::sbe::AggregateOrderBookUpdate>(data + byteProcess, msgHdr->size, callback);
+                    break;
+                default:
+                    callback.onUnknownMessage(msgHdr->type, msgHdr->size);
+                    break;
                 }
                 byteProcess += msgHdr->size;
             }
