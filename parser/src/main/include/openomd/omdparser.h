@@ -3,6 +3,7 @@
 #include <omdc_sbe/AggregateOrderBookUpdate.h>
 #include <omdd_sbe/AggregateOrderBookUpdate.h>
 #include <omdd_sbe/SeriesDefinitionBase.h>
+#include <omdd_sbe/RefreshComplete.h>
 
 namespace openomd
 {
@@ -21,8 +22,6 @@ class parser_api OmdParser
         uint16_t size;
         uint16_t type;
     };
-
-    OmdParser();
 
     template <typename _Msg, typename _Callback>
     static void process(char* buffer, size_t size, _Callback& callback)
@@ -45,16 +44,21 @@ class parser_api OmdParser
                 MsgHdr* msgHdr = (MsgHdr*) (data + byteProcess);
                 if (msgHdr->size == 0)
                     break;
+                char* pos = data + byteProcess + sizeof(MsgHdr);
+                auto msgSize = msgHdr->size - sizeof(MsgHdr);
                 switch (msgHdr->type)
                 {
                 case omdc::sbe::AggregateOrderBookUpdate::sbeTemplateId():
-                    process<omdc::sbe::AggregateOrderBookUpdate>(data + byteProcess, msgHdr->size, callback);
+                    process<omdc::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback);
                     break;
                 case omdd::sbe::SeriesDefinitionBase::sbeTemplateId():
-                    process<omdd::sbe::SeriesDefinitionBase>(data + byteProcess, msgHdr->size, callback);
+                    process<omdd::sbe::SeriesDefinitionBase>(pos, msgSize, callback);
                     break;
                 case omdd::sbe::AggregateOrderBookUpdate::sbeTemplateId():
-                    process<omdd::sbe::AggregateOrderBookUpdate>(data + byteProcess, msgHdr->size, callback);
+                    process<omdd::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback);
+                    break;
+                case omdd::sbe::RefreshComplete::sbeTemplateId():
+                    process<omdd::sbe::RefreshComplete>(pos, msgSize, callback);
                     break;
                 default:
                     callback.onUnknownMessage(msgHdr->type, msgHdr->size);

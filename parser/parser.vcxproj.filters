@@ -93,9 +93,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main\c\omdparser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>

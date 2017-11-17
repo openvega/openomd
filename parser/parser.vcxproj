@@ -46,9 +46,6 @@
     <ClInclude Include="src\main\include\openomd\parser.h" />
     <ClInclude Include="src\main\include\sbe\sbe.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main\c\omdparser.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1ebfd4e7-64ad-4e23-8288-a7775bef2900}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
