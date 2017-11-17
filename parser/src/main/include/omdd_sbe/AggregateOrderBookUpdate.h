@@ -409,7 +409,7 @@ public:
             m_index = -1;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            *m_positionPtr = *m_positionPtr + 3;
+            *m_positionPtr = *m_positionPtr + 1;
         }
 
         inline void wrapForEncode(char *buffer, const std::uint16_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
@@ -435,7 +435,7 @@ public:
             m_blockLength = 24;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            *m_positionPtr = *m_positionPtr + 3;
+            *m_positionPtr = *m_positionPtr + 1;
         }
 
         static SBE_CONSTEXPR std::uint64_t sbeHeaderSize() SBE_NOEXCEPT

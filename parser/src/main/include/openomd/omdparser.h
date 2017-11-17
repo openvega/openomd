@@ -27,7 +27,7 @@ public:
     template <typename _Msg, typename _Callback>
     static void process(char* buffer, size_t size, _Callback& callback)
     {
-        _Msg msg(buffer, size, sizeof(MsgHdr), _Msg::sbeSchemaVersion());
+        _Msg msg(buffer, size, _Msg::sbeBlockLength(), _Msg::sbeSchemaVersion());
         callback.onMessage(msg);
     }
 
