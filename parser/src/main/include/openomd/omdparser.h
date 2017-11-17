@@ -23,6 +23,7 @@ class parser_api OmdParser
         uint16_t type;
     };
 
+public:
     template <typename _Msg, typename _Callback>
     static void process(char* buffer, size_t size, _Callback& callback)
     {
