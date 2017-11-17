@@ -25,14 +25,14 @@ class parser_api OmdParser
 
 public:
     template <typename _Msg, typename _Callback>
-    static void process(char* buffer, size_t size, _Callback& callback)
+    static void process(char* buffer, size_t size, _Callback& callback, int32_t partition)
     {
         _Msg msg(buffer, size, _Msg::sbeBlockLength(), _Msg::sbeSchemaVersion());
-        callback.onMessage(msg);
+        callback.onMessage(msg, partition);
     }
 
     template <typename _Callback>
-    static void parse(char* data, size_t bytesRecvd, _Callback& callback)
+    static void parse(char* data, size_t bytesRecvd, _Callback& callback, int32_t partition)
     {
         if (bytesRecvd >= sizeof(PktHdr))
         {
@@ -50,16 +50,16 @@ public:
                 switch (msgHdr->type)
                 {
                 case omdc::sbe::AggregateOrderBookUpdate::sbeTemplateId():
-                    process<omdc::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback);
+                    process<omdc::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback, partition);
                     break;
                 case omdd::sbe::SeriesDefinitionBase::sbeTemplateId():
-                    process<omdd::sbe::SeriesDefinitionBase>(pos, msgSize, callback);
+                    process<omdd::sbe::SeriesDefinitionBase>(pos, msgSize, callback, partition);
                     break;
                 case omdd::sbe::AggregateOrderBookUpdate::sbeTemplateId():
-                    process<omdd::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback);
+                    process<omdd::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback, partition);
                     break;
                 case omdd::sbe::RefreshComplete::sbeTemplateId():
-                    process<omdd::sbe::RefreshComplete>(pos, msgSize, callback);
+                    process<omdd::sbe::RefreshComplete>(pos, msgSize, callback, partition);
                     break;
                 default:
                     callback.onUnknownMessage(msgHdr->type, msgHdr->size);
