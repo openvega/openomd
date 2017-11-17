@@ -37,7 +37,7 @@ public:
         std::string const& listenIp,
         std::string const& multicastIp,
         std::string const& outboundIp,
-        uint16_t port, _CB& callback, IOServiceLC& ioServiceLC, int32_t partition = 0)
+        uint16_t port, int32_t partition, _CB& callback, IOServiceLC& ioServiceLC)
         : _callback{callback}
         , _ioService{ioServiceLC.ioService()}
         , _socket{ioServiceLC.ioService()}
