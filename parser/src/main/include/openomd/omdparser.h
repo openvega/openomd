@@ -49,16 +49,16 @@ public:
                 auto msgSize = msgHdr->size - sizeof(MsgHdr);
                 switch (msgHdr->type)
                 {
-                case omdc::sbe::AggregateOrderBookUpdate::sbeTemplateId():
+                case 53: //omdc::sbe::AggregateOrderBookUpdate::sbeTemplateId():
                     process<omdc::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback, partition);
                     break;
-                case omdd::sbe::SeriesDefinitionBase::sbeTemplateId():
+                case 303: //omdd::sbe::SeriesDefinitionBase::sbeTemplateId():
                     process<omdd::sbe::SeriesDefinitionBase>(pos, msgSize, callback, partition);
                     break;
-                case omdd::sbe::AggregateOrderBookUpdate::sbeTemplateId():
+                case 353: //omdd::sbe::AggregateOrderBookUpdate::sbeTemplateId():
                     process<omdd::sbe::AggregateOrderBookUpdate>(pos, msgSize, callback, partition);
                     break;
-                case omdd::sbe::RefreshComplete::sbeTemplateId():
+                case 203: //omdd::sbe::RefreshComplete::sbeTemplateId():
                     process<omdd::sbe::RefreshComplete>(pos, msgSize, callback, partition);
                     break;
                 default:
