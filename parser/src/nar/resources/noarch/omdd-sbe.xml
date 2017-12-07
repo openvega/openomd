@@ -72,4 +72,17 @@
     <field name="OrderId" id="202" type="uint64" description="OrderId" semanticType="Int"/>
     <field name="Side" id="108" type="uint8" description="Side" semanticType="Int"/>
   </message>
+  <message name="Trade" id="350" description="Trade" semanticType="4">
+    <field name="OrderBookID" id="101" type="uint32" description="OrderBookID" semanticType="Int"/>
+    <field name="OrderId" id="202" type="uint64" description="OrderId" semanticType="Int"/>
+    <field name="Price" id="106" type="int32" description="Price" semanticType="Int"/>
+    <field name="TradeID" id="301" type="uint64" description="TradeID" semanticType="Int"/>
+    <field name="ComboGroupID" id="302" type="uint32" description="ComboGroupID" semanticType="Int"/>
+    <field name="Side" id="108" type="uint8" description="Side" semanticType="Int"/>
+    <field name="DealType" id="303" type="uint8" description="DealType" semanticType="Int"/>
+    <field name="TradeCondition" id="304" type="uint16" description="TradeCondition" semanticType="Int"/>
+    <field name="DealInfo" id="305" type="uint16" description="DealInfo" semanticType="Int"/>
+    <field name="Filler2" id="108" type="FillerT2" description="filler" semanticType="Int"/>
+    <field name="Quantity" id="203" type="uint64" description="Quantity" semanticType="Int"/>
+  </message>
 </messageSchema>
