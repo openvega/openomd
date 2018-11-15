@@ -17,13 +17,6 @@
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->
     <wpcap.win.version>4.1.2</wpcap.win.version>
   </properties>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>snapshots</name>
-      <url>http://hkvmmarapppro02:8081/repository/maven-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
   <profiles>
     <profile>
       <id>linux</id>
@@ -149,7 +142,7 @@
         <plugin>
           <groupId>com.github.maven-nar</groupId>
           <artifactId>nar-maven-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.5.2</version>
           <extensions>true</extensions>
           <executions>
             <execution>

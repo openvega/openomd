@@ -31,7 +31,8 @@
 #include <sbe/sbe.h>
 
 #include "MessageHeader.h"
-#include "GroupSize.h"
+#include "GroupSize8.h"
+#include "GroupSize16.h"
 
 using namespace sbe;
 
@@ -114,7 +115,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeBlockLength() SBE_NOEXCEPT
     {
-        return (std::uint16_t)14;
+        return (std::uint16_t)16;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
@@ -218,13 +219,13 @@ public:
     }
 
 
-    static const char *SecurityCodeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *securityCodeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -264,7 +265,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t orderIdId() SBE_NOEXCEPT
     {
-        return 202;
+        return 102;
     }
 
     static SBE_CONSTEXPR std::uint64_t orderIdSinceVersion() SBE_NOEXCEPT
@@ -290,13 +291,13 @@ public:
     }
 
 
-    static const char *OrderIdMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderIdMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -336,7 +337,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sideId() SBE_NOEXCEPT
     {
-        return 108;
+        return 103;
     }
 
     static SBE_CONSTEXPR std::uint64_t sideSinceVersion() SBE_NOEXCEPT
@@ -362,13 +363,13 @@ public:
     }
 
 
-    static const char *SideMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *sideMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -403,6 +404,78 @@ public:
     DeleteOrder &side(const std::uint16_t value)
     {
         *((std::uint16_t *)(m_buffer + m_offset + 12)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        return *this;
+    }
+
+    static SBE_CONSTEXPR std::uint16_t fillerId() SBE_NOEXCEPT
+    {
+        return 201;
+    }
+
+    static SBE_CONSTEXPR std::uint64_t fillerSinceVersion() SBE_NOEXCEPT
+    {
+         return 0;
+    }
+
+    bool fillerInActingVersion() SBE_NOEXCEPT
+    {
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+#endif
+        return m_actingVersion >= fillerSinceVersion();
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+    }
+
+    static SBE_CONSTEXPR std::size_t fillerEncodingOffset() SBE_NOEXCEPT
+    {
+         return 14;
+    }
+
+
+    static const char *fillerMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    {
+        switch (metaAttribute)
+        {
+            case MetaAttribute::EPOCH: return "unix";
+            case MetaAttribute::TIME_UNIT: return "nanosecond";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
+            case MetaAttribute::PRESENCE: return "required";
+        }
+
+        return "";
+    }
+
+    static SBE_CONSTEXPR std::uint16_t fillerNullValue() SBE_NOEXCEPT
+    {
+        return SBE_NULLVALUE_UINT16;
+    }
+
+    static SBE_CONSTEXPR std::uint16_t fillerMinValue() SBE_NOEXCEPT
+    {
+        return (std::uint16_t)0;
+    }
+
+    static SBE_CONSTEXPR std::uint16_t fillerMaxValue() SBE_NOEXCEPT
+    {
+        return (std::uint16_t)65534;
+    }
+
+    static SBE_CONSTEXPR std::size_t fillerEncodingLength() SBE_NOEXCEPT
+    {
+        return 2;
+    }
+
+    std::uint16_t filler() const
+    {
+        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 14)));
+    }
+
+    DeleteOrder &filler(const std::uint16_t value)
+    {
+        *((std::uint16_t *)(m_buffer + m_offset + 14)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
         return *this;
     }
 };

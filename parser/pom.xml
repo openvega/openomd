@@ -13,12 +13,25 @@
   <packaging>nar</packaging>
 
   <build>
-    <defaultGoal>deploy</defaultGoal>
     <plugins>
       <plugin>
         <groupId>com.github.maven-nar</groupId>
         <artifactId>nar-maven-plugin</artifactId>
-        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>static</type>
+            </library>
+          </libraries>
+          <tests>
+            <test>
+              <name>gtest_main</name>
+              <args>
+                <arg>--gtest_output=xml</arg>
+              </args>
+            </test>
+          </tests>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -26,6 +39,11 @@
     <dependency>
       <groupId>uk.co.real-logic</groupId>
       <artifactId>sbe-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openomd</groupId>
+      <artifactId>gtest</artifactId>
+      <version>1.8.0</version>
     </dependency>
   </dependencies>
 </project>

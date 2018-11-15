@@ -1,5 +1,4 @@
 #pragma once
-#include <openomd/parser.h>
 #include <omdc_sbe/AggregateOrderBookUpdate.h>
 #include <omdd_sbe/AggregateOrderBookUpdate.h>
 #include <omdd_sbe/SeriesDefinitionBase.h>
@@ -7,7 +6,7 @@
 
 namespace openomd
 {
-class parser_api OmdParser
+class OmdParser
 {
     struct PktHdr
     {

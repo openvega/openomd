@@ -31,7 +31,7 @@
 #include <sbe/sbe.h>
 
 #include "MessageHeader.h"
-#include "GroupSize.h"
+#include "GroupSize8.h"
 
 using namespace sbe;
 
@@ -119,7 +119,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
     {
-        return (std::uint16_t)30;
+        return (std::uint16_t)330;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeSchemaId() SBE_NOEXCEPT
@@ -218,13 +218,13 @@ public:
     }
 
 
-    static const char *OrderBookIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderBookIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -262,73 +262,73 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t orderIdId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t orderIDId() SBE_NOEXCEPT
     {
-        return 202;
+        return 102;
     }
 
-    static SBE_CONSTEXPR std::uint64_t orderIdSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderIDSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool orderIdInActingVersion() SBE_NOEXCEPT
+    bool orderIDInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= orderIdSinceVersion();
+        return m_actingVersion >= orderIDSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t orderIdEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderIDEncodingOffset() SBE_NOEXCEPT
     {
          return 4;
     }
 
 
-    static const char *OrderIdMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint64_t orderIdNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderIDNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT64;
     }
 
-    static SBE_CONSTEXPR std::uint64_t orderIdMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderIDMinValue() SBE_NOEXCEPT
     {
         return 0x0L;
     }
 
-    static SBE_CONSTEXPR std::uint64_t orderIdMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderIDMaxValue() SBE_NOEXCEPT
     {
         return 0xfffffffffffffffeL;
     }
 
-    static SBE_CONSTEXPR std::size_t orderIdEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderIDEncodingLength() SBE_NOEXCEPT
     {
         return 8;
     }
 
-    std::uint64_t orderId() const
+    std::uint64_t orderID() const
     {
         return SBE_LITTLE_ENDIAN_ENCODE_64(*((std::uint64_t *)(m_buffer + m_offset + 4)));
     }
 
-    AddOrder &orderId(const std::uint64_t value)
+    AddOrder &orderID(const std::uint64_t value)
     {
         *((std::uint64_t *)(m_buffer + m_offset + 4)) = SBE_LITTLE_ENDIAN_ENCODE_64(value);
         return *this;
@@ -336,7 +336,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t priceId() SBE_NOEXCEPT
     {
-        return 106;
+        return 103;
     }
 
     static SBE_CONSTEXPR std::uint64_t priceSinceVersion() SBE_NOEXCEPT
@@ -362,13 +362,13 @@ public:
     }
 
 
-    static const char *PriceMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *priceMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -408,7 +408,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t quantityId() SBE_NOEXCEPT
     {
-        return 203;
+        return 104;
     }
 
     static SBE_CONSTEXPR std::uint64_t quantitySinceVersion() SBE_NOEXCEPT
@@ -434,13 +434,13 @@ public:
     }
 
 
-    static const char *QuantityMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *quantityMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -480,7 +480,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sideId() SBE_NOEXCEPT
     {
-        return 108;
+        return 105;
     }
 
     static SBE_CONSTEXPR std::uint64_t sideSinceVersion() SBE_NOEXCEPT
@@ -506,13 +506,13 @@ public:
     }
 
 
-    static const char *SideMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *sideMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -552,7 +552,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t lotTypeId() SBE_NOEXCEPT
     {
-        return 204;
+        return 106;
     }
 
     static SBE_CONSTEXPR std::uint64_t lotTypeSinceVersion() SBE_NOEXCEPT
@@ -578,13 +578,13 @@ public:
     }
 
 
-    static const char *LotTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *lotTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -624,7 +624,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t orderTypeId() SBE_NOEXCEPT
     {
-        return 205;
+        return 107;
     }
 
     static SBE_CONSTEXPR std::uint64_t orderTypeSinceVersion() SBE_NOEXCEPT
@@ -650,13 +650,13 @@ public:
     }
 
 
-    static const char *OrderTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 
@@ -696,7 +696,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t orderBookPositionId() SBE_NOEXCEPT
     {
-        return 206;
+        return 108;
     }
 
     static SBE_CONSTEXPR std::uint64_t orderBookPositionSinceVersion() SBE_NOEXCEPT
@@ -722,13 +722,13 @@ public:
     }
 
 
-    static const char *OrderBookPositionMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderBookPositionMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
             case MetaAttribute::EPOCH: return "unix";
             case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "Int";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
             case MetaAttribute::PRESENCE: return "required";
         }
 

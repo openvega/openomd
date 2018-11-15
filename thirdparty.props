@@ -5,6 +5,7 @@
     <BoostVersion>1.59.0</BoostVersion>
     <GmockVersion>1.8.0</GmockVersion>
     <WpcapVersion>4.1.2</WpcapVersion>
+    <BoostDir>C:\dev\thirdparty\boost_1_59_0</BoostDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -17,6 +18,9 @@
     </BuildMacro>
     <BuildMacro Include="WpcapVersion">
       <Value>$(WpcapVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoostDir">
+      <Value>$(BoostDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

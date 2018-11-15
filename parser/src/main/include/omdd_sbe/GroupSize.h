@@ -106,7 +106,7 @@ public:
 
     static SBE_CONSTEXPR std::uint64_t encodedLength() SBE_NOEXCEPT
     {
-        return 1;
+        return 3;
     }
 
     std::uint64_t offset() const SBE_NOEXCEPT
