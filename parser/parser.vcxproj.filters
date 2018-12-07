@@ -258,9 +258,4 @@
       <Filter>Header Files\sbe\omdd</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main\c\multicastutil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>

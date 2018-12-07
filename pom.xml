@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.openomd</groupId>
+  <groupId>io.github.openvega</groupId>
   <artifactId>openomd</artifactId>
   <name>Open OMD</name>
   <version>1.0-SNAPSHOT</version>
@@ -47,7 +47,6 @@
                 <sysLibs>
                   <sysLib><name>pthread</name></sysLib>
                   <sysLib><name>dl</name></sysLib>
-                  <sysLib><name>pcap</name></sysLib>    <!-- marketdata -->
                 </sysLibs>
               </linker>
             </configuration>
@@ -90,7 +89,6 @@
                 <sysLibs>
                   <sysLib><name>pthread</name></sysLib>
                   <sysLib><name>dl</name></sysLib>
-                  <sysLib><name>pcap</name></sysLib>
                   <sysLib><name>gcov</name></sysLib>
                 </sysLibs>
               </linker>
@@ -159,12 +157,33 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>boost</artifactId>
+        <version>1.68.0</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>gmock</artifactId>
+        <version>1.8.1</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
         <groupId>uk.co.real-logic</groupId>
         <artifactId>sbe-all</artifactId>
         <version>${sbe.version}</version>
       </dependency>
+      
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.openvega</groupId>
+      <artifactId>gmock</artifactId>
+      <type>nar</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <modules>
     <module>parser</module>
   </modules>

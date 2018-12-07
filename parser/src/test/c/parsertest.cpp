@@ -1,4 +1,4 @@
-#include <gtest.h>
+#include <gtest/gtest.h>
 
 TEST(PARSER_TEST, OmdcCannedDataTest)
 {

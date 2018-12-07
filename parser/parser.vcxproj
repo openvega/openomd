@@ -103,14 +103,11 @@
     <ClInclude Include="src\main\include\openomd\omdparser.h" />
     <ClInclude Include="src\main\include\sbe\sbe.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main\c\multicastutil.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1ebfd4e7-64ad-4e23-8288-a7775bef2900}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>parser</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
