@@ -3967,12 +3967,14 @@ public:
             m_buffer = buffer;
             m_bufferLength = bufferLength;
             m_dimensions.wrap(m_buffer, *pos, actingVersion, bufferLength);
-            m_blockLength = m_dimensions.blockLength();
+            // SBE_OMD_HACK
+            m_blockLength = sbeBlockLength();
             m_count = m_dimensions.numInGroup();
             m_index = -1;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            *m_positionPtr = *m_positionPtr + 4;
+            // SBE_OMD_HACK
+            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
         }
 
         inline void wrapForEncode(char *buffer, const std::uint16_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
@@ -3998,7 +4000,8 @@ public:
             m_blockLength = 8;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            *m_positionPtr = *m_positionPtr + 4;
+            // SBE_OMD_HACK
+            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
         }
 
         static SBE_CONSTEXPR std::uint64_t sbeHeaderSize() SBE_NOEXCEPT
