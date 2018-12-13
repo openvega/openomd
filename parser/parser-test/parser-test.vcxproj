@@ -91,6 +91,7 @@
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\target\test-nar\gmock_main-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static;..\target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static;..\target\nar\lib\amd64-Windows-msvc\shared;..\target\nar\lib\amd64-Windows-msvc\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -114,6 +115,7 @@
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\target\test-nar\gmock_main-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static;..\target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static;..\target\nar\lib\amd64-Windows-msvc\shared;..\target\nar\lib\amd64-Windows-msvc\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -139,6 +141,7 @@
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -165,6 +168,7 @@
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -182,7 +186,7 @@
     <ClInclude Include="..\src\test\include\openomd\parser-test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\test\c\parsertest.cpp" />
+    <ClCompile Include="..\src\test\c\omdc.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -115,7 +115,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeBlockLength() SBE_NOEXCEPT
     {
-        return (std::uint16_t)5;
+        return (std::uint16_t)8;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
@@ -334,6 +334,127 @@ public:
         *((std::uint8_t *)(m_buffer + m_offset + 4)) = (value);
         return *this;
     }
+
+    static SBE_CONSTEXPR std::uint16_t fillerId() SBE_NOEXCEPT
+    {
+        return 201;
+    }
+
+    static SBE_CONSTEXPR std::uint64_t fillerSinceVersion() SBE_NOEXCEPT
+    {
+         return 0;
+    }
+
+    bool fillerInActingVersion() SBE_NOEXCEPT
+    {
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+#endif
+        return m_actingVersion >= fillerSinceVersion();
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+    }
+
+    static SBE_CONSTEXPR std::size_t fillerEncodingOffset() SBE_NOEXCEPT
+    {
+         return 5;
+    }
+
+
+    static const char *fillerMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    {
+        switch (metaAttribute)
+        {
+            case MetaAttribute::EPOCH: return "unix";
+            case MetaAttribute::TIME_UNIT: return "nanosecond";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
+            case MetaAttribute::PRESENCE: return "required";
+        }
+
+        return "";
+    }
+
+    static SBE_CONSTEXPR char fillerNullValue() SBE_NOEXCEPT
+    {
+        return (char)0;
+    }
+
+    static SBE_CONSTEXPR char fillerMinValue() SBE_NOEXCEPT
+    {
+        return (char)32;
+    }
+
+    static SBE_CONSTEXPR char fillerMaxValue() SBE_NOEXCEPT
+    {
+        return (char)126;
+    }
+
+    static SBE_CONSTEXPR std::size_t fillerEncodingLength() SBE_NOEXCEPT
+    {
+        return 1;
+    }
+
+    static SBE_CONSTEXPR std::uint64_t fillerLength() SBE_NOEXCEPT
+    {
+        return 3;
+    }
+
+    const char *filler() const
+    {
+        return (m_buffer + m_offset + 5);
+    }
+
+    char filler(const std::uint64_t index) const
+    {
+        if (index >= 3)
+        {
+            throw std::runtime_error("index out of range for filler [E104]");
+        }
+
+        return (*((char *)(m_buffer + m_offset + 5 + (index * 1))));
+    }
+
+    void filler(const std::uint64_t index, const char value)
+    {
+        if (index >= 3)
+        {
+            throw std::runtime_error("index out of range for filler [E105]");
+        }
+
+        *((char *)(m_buffer + m_offset + 5 + (index * 1))) = (value);
+    }
+
+    std::uint64_t getFiller(char *dst, const std::uint64_t length) const
+    {
+        if (length > 3)
+        {
+             throw std::runtime_error("length too large for getFiller [E106]");
+        }
+
+        std::memcpy(dst, m_buffer + m_offset + 5, sizeof(char) * length);
+        return length;
+    }
+
+    SecurityStatus &putFiller(const char *src)
+    {
+        std::memcpy(m_buffer + m_offset + 5, src, sizeof(char) * 3);
+        return *this;
+    }
+
+    std::string getFillerAsString() const
+    {
+        std::string result(m_buffer + m_offset + 5, 3);
+        return result;
+    }
+
+    SecurityStatus &putFiller(const std::string& str)
+    {
+        std::memcpy(m_buffer + m_offset + 5, str.c_str(), 3);
+        return *this;
+    }
+
 };
 }
 }

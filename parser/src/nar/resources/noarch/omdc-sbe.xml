@@ -99,7 +99,7 @@
     <field name="stampDutyFlag" id="118" type="char" semanticType="char"/>
     <field name="filler4" id="204" type="char"/>
     <field name="listingDate" id="119" type="uint32"/>
-    <field name="eelistingDate" id="120" type="uint32"/>
+    <field name="delistingDate" id="120" type="uint32"/>
     <field name="freeText" id="121" type="freetext" semanticType="String"/>
     <field name="filler5" id="205" type="filler82" semanticType="String"/>
     <field name="efnFlag" id="122" type="char" semanticType="char"/>
@@ -151,6 +151,7 @@
   <message name="SecurityStatus" id="21" semanticType="4">
     <field name="securityCode" id="101" type="securitycode"/>
     <field name="suspensionIndicator" id="102" type="uint8"/>
+    <field name="filler" id="201" type="str3"/>
   </message>
   <message name="AddOrder" id="30" semanticType="4">
     <field name="securityCode" id="101" type="securitycode"/>

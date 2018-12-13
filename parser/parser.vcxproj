@@ -100,7 +100,8 @@
     <ClInclude Include="src\main\include\omdd_sbe\TradeAmendment.h" />
     <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h" />
     <ClInclude Include="src\main\include\openomd\multicastutil.h" />
-    <ClInclude Include="src\main\include\openomd\omdparser.h" />
+    <ClInclude Include="src\main\include\openomd\omdbaseparser.h" />
+    <ClInclude Include="src\main\include\openomd\omdcparser.h" />
     <ClInclude Include="src\main\include\sbe\sbe.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

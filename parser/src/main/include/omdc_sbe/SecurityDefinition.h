@@ -2239,35 +2239,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t eelistingDateId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t delistingDateId() SBE_NOEXCEPT
     {
         return 120;
     }
 
-    static SBE_CONSTEXPR std::uint64_t eelistingDateSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t delistingDateSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool eelistingDateInActingVersion() SBE_NOEXCEPT
+    bool delistingDateInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= eelistingDateSinceVersion();
+        return m_actingVersion >= delistingDateSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t eelistingDateEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t delistingDateEncodingOffset() SBE_NOEXCEPT
     {
          return 215;
     }
 
 
-    static const char *eelistingDateMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *delistingDateMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -2280,32 +2280,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint32_t eelistingDateNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t delistingDateNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT32;
     }
 
-    static SBE_CONSTEXPR std::uint32_t eelistingDateMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t delistingDateMinValue() SBE_NOEXCEPT
     {
         return 0;
     }
 
-    static SBE_CONSTEXPR std::uint32_t eelistingDateMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t delistingDateMaxValue() SBE_NOEXCEPT
     {
         return 4294967294;
     }
 
-    static SBE_CONSTEXPR std::size_t eelistingDateEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t delistingDateEncodingLength() SBE_NOEXCEPT
     {
         return 4;
     }
 
-    std::uint32_t eelistingDate() const
+    std::uint32_t delistingDate() const
     {
         return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::uint32_t *)(m_buffer + m_offset + 215)));
     }
 
-    SecurityDefinition &eelistingDate(const std::uint32_t value)
+    SecurityDefinition &delistingDate(const std::uint32_t value)
     {
         *((std::uint32_t *)(m_buffer + m_offset + 215)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
         return *this;

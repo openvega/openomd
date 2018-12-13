@@ -38,9 +38,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\main\include\openomd\omdparser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h">
       <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
@@ -256,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h">
       <Filter>Header Files\sbe\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdbaseparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdcparser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
