@@ -47,9 +47,6 @@
     <ClInclude Include="src\main\include\omdc_sbe\DeleteOrder.h">
       <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\include\omdc_sbe\GroupSize.h">
-      <Filter>Header Files\sbe\omdc</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h">
       <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
@@ -63,9 +60,6 @@
       <Filter>Header Files\sbe\omdd</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdd_sbe\DeleteOrder.h">
-      <Filter>Header Files\sbe\omdd</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main\include\omdd_sbe\GroupSize.h">
       <Filter>Header Files\sbe\omdd</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdd_sbe\MessageHeader.h">
@@ -117,9 +111,6 @@
       <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\SequenceReset.h">
-      <Filter>Header Files\sbe\omdc</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main\include\omdc_sbe\SeriesDefinitionBase.h">
       <Filter>Header Files\sbe\omdc</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\omdc_sbe\AddOddLotOrder.h">

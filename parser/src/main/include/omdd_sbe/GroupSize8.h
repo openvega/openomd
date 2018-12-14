@@ -46,7 +46,8 @@ private:
 
     inline void reset(char *buffer, const std::uint64_t offset, const std::uint64_t bufferLength, const std::uint64_t actingVersion)
     {
-        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 4) > bufferLength), false))
+        // SBE_OMD_HACK
+        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 1) > bufferLength), false))
         {
             throw std::runtime_error("buffer too short for flyweight [E107]");
         }
