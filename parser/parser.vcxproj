@@ -48,6 +48,7 @@
     <ClInclude Include="src\main\include\omdc_sbe\Logon.h" />
     <ClInclude Include="src\main\include\omdc_sbe\LogonResponse.h" />
     <ClInclude Include="src\main\include\omdc_sbe\MarketDefinition.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\MarketTurnover.h" />
     <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h" />
     <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h" />
     <ClInclude Include="src\main\include\omdc_sbe\NominalPrice.h" />
@@ -59,11 +60,13 @@
     <ClInclude Include="src\main\include\omdc_sbe\SecurityDefinition.h" />
     <ClInclude Include="src\main\include\omdc_sbe\SecurityStatus.h" />
     <ClInclude Include="src\main\include\omdc_sbe\SequenceReset.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Statistics.h" />
     <ClInclude Include="src\main\include\omdc_sbe\Trade.h" />
     <ClInclude Include="src\main\include\omdc_sbe\TradeCancel.h" />
     <ClInclude Include="src\main\include\omdc_sbe\TradeTicker.h" />
     <ClInclude Include="src\main\include\omdc_sbe\TradingSessionStatus.h" />
     <ClInclude Include="src\main\include\omdc_sbe\VCMTrigger.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Yield.h" />
     <ClInclude Include="src\main\include\omdd_sbe\AddOrder.h" />
     <ClInclude Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h" />
     <ClInclude Include="src\main\include\omdd_sbe\CalculatedOpeningPrice.h" />

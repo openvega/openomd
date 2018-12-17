@@ -17,6 +17,7 @@
 #include <omdc_sbe/Logon.h>
 #include <omdc_sbe/LogonResponse.h>
 #include <omdc_sbe/MarketDefinition.h>
+#include <omdc_sbe/MarketTurnover.h>
 #include <omdc_sbe/ModifyOrder.h>
 #include <omdc_sbe/NominalPrice.h>
 #include <omdc_sbe/OrderImbalance.h>
@@ -27,11 +28,13 @@
 #include <omdc_sbe/SecurityDefinition.h>
 #include <omdc_sbe/SecurityStatus.h>
 #include <omdc_sbe/SequenceReset.h>
+#include <omdc_sbe/Statistics.h>
 #include <omdc_sbe/Trade.h>
 #include <omdc_sbe/TradeCancel.h>
 #include <omdc_sbe/TradeTicker.h>
 #include <omdc_sbe/TradingSessionStatus.h>
 #include <omdc_sbe/VCMTrigger.h>
+#include <omdc_sbe/Yield.h>
 
 namespace openomd
 {
@@ -64,6 +67,7 @@ public:
                 OMD_SWITCH_CASE(Logon);
                 OMD_SWITCH_CASE(LogonResponse);
                 OMD_SWITCH_CASE(MarketDefinition);
+                OMD_SWITCH_CASE(MarketTurnover);
                 OMD_SWITCH_CASE(ModifyOrder);
                 OMD_SWITCH_CASE(NominalPrice);
                 OMD_SWITCH_CASE(OrderImbalance);
@@ -74,11 +78,13 @@ public:
                 OMD_SWITCH_CASE(SecurityDefinition);
                 OMD_SWITCH_CASE(SecurityStatus);
                 OMD_SWITCH_CASE(SequenceReset);
+                OMD_SWITCH_CASE(Statistics);
                 OMD_SWITCH_CASE(Trade);
                 OMD_SWITCH_CASE(TradeCancel);
                 OMD_SWITCH_CASE(TradeTicker);
                 OMD_SWITCH_CASE(TradingSessionStatus);
                 OMD_SWITCH_CASE(VCMTrigger);
+                OMD_SWITCH_CASE(Yield);
             default:
                 callback.onUnknownMessage(type, msgSize);
                 break;

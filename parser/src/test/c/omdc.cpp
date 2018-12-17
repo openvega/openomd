@@ -27,6 +27,7 @@ public:
     ONMESSAGE(Logon)
     ONMESSAGE(LogonResponse)
     ONMESSAGE(MarketDefinition)
+    ONMESSAGE(MarketTurnover)
     ONMESSAGE(ModifyOrder)
     ONMESSAGE(NominalPrice)
     ONMESSAGE(OrderImbalance)
@@ -37,11 +38,13 @@ public:
     ONMESSAGE(SecurityDefinition)
     ONMESSAGE(SecurityStatus)
     ONMESSAGE(SequenceReset)
+    ONMESSAGE(Statistics)
     ONMESSAGE(Trade)
     ONMESSAGE(TradeCancel)
     ONMESSAGE(TradeTicker)
     ONMESSAGE(TradingSessionStatus)
     ONMESSAGE(VCMTrigger)
+    ONMESSAGE(Yield)
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }
@@ -59,7 +62,6 @@ void processMsg(char* msg, size_t size)
 //{
 //    void onMessage(, int32_t)
 //    {
-//
 //    }
 //    using OMDCProcessor::onMessage;
 //};
@@ -388,12 +390,25 @@ TEST(OMDC_TEST, AddOrder)
 
 TEST(OMDC_TEST, ModifyOrder)
 {
-
 }
 
 TEST(OMDC_TEST, DeleteOrder)
 {
+    char msg[] = "\x44\x00\x02\xba\xe8\xb2\x08\x00\x80\x91\xfe\xec\x45\x0d\x13\x15" \
+        "\x14\x00\x20\x00\xbd\x4a\x00\x00\x03\x28\x9e\x04\x00\x00\x00\x00" \
+        "\x01\x00\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::DeleteOrder const& d, int32_t)
+        {
+            EXPECT_EQ(19133, d.securityCode());
+            EXPECT_EQ(77473795, d.orderId());
+            EXPECT_EQ(1, d.side());            
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, AddOddLotOrder)
@@ -408,7 +423,34 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
 
 TEST(OMDC_TEST, AggregateOrderBookUpdate)
 {
-    
+    char msg[] = "\xe0\x04\x14\xc6\xd0\x18\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15" \
+        "\xcc\x00\x35\x00\xd5\x49\x00\x00\x05\x01\x00\x08" \
+        "\x01\x00\x5e\x01\x01\x16\x00\x0c\x29\x4d\x67\x33\x08\x00\x45\x00" \
+        "\x04\xfc\x00\x00\x40\x00\x01\x11\x72\x88\x0a\x02\x08\x50\xef\x01" \
+        "\x01\x16\x92\x40\xc7\x38\x04\xe8\x33\x47\xe0\x04\x14\xc6\xd0\x18" \
+        "\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15\xcc\x00\x35\x00\xd5\x49" \
+        "\x00\x00\x05\x01\x00\x08\xe0\x93\x04\x00\x00\x00\x00\x00\xe5\x00" \
+        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93" \
+        "\x04\x00\x00\x00\x00\x00\xea\x00\x00\x00\x01\x00\x00\x00\x01\x00" \
+        "\x01\x00\x00\x00\x00\x00\xe0\x93\x04\x00\x00\x00\x00\x00\xe4\x00" \
+        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93" \
+        "\x04\x00\x00\x00\x00\x00\xeb\x00\x00\x00\x01\x00\x00\x00\x01\x00" \
+        "\x02\x02\x00\x00\x00\x00\xe0\x93\x04\x00\x00\x00\x00\x00\xe3\x00" \
+        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93";
+
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t)
+        {
+            EXPECT_EQ(18901, aob.securityCode());
+            auto& en = aob.noEntries();
+            EXPECT_EQ(8, en.count());
+            
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
+
 }
 
 TEST(OMDC_TEST, BrokerQueue)
@@ -424,7 +466,24 @@ TEST(OMDC_TEST, OrderImbalance)
 
 TEST(OMDC_TEST, Trade)
 {
+    char msg[] = "\x54\x01\x0a\xc6\xb3\x8d\x09\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
+        "\x20\x00\x32\x00\x44\x0a\x00\x00\x6b\x01\x00\x00\x42\x59\x00\x00" \
+        "\xb8\x0b\x00\x00\x00\x00\x00\x00\x00\x22\x16\xd9\x45\x0d\x13\x15";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::Trade const& t, int32_t)
+        {
+            EXPECT_EQ(2628, t.securityCode());
+            EXPECT_EQ(363, t.tradeID());
+            EXPECT_EQ(22850, t.price());
+            EXPECT_EQ(3000, t.quantity());
+            EXPECT_EQ(0, t.trdType());
+            EXPECT_EQ(1518572093000000000, t.tradeTime());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, TradeCancel)
@@ -507,14 +566,26 @@ TEST(OMDC_TEST, VCMTrigger)
 
 TEST(OMDC_TEST, Statistics)
 {
-    char msg[] = "\x6c\x00\x02\x01\x41\x3e\x00\x00\x00\x4c\xb0\x70\x17\x0d\x13\x15" \
-        "\x34\x00\x3c\x00\x4e\x09\x00\x00\xbc\x6e\x07\x00\x00\x00\x00\x00" \
-        "\xdc\xda\x0e\xaa\x0d\x00\x00\x00\x2c\xdc\x01\x00\x5c\xd4\x01\x00" \
-        "\xc8\xdb\x01\x00\xa5\xd6\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+    char msg[] = "\x78\x00\x03\x01\xd5\x65\x00\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
+        "\x34\x00\x3c\x00\x44\x0a\x00\x00\x80\x35\x40\x00\x00\x00\x00\x00" \
+        "\xa8\xfe\x5b\x5f\x16\x00\x00\x00\x42\x59\x00\x00\xac\x58\x00\x00" \
+        "\x42\x59\x00\x00\xe8\x58\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
         "\x00\x00\x00\x00";
     
     struct Processor : public OMDCProcessor
     {
+        void onMessage(sbe::Statistics const& s, int32_t)
+        {
+            EXPECT_EQ(2628, s.securityCode());
+            EXPECT_EQ(4208000, s.sharesTraded());
+            EXPECT_EQ(96089145000, s.turnover());
+            EXPECT_EQ(22850, s.highPrice());
+            EXPECT_EQ(22700, s.lowPrice());
+            EXPECT_EQ(22850, s.lastPrice());
+            EXPECT_EQ(22760, s.vwap());
+            EXPECT_EQ(0, s.shortSellSharesTraded());
+            EXPECT_EQ(0, s.shortSellTurnover());
+        }
         using OMDCProcessor::onMessage;
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
