@@ -271,6 +271,27 @@
     <field name="vcmLowerPrice" id="105" type="int32"/>
     <field name="vcmUpperPrice" id="106" type="int32"/>
   </message>
+  <message name="Statistics" id="60" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="sharesTraded" id="102" type="uint64"/>
+    <field name="turnover" id="103" type="int64"/>
+    <field name="highPrice" id="104" type="int32"/>
+    <field name="lowPrice" id="105" type="int32"/>
+    <field name="lastPrice" id="106" type="int32"/>
+    <field name="vwap" id="107" type="int32"/>
+    <field name="shortSellSharesTraded" id="108" type="int64"/>
+    <field name="shortSellTurnover" id="109" type="int64"/>
+  </message>
+  <message name="MarketTurnover" id="61" semanticType="4">
+    <field name="marketCode" id="101" type="str4" semanticType="String"/>
+    <field name="currencyCode" id="102" type="str3"/>
+    <field name="filler" id="201" type="char"/>
+    <field name="turnover" id="103" type="int64"/>
+  </message>
+  <message name="Yield" id="44" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="yield" id="102" type="int32"/>
+  </message>
   <message name="IndexDefinition" id="70" semanticType="4">
     <field name="indexCode" id="101" type="indexcode"/>
     <field name="indexSource" id="102" type="char"/>
