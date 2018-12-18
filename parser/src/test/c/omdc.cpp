@@ -423,29 +423,95 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
 
 TEST(OMDC_TEST, AggregateOrderBookUpdate)
 {
-    char msg[] = "\xe0\x04\x14\xc6\xd0\x18\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15" \
-        "\xcc\x00\x35\x00\xd5\x49\x00\x00\x05\x01\x00\x08" \
-        "\x01\x00\x5e\x01\x01\x16\x00\x0c\x29\x4d\x67\x33\x08\x00\x45\x00" \
-        "\x04\xfc\x00\x00\x40\x00\x01\x11\x72\x88\x0a\x02\x08\x50\xef\x01" \
-        "\x01\x16\x92\x40\xc7\x38\x04\xe8\x33\x47\xe0\x04\x14\xc6\xd0\x18" \
-        "\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15\xcc\x00\x35\x00\xd5\x49" \
-        "\x00\x00\x05\x01\x00\x08\xe0\x93\x04\x00\x00\x00\x00\x00\xe5\x00" \
-        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93" \
-        "\x04\x00\x00\x00\x00\x00\xea\x00\x00\x00\x01\x00\x00\x00\x01\x00" \
-        "\x01\x00\x00\x00\x00\x00\xe0\x93\x04\x00\x00\x00\x00\x00\xe4\x00" \
-        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93" \
-        "\x04\x00\x00\x00\x00\x00\xeb\x00\x00\x00\x01\x00\x00\x00\x01\x00" \
-        "\x02\x02\x00\x00\x00\x00\xe0\x93\x04\x00\x00\x00\x00\x00\xe3\x00" \
-        "\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00\xe0\x93";
+    char msg[] = "\xe0\x04\x14\xc6\xd0\x18\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15\xcc\x00\x35\x00\xd5\x49\x00\x00\x05\x01\x00\x08" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe5\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xea\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe4\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xeb\x00\x00\x00\x01\x00\x00\x00\x01\x00\x02\x02\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe3\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x02\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe2\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe1\x00\x00\x00\x01\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00" \
+        "\xe0\x93\x04\x00\x00\x00\x00\x00\xe0\x00\x00\x00\x01\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00" ;
 
     struct Processor : public OMDCProcessor
     {
         void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t)
         {
             EXPECT_EQ(18901, aob.securityCode());
-            auto& en = aob.noEntries();
-            EXPECT_EQ(8, en.count());
-            
+            auto& ens = aob.noEntries();
+            EXPECT_EQ(8, ens.count());
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(229, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(1, en.priceLevel());
+                EXPECT_EQ(2, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(234, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(1, en.side());
+                EXPECT_EQ(1, en.priceLevel());
+                EXPECT_EQ(0, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(228, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(1, en.priceLevel());
+                EXPECT_EQ(2, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(235, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(1, en.side());
+                EXPECT_EQ(2, en.priceLevel());
+                EXPECT_EQ(2, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(227, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(1, en.priceLevel());
+                EXPECT_EQ(2, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(226, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(1, en.priceLevel());
+                EXPECT_EQ(0, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(225, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(2, en.priceLevel());
+                EXPECT_EQ(0, en.updateAction());
+            }
+            {
+                auto& en = ens.next();
+                EXPECT_EQ(300000, en.aggregateQuantity());
+                EXPECT_EQ(224, en.price());
+                EXPECT_EQ(1, en.numberOfOrders());
+                EXPECT_EQ(0, en.side());
+                EXPECT_EQ(3, en.priceLevel());
+                EXPECT_EQ(0, en.updateAction());
+            }
         }
         using OMDCProcessor::onMessage;
     };
