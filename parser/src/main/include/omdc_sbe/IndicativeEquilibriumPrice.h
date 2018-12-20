@@ -31,7 +31,9 @@
 #include <sbe/sbe.h>
 
 #include "MessageHeader.h"
+#include "GroupSize16Reverse.h"
 #include "GroupSize8.h"
+#include "BrokerQueueItem.h"
 #include "GroupSize16.h"
 
 using namespace sbe;

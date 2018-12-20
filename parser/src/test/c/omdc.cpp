@@ -29,6 +29,7 @@ public:
     ONMESSAGE(MarketDefinition)
     ONMESSAGE(MarketTurnover)
     ONMESSAGE(ModifyOrder)
+    ONMESSAGE(News)
     ONMESSAGE(NominalPrice)
     ONMESSAGE(OrderImbalance)
     ONMESSAGE(ReferencePrice)
@@ -39,6 +40,8 @@ public:
     ONMESSAGE(SecurityStatus)
     ONMESSAGE(SequenceReset)
     ONMESSAGE(Statistics)
+    ONMESSAGE(StockConnectDailyQuotaBalance)
+    ONMESSAGE(StockConnectMarketTurnover)
     ONMESSAGE(Trade)
     ONMESSAGE(TradeCancel)
     ONMESSAGE(TradeTicker)
@@ -92,7 +95,18 @@ TEST(OMDC_TEST, LogonResponse)
 
 TEST(OMDC_TEST, DisasterRecoverySignal)
 {
+    char msg[] = "\x18\x00\x01\x00\xe4\x01\x00\x00\x40\x1c\xe4\x8e\xff\xfd\x3c\x14" \
+        "\x08\x00\x69\x00\x02\x00\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::DisasterRecoverySignal const& dr, int32_t)
+        {
+            EXPECT_EQ(2, dr.drStatus());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, RetransmissionRequest)
@@ -122,7 +136,23 @@ TEST(OMDC_TEST, RefreshComplete)
 
 TEST(OMDC_TEST, MarketDefinition)
 {
+    char msg[] = "\x90\x00\x04\x5c\x51\x9a\x00\x00\x80\xc7\x49\x0b\xc4\xfd\x3c\x14" \
+        "\x28\x00\x0a\x00\x4e\x41\x53\x44\x4e\x41\x53\x44\x41\x51\x2d\x41" \
+        "\x4d\x45\x58\x20\x42\x4f\x41\x52\x44\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x48\x4b\x44\x1f\x00\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::MarketDefinition const& md, int32_t)
+        {
+            EXPECT_EQ("NASD", md.getMarketCodeAsString());
+            EXPECT_EQ("NASDAQ-AMEX BOARD        ", md.getMarketNameAsString());
+            EXPECT_EQ("HKD", md.getCurrencyCodeAsString());
+            EXPECT_EQ(31, md.numberOfSecurities());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, SecurityDefinition)
@@ -201,8 +231,8 @@ TEST(OMDC_TEST, SecurityDefinition)
             auto& underlyings = sd.noUnderlyingSecurities();
             EXPECT_EQ(1, underlyings.count());
             EXPECT_EQ(true, underlyings.hasNext());
-            auto& u1 = underlyings.next();
-            EXPECT_EQ(1398, u1.underlyingSecurityCode());
+            underlyings.next();
+            EXPECT_EQ(1398, underlyings.underlyingSecurityCode());
         }
         using OMDCProcessor::onMessage;
     };
@@ -300,8 +330,8 @@ TEST(OMDC_TEST, LiquidityProvider)
             auto& lps = lp.noLiquidityProviders();
             EXPECT_EQ(1, lps.count());
             EXPECT_EQ(true, lps.hasNext());
-            auto& lp1 = lps.next();
-            EXPECT_EQ(9707, lp1.lpBrokerNumber());
+            lps.next();
+            EXPECT_EQ(9707, lps.lpBrokerNumber());
         }
         using OMDCProcessor::onMessage;
     };
@@ -327,20 +357,20 @@ TEST(OMDC_TEST, CurrencyRate)
 
 TEST(OMDC_TEST, TradingSessionStatus)
 {
-    char msg[] = "\x70\x00\x03\x02\x03\x00\x00\x00\x00\x91\x63\x8d\x06\xf5\x12\x15" \
-        "\x20\x00\x14\x00\x47\x45\x4d\x20\x01\x64\x00\x30\x20\x20\x20\x20" \
-        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
+    char msg[] = "\x48\x00\x03\x00\x75\xd6\x08\x00\x00\x09\xda\xdd\x49\x22\x13\x15" \
+        "\x20\x00\x14\x00\x4d\x41\x49\x4e\x01\x69\x05\x30\x20\x20\x20\x20" \
+        "\x00\x00\x9d\xdd\x49\x22\x13\x15\x00\x8e\x49\x9a\x57\x22\x13\x15";
 
     struct Processor : public OMDCProcessor
     {
         void onMessage(sbe::TradingSessionStatus const& ts, int32_t partition)
         {
-            EXPECT_EQ("GEM ", ts.getMarketCodeAsString());
-            EXPECT_EQ(100, ts.tradingSessionSubID());
-            EXPECT_EQ(0, ts.tradingSesStatus());
+            EXPECT_EQ("MAIN", ts.getMarketCodeAsString());
+            EXPECT_EQ(105, ts.tradingSessionSubID());
+            EXPECT_EQ(5, ts.tradingSesStatus());
             EXPECT_EQ(48, ts.tradingSesControlFlag());
-            EXPECT_EQ(0, ts.startDateTime());
-            EXPECT_EQ(0, ts.endDateTime());
+            EXPECT_EQ(1518595200000000000, ts.startDateTime());
+            EXPECT_EQ(1518595259000000000, ts.endDateTime());
         }
         using OMDCProcessor::onMessage;
     };
@@ -390,6 +420,23 @@ TEST(OMDC_TEST, AddOrder)
 
 TEST(OMDC_TEST, ModifyOrder)
 {
+    char msg[] = "\xb0\x05\x38\x00\x27\x89\x05\x00\xc0\xed\x53\xf9\x24\x0d\x13\x15" \
+        "\x1c\x00\x1f\x00\xb3\x4e\x00\x00\x01\xdc\x1d\x03\x00\x00\x00\x00" \
+        "\x20\x53\x14\x00\x01\x00\x00\x00\x00\x00\x00\x00";
+
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::ModifyOrder const& mo, int32_t)
+        {
+            EXPECT_EQ(20147, mo.securityCode());
+            EXPECT_EQ(52288513, mo.orderId());
+            EXPECT_EQ(1332000, mo.quantity());
+            EXPECT_EQ(1, mo.side());
+            EXPECT_EQ(0, mo.orderBookPosition());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, DeleteOrder)
@@ -413,12 +460,44 @@ TEST(OMDC_TEST, DeleteOrder)
 
 TEST(OMDC_TEST, AddOddLotOrder)
 {
+    char msg[] = "\x08\x02\x12\x01\x49\x01\x00\x00\x00\xff\xed\xbc\x39\x0d\x13\x15" \
+        "\x1c\x00\x21\x00\x23\x00\x00\x00\x01\x05\x07\x01\x00\x00\x00\x00" \
+        "\x5c\x12\x00\x00\x1c\x01\x00\x00\xec\x11\x01\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::AddOddLotOrder const& oo, int32_t)
+        {
+            EXPECT_EQ(35, oo.securityCode());
+            EXPECT_EQ(17237249, oo.orderId());
+            EXPECT_EQ(4700, oo.price());
+            EXPECT_EQ(284, oo.quantity());
+            EXPECT_EQ(4588, oo.brokerID());
+            EXPECT_EQ(1, oo.side());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, DeleteOddLotOrder)
 {
+    char msg[] = "\x24\x00\x01\x02\x23\x01\x00\x00\xc0\x9c\xfb\x65\x47\x22\x13\x15" \
+        "\x14\x00\x22\x00\xbc\x02\x00\x00\x01\x0c\x36\x56\x00\x00\x00\x00" \
+        "\x30\x03\x01\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::DeleteOddLotOrder const& dol, int32_t)
+        {
+            EXPECT_EQ(700, dol.securityCode());
+            EXPECT_EQ(1446382593, dol.orderId());
+            EXPECT_EQ(816, dol.brokerID());
+            EXPECT_EQ(1, dol.side());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, AggregateOrderBookUpdate)
@@ -438,80 +517,72 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
         void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t)
         {
             EXPECT_EQ(18901, aob.securityCode());
-            auto& ens = aob.noEntries();
-            EXPECT_EQ(8, ens.count());
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(229, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(1, en.priceLevel());
-                EXPECT_EQ(2, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(234, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(1, en.side());
-                EXPECT_EQ(1, en.priceLevel());
-                EXPECT_EQ(0, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(228, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(1, en.priceLevel());
-                EXPECT_EQ(2, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(235, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(1, en.side());
-                EXPECT_EQ(2, en.priceLevel());
-                EXPECT_EQ(2, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(227, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(1, en.priceLevel());
-                EXPECT_EQ(2, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(226, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(1, en.priceLevel());
-                EXPECT_EQ(0, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(225, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(2, en.priceLevel());
-                EXPECT_EQ(0, en.updateAction());
-            }
-            {
-                auto& en = ens.next();
-                EXPECT_EQ(300000, en.aggregateQuantity());
-                EXPECT_EQ(224, en.price());
-                EXPECT_EQ(1, en.numberOfOrders());
-                EXPECT_EQ(0, en.side());
-                EXPECT_EQ(3, en.priceLevel());
-                EXPECT_EQ(0, en.updateAction());
-            }
+            auto& en = aob.noEntries();
+            EXPECT_EQ(8, en.count());
+            
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(229, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(1, en.priceLevel());
+            EXPECT_EQ(2, en.updateAction());
+            
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(234, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(1, en.side());
+            EXPECT_EQ(1, en.priceLevel());
+            EXPECT_EQ(0, en.updateAction());
+
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(228, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(1, en.priceLevel());
+            EXPECT_EQ(2, en.updateAction());
+
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(235, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(1, en.side());
+            EXPECT_EQ(2, en.priceLevel());
+            EXPECT_EQ(2, en.updateAction());
+            
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(227, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(1, en.priceLevel());
+            EXPECT_EQ(2, en.updateAction());
+            
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(226, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(1, en.priceLevel());
+            EXPECT_EQ(0, en.updateAction());
+            
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(225, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(2, en.priceLevel());
+            EXPECT_EQ(0, en.updateAction());
+
+            en.next();
+            EXPECT_EQ(300000, en.aggregateQuantity());
+            EXPECT_EQ(224, en.price());
+            EXPECT_EQ(1, en.numberOfOrders());
+            EXPECT_EQ(0, en.side());
+            EXPECT_EQ(3, en.priceLevel());
+            EXPECT_EQ(0, en.updateAction());
         }
         using OMDCProcessor::onMessage;
     };
@@ -521,13 +592,90 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
 
 TEST(OMDC_TEST, BrokerQueue)
 {
-    
-}
+    char msg[] = "\xc4\x02\x07\x00\x70\x7c" \
+        "\x97\x00\x00\x7f\x1e\x12\x47\x22\x13\x15\xac\x00\x36\x00\x74\x0c" \
+        "\x00\x00\x28\x02\x00\x59\x01\x21\x42\x00\xd2\x05\x42\x00\xd2\x05" \
+        "\x42\x00\x01\x00\x53\x00\xd2\x05\x42\x00\xab\x05\x42\x00\x91\x00" \
+        "\x42\x00\x02\x00\x53\x00\xd2\x05\x42\x00\xd2\x05\x42\x00\x91\x00" \
+        "\x42\x00\x3c\x21\x42\x00\x3c\x21\x42\x00\xab\x05\x42\x00\x01\x02" \
+        "\x42\x00\x3c\x21\x42\x00\xab\x05\x42\x00\x03\x00\x53\x00\xd2\x05" \
+        "\x42\x00\x01\x02\x42\x00\xd2\x05\x42\x00\xd2\x05\x42\x00\xd2\x05" \
+        "\x42\x00\xd2\x05\x42\x00\x40\x23\x42\x00\x01\x02\x42\x00\x3c\x21" \
+        "\x42\x00\xab\x05\x42\x00\xd5\x10\x42\x00\x3c\x21\x42\x00\x3c\x21" \
+        "\x42\x00\x3c\x21\x42\x00\x3c\x21\x42\x00\xab\x05\x42\x00\x3a\x21" \
+        "\x42\x00\xab\x05\x42\x00\xd5\x10\x42\x00\x04\x00\x53\x00\x3c\x21" \
+        "\x42\x00\x3f\x23\x42\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::BrokerQueue& bq, int32_t)
+        {
+            EXPECT_EQ(3188, bq.securityCode());
+            auto& items = bq.items();
+            EXPECT_EQ(40, items.count());
+            EXPECT_EQ(2, items.side());
+            EXPECT_EQ(89, items.bqMoreFlag());
+
+            items.next();
+            EXPECT_EQ(8449, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            items.next();
+            EXPECT_EQ(1490, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            items.next();
+            EXPECT_EQ(1490, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            items.next();
+            EXPECT_EQ(1, items.item());
+            EXPECT_EQ(83, items.itemType());
+
+            items.next();
+            EXPECT_EQ(1490, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            items.next();
+            EXPECT_EQ(1451, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            items.next();
+            EXPECT_EQ(145, items.item());
+            EXPECT_EQ(66, items.itemType());
+
+            // check last
+            while (items.hasNext())
+            {
+                items.next();
+            }
+            EXPECT_EQ(9023, items.item());
+            EXPECT_EQ(66, items.itemType());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
+
+
+}
 
 TEST(OMDC_TEST, OrderImbalance)
 {
+    char msg[] = "\xbc\x05\x18\x2f\x35\x25\x31\x01\x00\x12\xf6\xae\x71\x22\x13\x15" \
+        "\x14\x00\x38\x00\x4e\x05\x00\x00\x42\x01\x50\x46\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::OrderImbalance const& oib, int32_t)
+        {
+            EXPECT_EQ(1358, oib.securityCode());
+            EXPECT_EQ(66, oib.orderImbalanceDirection());
+            EXPECT_EQ(18000, oib.orderImbalanceQuantity());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, Trade)
@@ -581,7 +729,20 @@ TEST(OMDC_TEST, TradeTicker)
 
 TEST(OMDC_TEST, ClosingPrice)
 {
-    
+    char msg[] = "\x20\x00\x01\x00\x52\xef\x08\x00\x80\xbb\xfa\xbf\xbe\x22\x13\x15" \
+        "\x10\x00\x3e\x00\x76\x05\x00\x00\x7c\x1a\x00\x00\x04\x49\x00\x00";
+
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::ClosingPrice const& cp, int32_t)
+        {
+            EXPECT_EQ(1398, cp.securityCode());
+            EXPECT_EQ(6780, cp.closingPrice());
+            EXPECT_EQ(18692, cp.numberOfTrades());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, NominalPrice)
@@ -622,35 +783,68 @@ TEST(OMDC_TEST, IndicativeEquilibriumPrice)
 
 TEST(OMDC_TEST, ReferencePrice)
 {
+    char msg[] = "\x44\x05\x2f\x2f\x2b\x36\x31\x01\x00\xd8\x46\x2e\x72\x22\x13\x15" \
+        "\x14\x00\x2b\x00\x26\x0c\x00\x00\xda\x7a\x00\x00\xcc\x74\x00\x00" \
+        "\xe8\x80\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::ReferencePrice const& rp, int32_t)
+        {
+            EXPECT_EQ(3110, rp.securityCode());
+            EXPECT_EQ(31450, rp.referencePrice());
+            EXPECT_EQ(29900, rp.lowerPrice());
+            EXPECT_EQ(33000, rp.upperPrice());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, VCMTrigger)
 {
+    char msg[] = "\xc0\x05\x48\xcd\x50\x12\x02\x00\x80\x0d\x4d\xbe\x45\x2c\x63\x14" \
+        "\x24\x00\x17\x00\x63\x09\x00\x00\x00\x2e\x11\xb1\x07\x2c\x63\x14" \
+        "\x00\xe6\x75\x8a\x4d\x2c\x63\x14\x82\x00\x00\x00\x75\x00\x00\x00" \
+        "\x8f\x00\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::VCMTrigger const& vcm, int32_t)
+        {
+            EXPECT_EQ(2403, vcm.securityCode());
+            EXPECT_EQ(1469066315000000000, vcm.coolingOffStartTime());
+            EXPECT_EQ(1469066615000000000, vcm.coolingOffEndTime());
+            EXPECT_EQ(130, vcm.vcmReferencePrice());
+            EXPECT_EQ(117, vcm.vcmLowerPrice());
+            EXPECT_EQ(143, vcm.vcmUpperPrice());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, Statistics)
 {
-    char msg[] = "\x78\x00\x03\x01\xd5\x65\x00\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
-        "\x34\x00\x3c\x00\x44\x0a\x00\x00\x80\x35\x40\x00\x00\x00\x00\x00" \
-        "\xa8\xfe\x5b\x5f\x16\x00\x00\x00\x42\x59\x00\x00\xac\x58\x00\x00" \
-        "\x42\x59\x00\x00\xe8\x58\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
-        "\x00\x00\x00\x00";
+    char msg[] = "\x44\x00\x01\x00\x9d\xd2\x08\x00\x40\x82\x82\x10\x47\x22\x13\x15" \
+        "\x34\x00\x3c\x00\x74\x0c\x00\x00\x30\x50\x98\x00\x00\x00\x00\x00" \
+        "\x20\xe0\xfe\xdd\x72\x00\x00\x00\x88\xc2\x00\x00\x68\xbf\x00\x00" \
+        "\xc0\xc1\x00\x00\x10\xc1\x00\x00\x38\x9a\x14\x00\x90\x49\x48\x79" \
+        "\x0f\x00\x00\x00";
     
     struct Processor : public OMDCProcessor
     {
         void onMessage(sbe::Statistics const& s, int32_t)
         {
-            EXPECT_EQ(2628, s.securityCode());
-            EXPECT_EQ(4208000, s.sharesTraded());
-            EXPECT_EQ(96089145000, s.turnover());
-            EXPECT_EQ(22850, s.highPrice());
-            EXPECT_EQ(22700, s.lowPrice());
-            EXPECT_EQ(22850, s.lastPrice());
-            EXPECT_EQ(22760, s.vwap());
-            EXPECT_EQ(0, s.shortSellSharesTraded());
-            EXPECT_EQ(0, s.shortSellTurnover());
+            EXPECT_EQ(3188, s.securityCode());
+            EXPECT_EQ(9982000, s.sharesTraded());
+            EXPECT_EQ(493350740000, s.turnover());
+            EXPECT_EQ(49800, s.highPrice());
+            EXPECT_EQ(49000, s.lowPrice());
+            EXPECT_EQ(49600, s.lastPrice());
+            EXPECT_EQ(49424, s.vwap());
+            EXPECT_EQ(1350200, s.shortSellSharesTraded());
+            EXPECT_EQ(66459290000, s.shortSellTurnover());
         }
         using OMDCProcessor::onMessage;
     };
@@ -659,7 +853,20 @@ TEST(OMDC_TEST, Statistics)
 
 TEST(OMDC_TEST, MarketTurnover)
 {
+    char msg[] = "\xb0\x00\x08\x00\x31\x87\x01\x00\x00\x48\x34\xba\x47\x22\x13\x15" 
+        "\x14\x00\x3d\x00\x4d\x41\x49\x4e\x48\x4b\x44\x20\x59\x0d\x5b\xb9\x26\x5e\x00\x00";
 
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::MarketTurnover const& mt, int32_t)
+        {
+            EXPECT_EQ("MAIN", mt.getMarketCodeAsString());
+            EXPECT_EQ("HKD", mt.getCurrencyCodeAsString());
+            EXPECT_EQ(103520411520345, mt.turnover());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, Yield)
@@ -669,7 +876,122 @@ TEST(OMDC_TEST, Yield)
 
 TEST(OMDC_TEST, News)
 {
+    char msg[] = "\x34\x05\x01\x00\x3c\x31\x00\x00\x80\x9b\x07\x4e\x79\x3e\x63\x14" \
+        "\x24\x05\x16\x00\x45\x58\x4e\x30\x30\x35\x00\x00\x00\x00\x00\x00" \
 
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" \
+        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x4e\x4e\x00\x00\x00\x00" \
+        "\x00\xa6\xae\xc9\x29\x31\x63\x14\x00\x00\x00\x00\x00\x00\xc8\x00" \
+        "\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00" \
+        "\x05\x00\x00\x00\x06\x00\x00\x00\x07\x00\x00\x00\x08\x00\x00\x00" \
+        "\x09\x00\x00\x00\x0a\x00\x00\x00\x0e\x00\x00\x00\x1c\x00\x00\x00" \
+        "\x10\x00\x00\x00\x11\x00\x00\x00\x12\x00\x00\x00\x13\x00\x00\x00" \
+        "\x14\x00\x00\x00\x15\x00\x00\x00\x16\x00\x00\x00\x17\x00\x00\x00" \
+        "\x1d\x00\x00\x00\x1e\x00\x00\x00\x1f\x00\x00\x00\x20\x00\x00\x00" \
+        "\x25\x00\x00\x00\x26\x00\x00\x00\x2c\x00\x00\x00\x30\x00\x00\x00" \
+        "\x31\x00\x00\x00\x32\x00\x00\x00\x33\x00\x00\x00\x34\x00\x00\x00" \
+        "\x35\x00\x00\x00\x36\x00\x00\x00\x37\x00\x00\x00\x3a\x00\x00\x00" \
+        "\x3b\x00\x00\x00\x3c\x00\x00\x00\x3d\x00\x00\x00\x3e\x00\x00\x00" \
+        "\x3f\x00\x00\x00\x42\x00\x00\x00\x7e\x03\x00\x00\x86\x03\x00\x00" \
+        "\x89\x03\x00\x00\x8a\x03\x00\x00\x92\x03\x00\x00\x94\x03\x00\x00" \
+        "\x95\x03\x00\x00\x98\x03\x00\x00\xab\x03\x00\x00\xb7\x03\x00\x00" \
+        "\xc6\x03\x00\x00\xd5\x03\x00\x00\xdf\x03\x00\x00\xe6\x03\x00\x00" \
+        "\xf3\x03\x00\x00\xf4\x03\x00\x00\xf5\x03\x00\x00\xf7\x03\x00\x00" \
+        "\xf9\x03\x00\x00\xfa\x03\x00\x00\x09\x04\x00\x00\x0e\x04\x00\x00" \
+        "\x14\x04\x00\x00\x1f\x04\x00\x00\x2c\x04\x00\x00\x40\x04\x00\x00" \
+        "\x4b\x04\x00\x00\x55\x04\x00\x00\x5a\x04\x00\x00\x6d\x04\x00\x00" \
+        "\x72\x04\x00\x00\x77\x04\x00\x00\x93\x04\x00\x00\x96\x04\x00\x00" \
+        "\xa2\x04\x00\x00\xaf\x04\x00\x00\xb0\x04\x00\x00\xb5\x04\x00\x00" \
+        "\xb6\x04\x00\x00\xb7\x04\x00\x00\xba\x04\x00\x00\xbb\x04\x00\x00" \
+        "\xbc\x04\x00\x00\xbe\x04\x00\x00\xc8\x04\x00\x00\xca\x04\x00\x00" \
+        "\xcf\x04\x00\x00\xf7\x04\x00\x00\x35\x05\x00\x00\x57\x05\x00\x00" \
+        "\x6b\x05\x00\x00\x71\x05\x00\x00\x74\x05\x00\x00\x76\x05\x00\x00" \
+        "\x78\x05\x00\x00\x7d\x05\x00\x00\xd2\x05\x00\x00\xef\x05\x00\x00" \
+        "\x52\x06\x00\x00\x6e\x06\x00\x00\x87\x06\x00\x00\x98\x06\x00\x00" \
+        "\xa5\x06\x00\x00\xe6\x06\x00\x00\x07\x07\x00\x00\x08\x07\x00\x00" \
+        "\x15\x07\x00\x00\x58\x07\x00\x00\x60\x07\x00\x00\x61\x07\x00\x00" \
+        "\x65\x07\x00\x00\x6a\x07\x00\x00\x7f\x07\x00\x00\xc4\x07\x00\x00" \
+        "\xcd\x07\x00\x00\xd0\x07\x00\x00\xd1\x07\x00\x00\xd2\x07\x00\x00" \
+        "\xd3\x07\x00\x00\xd4\x07\x00\x00\xd5\x07\x00\x00\xd6\x07\x00\x00" \
+        "\xd7\x07\x00\x00\xe4\x07\x00\x00\xf6\x07\x00\x00\x3c\x08\x00\x00" \
+        "\x46\x08\x00\x00\x49\x08\x00\x00\x99\x08\x00\x00\xad\x08\x00\x00" \
+        "\xfd\x08\x00\x00\x07\x09\x00\x00\x0a\x09\x00\x00\x0e\x09\x00\x00" \
+        "\x0f\x09\x00\x00\x18\x09\x00\x00\x1b\x09\x00\x00\x1c\x09\x00\x00" \
+        "\x1d\x09\x00\x00\x22\x09\x00\x00\x2b\x09\x00\x00\x52\x09\x00\x00" \
+        "\x54\x09\x00\x00\x60\x09\x00\x00\x61\x09\x00\x00\x62\x09\x00\x00" \
+        "\x63\x09\x00\x00\x64\x09\x00\x00\x65\x09\x00\x00\x66\x09\x00\x00" \
+        "\x67\x09\x00\x00\x68\x09\x00\x00\x69\x09\x00\x00\x6a\x09\x00\x00" \
+        "\x6b\x09\x00\x00\x6c\x09\x00\x00\x6d\x09\x00\x00\x6e\x09\x00\x00" \
+        "\x6f\x09\x00\x00\x70\x09\x00\x00\x71\x09\x00\x00\x72\x09\x00\x00" \
+        "\x73\x09\x00\x00\x74\x09\x00\x00\x75\x09\x00\x00\x76\x09\x00\x00" \
+        "\x77\x09\x00\x00\x78\x09\x00\x00\x7c\x09\x00\x00\x83\x09\x00\x00" \
+        "\xa2\x09\x00\x00\xcc\x09\x00\x00\xcd\x09\x00\x00\xd1\x09\x00\x00" \
+        "\xd2\x09\x00\x00\xd7\x09\x00\x00\xd9\x09\x00\x00\xe0\x09\x00\x00" \
+        "\xe1\x09\x00\x00\x03\x0a\x00\x00\x04\x0a\x00\x00\x05\x0a\x00\x00" \
+        "\x07\x0a\x00\x00\x08\x0a\x00\x00\x0e\x0a\x00\x00\x10\x0a\x00\x00" \
+        "\x12\x0a\x00\x00\x13\x0a\x00\x00\x1e\x0a\x00\x00\x26\x0a\x00\x00" \
+        "\x28\x0a\x00\x00\x29\x0a\x00\x00\x42\x0a\x00\x00\x44\x0a\x00\x00" \
+        "\x80\x0a\x00\x00\x8c\x0a\x00\x00\xa7\x0a\x00\x00\xd9\x0a\x00\x00" \
+        
+        "\x20\x00\x01\x00\x73\x68\x61\x72\x65\x73\x2f\x73\x65\x63\x75\x72" \
+        "\x69\x74\x69\x65\x73\x20\x6f\x66\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x28\x74\x68\x65\x20\x22\x43\x6f\x6d\x70\x61\x6e\x79\x22" \
+        "\x29\x20\x77\x69\x6c\x6c\x20\x62\x65\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20";
+
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::News& news, int32_t)
+        {
+            EXPECT_EQ("EXN", news.getNewsTypeAsString());
+            EXPECT_EQ("005", news.getNewsIDAsString());
+            EXPECT_EQ('N', news.cancelFlag());
+            EXPECT_EQ('N', news.lastFragment());
+            EXPECT_EQ(1469071959000000000, news.releaseTime());
+            auto& market = news.noMarketCodes();
+            EXPECT_EQ(0, market.count());
+            EXPECT_EQ(false, market.hasNext());
+            auto& sec = news.noSecurityCodes();
+            EXPECT_EQ(200, sec.count());
+            sec.next();
+            EXPECT_EQ(1, sec.securityCode());
+            while (sec.hasNext())
+            {
+                sec.next();
+            }
+            EXPECT_EQ(2777, sec.securityCode());
+            auto& newsLines = news.noNewsLines();
+            EXPECT_EQ(1, newsLines.count());
+            newsLines.next();
+            EXPECT_EQ(160, newsLines.getNewsLineAsString().size());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, IndexDefinition)
@@ -692,33 +1014,33 @@ TEST(OMDC_TEST, IndexDefinition)
 
 TEST(OMDC_TEST, IndexData)
 {
-    char msg[] = "\x80\x00\x01\x84\xff\x16\x00\x00\x40\x09\x65\x99\xd0\x0a\x13\x15" \
-        "\x70\x00\x47\x00\x30\x30\x30\x30\x31\x30\x33\x20\x20\x20\x20\x50" \
-        "\x00\x4c\xbb\x81\xd0\x0a\x13\x15\x00\x00\x00\x00\x00\x00\x00\x80" \
-        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80" \
-        "\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x80" \
-        "\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x80" \
-        "\x00\x00\x00\x00\x00\x00\x00\x80\xd4\x03\x39\x17\x00\x00\x00\x00" \
-        "\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x20\x20\x20\x20";
+    char msg[] = "\x80\x00\x01\x84\x4e\x63\x02\x00\xc0\xe2\x32\x4b\xe8\x23\x13\x15" \
+        "\x70\x00\x47\x00\x48\x31\x31\x31\x30\x38\x20\x20\x20\x20\x20\x20" \
+        "\x00\x6e\x70\x35\xe6\x23\x13\x15\x7d\x24\x14\x01\x00\x00\x00\x00" \
+        "\x9f\xa1\x03\x00\x00\x00\x00\x00\x0a\x7c\x14\x01\x00\x00\x00\x00" \
+        "\x16\x61\x10\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80" \
+        "\x98\x3b\xeb\x58\xb7\x03\x05\x00\xb8\x7a\x10\x01\x00\x00\x00\x00" \
+        "\x7d\x24\x14\x01\x00\x00\x00\x00\xde\x82\x10\x01\x00\x00\x00\x00" \
+        "\x28\xa1\x73\x6b\x02\x00\x00\x00\xf4\x33\x00\x00\x20\x20\x20\x20";
 
     struct Processor : public OMDCProcessor
     {
         void onMessage(sbe::IndexData const& id, int32_t)
         {
-            EXPECT_EQ("0000103    ", id.getIndexCodeAsString());
-            EXPECT_EQ(80, id.indexStatus());
-            EXPECT_EQ(1518569390000000000, id.indexTime());
-            EXPECT_EQ(-9223372036854775808, id.indexValue());
-            EXPECT_EQ(0, id.netChgPrevDay());
-            EXPECT_EQ(-9223372036854775808, id.highValue());
-            EXPECT_EQ(-9223372036854775808, id.lowValue());
-            EXPECT_EQ(-9223372036854775808, id.easValue());
-            EXPECT_EQ(-9223372036854775808, id.indexTurnover());
-            EXPECT_EQ(-9223372036854775808, id.openingValue());
-            EXPECT_EQ(-9223372036854775808, id.closingValue());
-            EXPECT_EQ(389612500, id.previousSesClose());
-            EXPECT_EQ(-9223372036854775808, id.indexVolume());
-            EXPECT_EQ(0, id.netChgPrevDayPct());
+            EXPECT_EQ("H11108     ", id.getIndexCodeAsString());
+            EXPECT_EQ(32, id.indexStatus());
+            EXPECT_EQ(1518596971000000000, id.indexTime());
+            EXPECT_EQ(18097277, id.indexValue());
+            EXPECT_EQ(237983, id.netChgPrevDay());
+            EXPECT_EQ(18119690, id.highValue());
+            EXPECT_EQ(17850646, id.lowValue());
+            EXPECT_EQ(INT64_MIN, id.easValue());
+            EXPECT_EQ(1411460889263000, id.indexTurnover());
+            EXPECT_EQ(17857208, id.openingValue());
+            EXPECT_EQ(18097277, id.closingValue());
+            EXPECT_EQ(17859294, id.previousSesClose());
+            EXPECT_EQ(10392674600, id.indexVolume());
+            EXPECT_EQ(13300, id.netChgPrevDayPct());
             EXPECT_EQ(' ', id.exception());
         }
         using OMDCProcessor::onMessage;
@@ -726,5 +1048,14 @@ TEST(OMDC_TEST, IndexData)
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
+TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
+{
+
+}
+
+TEST(OMDC_TEST, StockConnectMarketTurnover)
+{
+
+}
 }
 }

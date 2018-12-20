@@ -46,8 +46,7 @@ private:
 
     inline void reset(char *buffer, const std::uint64_t offset, const std::uint64_t bufferLength, const std::uint64_t actingVersion)
     {
-        // SBE_OMD_HACK
-        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 1) > bufferLength), false))
+        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 4) > bufferLength), false))
         {
             throw std::runtime_error("buffer too short for flyweight [E107]");
         }
@@ -126,37 +125,6 @@ public:
     }
 
 
-    static SBE_CONSTEXPR std::uint8_t numInGroupNullValue() SBE_NOEXCEPT
-    {
-        return SBE_NULLVALUE_UINT8;
-    }
-
-    static SBE_CONSTEXPR std::uint8_t numInGroupMinValue() SBE_NOEXCEPT
-    {
-        return (std::uint8_t)0;
-    }
-
-    static SBE_CONSTEXPR std::uint8_t numInGroupMaxValue() SBE_NOEXCEPT
-    {
-        return (std::uint8_t)254;
-    }
-
-    static SBE_CONSTEXPR std::size_t numInGroupEncodingLength() SBE_NOEXCEPT
-    {
-        return 1;
-    }
-
-    std::uint8_t numInGroup() const
-    {
-        return (*((std::uint8_t *)(m_buffer + m_offset + 0)));
-    }
-
-    GroupSize8 &numInGroup(const std::uint8_t value)
-    {
-        *((std::uint8_t *)(m_buffer + m_offset + 0)) = (value);
-        return *this;
-    }
-
     static SBE_CONSTEXPR std::uint8_t fillerNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
@@ -179,12 +147,12 @@ public:
 
     std::uint8_t filler() const
     {
-        return (*((std::uint8_t *)(m_buffer + m_offset + 1)));
+        return (*((std::uint8_t *)(m_buffer + m_offset + 0)));
     }
 
     GroupSize8 &filler(const std::uint8_t value)
     {
-        *((std::uint8_t *)(m_buffer + m_offset + 1)) = (value);
+        *((std::uint8_t *)(m_buffer + m_offset + 0)) = (value);
         return *this;
     }
 
@@ -210,12 +178,43 @@ public:
 
     std::uint16_t blockLength() const
     {
-        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 2)));
+        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 1)));
     }
 
     GroupSize8 &blockLength(const std::uint16_t value)
     {
-        *((std::uint16_t *)(m_buffer + m_offset + 2)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        *((std::uint16_t *)(m_buffer + m_offset + 1)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        return *this;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupNullValue() SBE_NOEXCEPT
+    {
+        return SBE_NULLVALUE_UINT8;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupMinValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)0;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupMaxValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)254;
+    }
+
+    static SBE_CONSTEXPR std::size_t numInGroupEncodingLength() SBE_NOEXCEPT
+    {
+        return 1;
+    }
+
+    std::uint8_t numInGroup() const
+    {
+        return (*((std::uint8_t *)(m_buffer + m_offset + 3)));
+    }
+
+    GroupSize8 &numInGroup(const std::uint8_t value)
+    {
+        *((std::uint8_t *)(m_buffer + m_offset + 3)) = (value);
         return *this;
     }
 };

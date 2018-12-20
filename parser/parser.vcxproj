@@ -33,6 +33,7 @@
     <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h" />
     <ClInclude Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h" />
     <ClInclude Include="src\main\include\omdc_sbe\BrokerQueue.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\BrokerQueueItem.h" />
     <ClInclude Include="src\main\include\omdc_sbe\ClosingPrice.h" />
     <ClInclude Include="src\main\include\omdc_sbe\CurrencyRate.h" />
     <ClInclude Include="src\main\include\omdc_sbe\DeleteOddLotOrder.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="src\main\include\omdc_sbe\MarketTurnover.h" />
     <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h" />
     <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\News.h" />
     <ClInclude Include="src\main\include\omdc_sbe\NominalPrice.h" />
     <ClInclude Include="src\main\include\omdc_sbe\OrderImbalance.h" />
     <ClInclude Include="src\main\include\omdc_sbe\ReferencePrice.h" />
@@ -61,6 +63,8 @@
     <ClInclude Include="src\main\include\omdc_sbe\SecurityStatus.h" />
     <ClInclude Include="src\main\include\omdc_sbe\SequenceReset.h" />
     <ClInclude Include="src\main\include\omdc_sbe\Statistics.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectDailyQuotaBalance.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectMarketTurnover.h" />
     <ClInclude Include="src\main\include\omdc_sbe\Trade.h" />
     <ClInclude Include="src\main\include\omdc_sbe\TradeCancel.h" />
     <ClInclude Include="src\main\include\omdc_sbe\TradeTicker.h" />

@@ -32,6 +32,7 @@
 
 #include "MessageHeader.h"
 #include "GroupSize8.h"
+#include "BrokerQueueItem.h"
 #include "GroupSize16.h"
 
 using namespace sbe;
@@ -115,7 +116,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeBlockLength() SBE_NOEXCEPT
     {
-        return (std::uint16_t)7;
+        return (std::uint16_t)4;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
@@ -263,127 +264,6 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t fillerId() SBE_NOEXCEPT
-    {
-        return 201;
-    }
-
-    static SBE_CONSTEXPR std::uint64_t fillerSinceVersion() SBE_NOEXCEPT
-    {
-         return 0;
-    }
-
-    bool fillerInActingVersion() SBE_NOEXCEPT
-    {
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wtautological-compare"
-#endif
-        return m_actingVersion >= fillerSinceVersion();
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#endif
-    }
-
-    static SBE_CONSTEXPR std::size_t fillerEncodingOffset() SBE_NOEXCEPT
-    {
-         return 4;
-    }
-
-
-    static const char *fillerMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
-    {
-        switch (metaAttribute)
-        {
-            case MetaAttribute::EPOCH: return "unix";
-            case MetaAttribute::TIME_UNIT: return "nanosecond";
-            case MetaAttribute::SEMANTIC_TYPE: return "";
-            case MetaAttribute::PRESENCE: return "required";
-        }
-
-        return "";
-    }
-
-    static SBE_CONSTEXPR char fillerNullValue() SBE_NOEXCEPT
-    {
-        return (char)0;
-    }
-
-    static SBE_CONSTEXPR char fillerMinValue() SBE_NOEXCEPT
-    {
-        return (char)32;
-    }
-
-    static SBE_CONSTEXPR char fillerMaxValue() SBE_NOEXCEPT
-    {
-        return (char)126;
-    }
-
-    static SBE_CONSTEXPR std::size_t fillerEncodingLength() SBE_NOEXCEPT
-    {
-        return 1;
-    }
-
-    static SBE_CONSTEXPR std::uint64_t fillerLength() SBE_NOEXCEPT
-    {
-        return 3;
-    }
-
-    const char *filler() const
-    {
-        return (m_buffer + m_offset + 4);
-    }
-
-    char filler(const std::uint64_t index) const
-    {
-        if (index >= 3)
-        {
-            throw std::runtime_error("index out of range for filler [E104]");
-        }
-
-        return (*((char *)(m_buffer + m_offset + 4 + (index * 1))));
-    }
-
-    void filler(const std::uint64_t index, const char value)
-    {
-        if (index >= 3)
-        {
-            throw std::runtime_error("index out of range for filler [E105]");
-        }
-
-        *((char *)(m_buffer + m_offset + 4 + (index * 1))) = (value);
-    }
-
-    std::uint64_t getFiller(char *dst, const std::uint64_t length) const
-    {
-        if (length > 3)
-        {
-             throw std::runtime_error("length too large for getFiller [E106]");
-        }
-
-        std::memcpy(dst, m_buffer + m_offset + 4, sizeof(char) * length);
-        return length;
-    }
-
-    AggregateOrderBookUpdate &putFiller(const char *src)
-    {
-        std::memcpy(m_buffer + m_offset + 4, src, sizeof(char) * 3);
-        return *this;
-    }
-
-    std::string getFillerAsString() const
-    {
-        std::string result(m_buffer + m_offset + 4, 3);
-        return result;
-    }
-
-    AggregateOrderBookUpdate &putFiller(const std::string& str)
-    {
-        std::memcpy(m_buffer + m_offset + 4, str.c_str(), 3);
-        return *this;
-    }
-
-
     class NoEntries
     {
     private:
@@ -410,17 +290,16 @@ public:
             m_index = -1;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
-        inline void wrapForEncode(char *buffer, const std::uint8_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
+        inline void wrapForEncode(char *buffer, const std::uint16_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
         {
     #if defined(__GNUG__) && !defined(__clang__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wtype-limits"
     #endif
-            if (count < 0 || count > 254)
+            if (count < 0 || count > 65534)
             {
                 throw std::runtime_error("count outside of allowed range [E110]");
             }
@@ -431,14 +310,13 @@ public:
             m_bufferLength = bufferLength;
             m_dimensions.wrap(m_buffer, *pos, actingVersion, bufferLength);
             m_dimensions.blockLength((std::uint8_t)24);
-            m_dimensions.numInGroup((std::uint8_t)count);
+            m_dimensions.numInGroup((std::uint16_t)count);
             m_index = -1;
             m_count = count;
             m_blockLength = 24;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
         static SBE_CONSTEXPR std::uint64_t sbeHeaderSize() SBE_NOEXCEPT
@@ -1031,7 +909,7 @@ public:
         return m_noEntries;
     }
 
-    NoEntries &noEntriesCount(const std::uint8_t count)
+    NoEntries &noEntriesCount(const std::uint16_t count)
     {
         m_noEntries.wrapForEncode(m_buffer, count, m_positionPtr, m_actingVersion, m_bufferLength);
         return m_noEntries;

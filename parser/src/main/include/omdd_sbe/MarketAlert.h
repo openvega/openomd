@@ -771,13 +771,13 @@ public:
             *m_positionPtr = *m_positionPtr + 4;
         }
 
-        inline void wrapForEncode(char *buffer, const std::uint8_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
+        inline void wrapForEncode(char *buffer, const std::uint16_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
         {
     #if defined(__GNUG__) && !defined(__clang__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wtype-limits"
     #endif
-            if (count < 0 || count > 254)
+            if (count < 0 || count > 65534)
             {
                 throw std::runtime_error("count outside of allowed range [E110]");
             }
@@ -788,7 +788,7 @@ public:
             m_bufferLength = bufferLength;
             m_dimensions.wrap(m_buffer, *pos, actingVersion, bufferLength);
             m_dimensions.blockLength((std::uint8_t)320);
-            m_dimensions.numInGroup((std::uint8_t)count);
+            m_dimensions.numInGroup((std::uint16_t)count);
             m_index = -1;
             m_count = count;
             m_blockLength = 320;
@@ -1004,7 +1004,7 @@ public:
         return m_noLines;
     }
 
-    NoLines &noLinesCount(const std::uint8_t count)
+    NoLines &noLinesCount(const std::uint16_t count)
     {
         m_noLines.wrapForEncode(m_buffer, count, m_positionPtr, m_actingVersion, m_bufferLength);
         return m_noLines;

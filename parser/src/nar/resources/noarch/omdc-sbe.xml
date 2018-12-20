@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<messageSchema xmlns:ns2="http://www.fixprotocol.org/ns/simple/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" package="omdc.sbe" id="1" version="1" semanticVersion="FIX5SP2" description="OMDD sbe" byteOrder="littleEndian">
+<messageSchema xmlns:ns2="http://www.fixprotocol.org/ns/simple/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" package="omdc.sbe" id="1" version="1" semanticVersion="FIX5SP2" description="OMDC sbe" byteOrder="littleEndian">
   <types>
     <type name="str2" primitiveType="char" length="2" semanticType="String"/>
     <type name="str3" primitiveType="char" length="3" semanticType="String"/>
     <type name="str4" primitiveType="char" length="4" semanticType="String"/>
-    <type name="filler33" length="33" primitiveType="char" semanticType="String"/>
+    <type name="str160" primitiveType="char" length="160" semanticType="String"/>
+    <type name="str320" primitiveType="char" length="320" semanticType="String"/>
+    <type name="filler31" length="31" primitiveType="char" semanticType="String"/>
     <type name="filler42" length="42" primitiveType="char" semanticType="String"/>
     <type name="filler82" length="82" primitiveType="char" semanticType="String"/>
     <type name="username" primitiveType="char" length="12" semanticType="String"/>
@@ -16,13 +18,22 @@
     <type name="freetext" primitiveType="char" length="38" semanticType="String"/>
     <type name="indexcode" primitiveType="char" length="11" semanticType="String"/>
     <composite name="groupSize8" description="Repeating group dimension" semanticType="NumInGroup">
-      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
       <type name="filler" primitiveType="uint8"/>
       <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
+    </composite>
+    <composite name="groupSize16Reverse" description="Repeating group dimension" semanticType="NumInGroup">
+      <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint16"/>
     </composite>
     <composite name="groupSize16" description="Repeating group dimension" semanticType="NumInGroup">
       <type name="numInGroup" description="Num of Entries" primitiveType="uint16"/>
       <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+    </composite>
+    <composite name="brokerQueueItem" description="Repeating group dimension" semanticType="NumInGroup">
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
+      <type name="side" primitiveType="uint16"/>
+      <type name="blockLength" description="BQMoreFlag" primitiveType="uint8"/>
     </composite>
     <composite name="messageHeader" description="Template ID and length of message root">
       <type name="msgSize" primitiveType="uint16" description="Length of entire message, including binary header in number of bytes"/>
@@ -44,14 +55,14 @@
   <message name="SequenceReset" id="100" semanticType="4">
     <field name="newSeqNo" id="101" type="uint32"/>
   </message>
-  <message name="DisasterRecoverySignal" id="105" semanticType="4">
-    <field name="drStatus" id="101" type="uint32"/>
-  </message>
   <message name="Logon" id="101" semanticType="4">
     <field name="username" id="101" type="username" semanticType="String"/>
   </message>
   <message name="LogonResponse" id="102" semanticType="4">
     <field name="sessionStatus" id="101" type="uint8"/>
+  </message>
+  <message name="DisasterRecoverySignal" id="105" semanticType="4">
+    <field name="drStatus" id="101" type="uint32"/>
   </message>
   <message name="RetransmissionReq" id="201" semanticType="4">
     <field name="channelID" id="101" type="uint16"/>
@@ -119,8 +130,8 @@
     <field name="entitlement" id="134" type="int32"/>
     <field name="decimalsInEntitlement" id="135" type="uint8"/>
     <field name="noWarrantsPerEntitlement" id="136" type="uint32"/>
-    <field name="filler8" id="208" type="filler33" semanticType="String"/>
-    <group name="noUnderlyingSecurities" id="137" dimensionType="groupSize16">
+    <field name="filler8" id="208" type="filler31" semanticType="String"/>
+    <group name="noUnderlyingSecurities" id="137" dimensionType="groupSize16Reverse">
       <field name="underlyingSecurityCode" id="138" type="securitycode"/>
       <field name="filler9" id="209" type="int32"/>
     </group>
@@ -193,7 +204,6 @@
   </message>
   <message name="AggregateOrderBookUpdate" id="53" semanticType="4">
     <field name="securityCode" id="101" type="securitycode"/>
-    <field name="filler" id="201" type="str3"/>
     <group name="noEntries" id="102" dimensionType="groupSize8">
       <field name="aggregateQuantity" id="103" type="uint64"/>
       <field name="price" id="104" type="int32"/>
@@ -206,10 +216,10 @@
   </message>
   <message name="BrokerQueue" id="54" semanticType="4">
     <field name="securityCode" id="101" type="securitycode"/>
-    <!-- 2 fields Side and BQMoreFlag after itemCount-->
-    <group name="itemCount" id="102" dimensionType="groupSize8">
+    <!-- brokerQueueItem contains 2 fields Side and BQMoreFlag(as blockLength) -->
+    <group name="items" id="102" dimensionType="brokerQueueItem">
       <field name="item" id="103" type="uint16"/>
-      <field name="type" id="104" type="char"/>
+      <field name="itemType" id="104" type="char"/>
       <field name="filler" id="201" type="uint8"/>
     </group>
   </message>
@@ -292,6 +302,24 @@
     <field name="securityCode" id="101" type="securitycode"/>
     <field name="yield" id="102" type="int32"/>
   </message>
+  <message name="News" id="22" semanticType="4">
+    <field name="newsType" id="101" type="str3"/>
+    <field name="newsID" id="102" type="str3"/>
+    <field name="headline" id="103" type="str320"/>
+    <field name="cancelFlag" id="104" type="char"/>
+    <field name="lastFragment" id="105" type="char"/>
+    <field name="filler1" id="201" type="uint32"/>
+    <field name="releaseTime" id="106" type="uint64"/>
+    <group name="noMarketCodes" id="107" dimensionType="groupSize16Reverse">
+      <field name="marketCode" id="108" type="str4"/>
+    </group>
+    <group name="noSecurityCodes" id="109" dimensionType="groupSize16Reverse">
+      <field name="securityCode" id="110" type="uint32"/>
+    </group>
+    <group name="noNewsLines" id="111" dimensionType="groupSize16Reverse">
+      <field name="newsLine" id="112" type="str160"/>
+    </group>
+  </message>
   <message name="IndexDefinition" id="70" semanticType="4">
     <field name="indexCode" id="101" type="indexcode"/>
     <field name="indexSource" id="102" type="char"/>
@@ -315,5 +343,18 @@
     <field name="netChgPrevDayPct" id="114" type="int32"/>
     <field name="exception" id="115" type="char"/>
     <field name="filler" id="201" type="str3"/>
+  </message>
+  <message name="StockConnectDailyQuotaBalance" id="80" semanticType="4">
+    <field name="stockConnectMarket" id="101" type="str2"/>
+    <field name="tradingDirection" id="102" type="str2"/>
+    <field name="dailyQuotaBalance" id="103" type="int64"/>
+    <field name="dailyQuotaBalanceTime" id="104" type="uint64"/>
+  </message>
+  <message name="StockConnectMarketTurnover" id="81" semanticType="4">
+    <field name="stockConnectMarket" id="101" type="str2"/>
+    <field name="tradingDirection" id="102" type="str2"/>
+    <field name="buyTurnover" id="103" type="int64"/>
+    <field name="sellTurnover" id="104" type="int64"/>
+    <field name="buySellTurnover" id="105" type="int64"/>
   </message>
 </messageSchema>

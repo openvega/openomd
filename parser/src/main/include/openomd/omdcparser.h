@@ -19,6 +19,7 @@
 #include <omdc_sbe/MarketDefinition.h>
 #include <omdc_sbe/MarketTurnover.h>
 #include <omdc_sbe/ModifyOrder.h>
+#include <omdc_sbe/News.h>
 #include <omdc_sbe/NominalPrice.h>
 #include <omdc_sbe/OrderImbalance.h>
 #include <omdc_sbe/ReferencePrice.h>
@@ -29,6 +30,8 @@
 #include <omdc_sbe/SecurityStatus.h>
 #include <omdc_sbe/SequenceReset.h>
 #include <omdc_sbe/Statistics.h>
+#include <omdc_sbe/StockConnectDailyQuotaBalance.h>
+#include <omdc_sbe/StockConnectMarketTurnover.h>
 #include <omdc_sbe/Trade.h>
 #include <omdc_sbe/TradeCancel.h>
 #include <omdc_sbe/TradeTicker.h>
@@ -69,6 +72,7 @@ public:
                 OMD_SWITCH_CASE(MarketDefinition);
                 OMD_SWITCH_CASE(MarketTurnover);
                 OMD_SWITCH_CASE(ModifyOrder);
+                OMD_SWITCH_CASE(News);
                 OMD_SWITCH_CASE(NominalPrice);
                 OMD_SWITCH_CASE(OrderImbalance);
                 OMD_SWITCH_CASE(ReferencePrice);
@@ -79,6 +83,8 @@ public:
                 OMD_SWITCH_CASE(SecurityStatus);
                 OMD_SWITCH_CASE(SequenceReset);
                 OMD_SWITCH_CASE(Statistics);
+                OMD_SWITCH_CASE(StockConnectDailyQuotaBalance);
+                OMD_SWITCH_CASE(StockConnectMarketTurnover);
                 OMD_SWITCH_CASE(Trade);
                 OMD_SWITCH_CASE(TradeCancel);
                 OMD_SWITCH_CASE(TradeTicker);

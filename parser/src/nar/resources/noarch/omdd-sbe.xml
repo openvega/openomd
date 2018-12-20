@@ -13,9 +13,9 @@
     <type name="str32" length="32" primitiveType="char"/>
     <type name="str320" length="320" primitiveType="char"/>
     <composite name="groupSize8" description="Repeating group dimension" semanticType="NumInGroup">
-      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
       <type name="filler1" primitiveType="uint8"/>
       <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
     </composite>
     <composite name="messageHeader" description="Template ID and length of message root">
       <type name="msgSize" primitiveType="uint16" description="Length of entire message, including binary header in number of bytes"/>
