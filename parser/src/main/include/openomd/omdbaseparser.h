@@ -2,6 +2,7 @@
 
 namespace openomd
 {
+#define OMD_SWITCH_CASE(MESSAGE) case MESSAGE::sbeTemplateId(): process<MESSAGE>(pos, msgSize, callback, partition); break;
 class OmdBaseParser
 {
 protected:
@@ -44,7 +45,14 @@ protected:
                 char* pos = data + byteProcess + MSG_HDR_SIZE;
                 auto msgSize = msgHdr->size - MSG_HDR_SIZE;
                 assert(msgSize >= 0);
-                func(msgHdr->type, pos, msgSize, callback, partition);
+                try
+                {
+                    func(msgHdr->type, pos, msgSize, callback, partition);
+                }
+                catch (std::exception const& ex)
+                {
+                    callback.onError(ex);
+                }
                 byteProcess += msgHdr->size;
             }
             assert(byteLeft >= 0);

@@ -1,6 +1,6 @@
 /* Generated SBE (Simple Binary Encoding) message codec */
-#ifndef _OMDD_SBE_GROUPSIZE8_H_
-#define _OMDD_SBE_GROUPSIZE8_H_
+#ifndef _OMDD_SBE_GROUPSIZE8REVERSE_H_
+#define _OMDD_SBE_GROUPSIZE8REVERSE_H_
 
 #if defined(SBE_HAVE_CMATH)
 /* cmath needed for std::numeric_limits<double>::quiet_NaN() */
@@ -36,7 +36,7 @@ using namespace sbe;
 namespace omdd {
 namespace sbe {
 
-class GroupSize8
+class GroupSize8Reverse
 {
 private:
     char *m_buffer;
@@ -46,8 +46,7 @@ private:
 
     inline void reset(char *buffer, const std::uint64_t offset, const std::uint64_t bufferLength, const std::uint64_t actingVersion)
     {
-        // SBE_OMD_HACK
-        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 1) > bufferLength), false))
+        if (SBE_BOUNDS_CHECK_EXPECT(((offset + 4) > bufferLength), false))
         {
             throw std::runtime_error("buffer too short for flyweight [E107]");
         }
@@ -59,27 +58,27 @@ private:
     }
 
 public:
-    GroupSize8() : m_buffer(nullptr), m_offset(0) {}
+    GroupSize8Reverse() : m_buffer(nullptr), m_offset(0) {}
 
-    GroupSize8(char *buffer, const std::uint64_t bufferLength, const std::uint64_t actingVersion)
+    GroupSize8Reverse(char *buffer, const std::uint64_t bufferLength, const std::uint64_t actingVersion)
     {
         reset(buffer, 0, bufferLength, actingVersion);
     }
 
-    GroupSize8(const GroupSize8& codec) :
+    GroupSize8Reverse(const GroupSize8Reverse& codec) :
         m_buffer(codec.m_buffer),
         m_bufferLength(codec.m_bufferLength),
         m_offset(codec.m_offset),
         m_actingVersion(codec.m_actingVersion){}
 
 #if __cplusplus >= 201103L
-    GroupSize8(GroupSize8&& codec) :
+    GroupSize8Reverse(GroupSize8Reverse&& codec) :
         m_buffer(codec.m_buffer),
         m_bufferLength(codec.m_bufferLength),
         m_offset(codec.m_offset),
         m_actingVersion(codec.m_actingVersion){}
 
-    GroupSize8& operator=(GroupSize8&& codec) SBE_NOEXCEPT
+    GroupSize8Reverse& operator=(GroupSize8Reverse&& codec) SBE_NOEXCEPT
     {
         m_buffer = codec.m_buffer;
         m_bufferLength = codec.m_bufferLength;
@@ -90,7 +89,7 @@ public:
 
 #endif
 
-    GroupSize8& operator=(const GroupSize8& codec) SBE_NOEXCEPT
+    GroupSize8Reverse& operator=(const GroupSize8Reverse& codec) SBE_NOEXCEPT
     {
         m_buffer = codec.m_buffer;
         m_bufferLength = codec.m_bufferLength;
@@ -99,7 +98,7 @@ public:
         return *this;
     }
 
-    GroupSize8 &wrap(char *buffer, const std::uint64_t offset, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
+    GroupSize8Reverse &wrap(char *buffer, const std::uint64_t offset, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
     {
         reset(buffer, offset, bufferLength, actingVersion);
         return *this;
@@ -126,37 +125,6 @@ public:
     }
 
 
-    static SBE_CONSTEXPR std::uint8_t numInGroupNullValue() SBE_NOEXCEPT
-    {
-        return SBE_NULLVALUE_UINT8;
-    }
-
-    static SBE_CONSTEXPR std::uint8_t numInGroupMinValue() SBE_NOEXCEPT
-    {
-        return (std::uint8_t)0;
-    }
-
-    static SBE_CONSTEXPR std::uint8_t numInGroupMaxValue() SBE_NOEXCEPT
-    {
-        return (std::uint8_t)254;
-    }
-
-    static SBE_CONSTEXPR std::size_t numInGroupEncodingLength() SBE_NOEXCEPT
-    {
-        return 1;
-    }
-
-    std::uint8_t numInGroup() const
-    {
-        return (*((std::uint8_t *)(m_buffer + m_offset + 0)));
-    }
-
-    GroupSize8 &numInGroup(const std::uint8_t value)
-    {
-        *((std::uint8_t *)(m_buffer + m_offset + 0)) = (value);
-        return *this;
-    }
-
     static SBE_CONSTEXPR std::uint8_t filler1NullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
@@ -179,12 +147,12 @@ public:
 
     std::uint8_t filler1() const
     {
-        return (*((std::uint8_t *)(m_buffer + m_offset + 1)));
+        return (*((std::uint8_t *)(m_buffer + m_offset + 0)));
     }
 
-    GroupSize8 &filler1(const std::uint8_t value)
+    GroupSize8Reverse &filler1(const std::uint8_t value)
     {
-        *((std::uint8_t *)(m_buffer + m_offset + 1)) = (value);
+        *((std::uint8_t *)(m_buffer + m_offset + 0)) = (value);
         return *this;
     }
 
@@ -210,12 +178,43 @@ public:
 
     std::uint16_t blockLength() const
     {
-        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 2)));
+        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 1)));
     }
 
-    GroupSize8 &blockLength(const std::uint16_t value)
+    GroupSize8Reverse &blockLength(const std::uint16_t value)
     {
-        *((std::uint16_t *)(m_buffer + m_offset + 2)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        *((std::uint16_t *)(m_buffer + m_offset + 1)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        return *this;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupNullValue() SBE_NOEXCEPT
+    {
+        return SBE_NULLVALUE_UINT8;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupMinValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)0;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t numInGroupMaxValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)254;
+    }
+
+    static SBE_CONSTEXPR std::size_t numInGroupEncodingLength() SBE_NOEXCEPT
+    {
+        return 1;
+    }
+
+    std::uint8_t numInGroup() const
+    {
+        return (*((std::uint8_t *)(m_buffer + m_offset + 3)));
+    }
+
+    GroupSize8Reverse &numInGroup(const std::uint8_t value)
+    {
+        *((std::uint8_t *)(m_buffer + m_offset + 3)) = (value);
         return *this;
     }
 };

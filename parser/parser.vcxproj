@@ -82,6 +82,7 @@
     <ClInclude Include="src\main\include\omdd_sbe\DisasterRecoverySignal.h" />
     <ClInclude Include="src\main\include\omdd_sbe\EstimatedAverageSettlementPrice.h" />
     <ClInclude Include="src\main\include\omdd_sbe\GroupSize8.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize8Reverse.h" />
     <ClInclude Include="src\main\include\omdd_sbe\ImpliedVolatility.h" />
     <ClInclude Include="src\main\include\omdd_sbe\Logon.h" />
     <ClInclude Include="src\main\include\omdd_sbe\LogonResponse.h" />
@@ -106,7 +107,11 @@
     <ClInclude Include="src\main\include\openomd\multicastutil.h" />
     <ClInclude Include="src\main\include\openomd\omdbaseparser.h" />
     <ClInclude Include="src\main\include\openomd\omdcparser.h" />
+    <ClInclude Include="src\main\include\openomd\omddparser.h" />
     <ClInclude Include="src\main\include\sbe\sbe.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="omdpatch.sh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1ebfd4e7-64ad-4e23-8288-a7775bef2900}</ProjectGuid>

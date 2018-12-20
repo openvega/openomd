@@ -31,6 +31,7 @@
 #include <sbe/sbe.h>
 
 #include "MessageHeader.h"
+#include "GroupSize8Reverse.h"
 #include "GroupSize8.h"
 
 using namespace sbe;

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "omdc_sbe/Logon.h"
 #include "openomd/omdcparser.h"
 
 namespace omdc
@@ -50,6 +49,10 @@ public:
     ONMESSAGE(Yield)
     void onUnknownMessage(uint16_t, uint16_t)
     {
+    }
+    void onError(std::exception const& ex)
+    {
+        printf("OMDCProcessor error %s\n", ex.what());
     }
 };
 

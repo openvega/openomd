@@ -41,8 +41,6 @@
 
 namespace openomd
 {
-#define OMD_SWITCH_CASE(MESSAGE) case MESSAGE::sbeTemplateId(): process<MESSAGE>(pos, msgSize, callback, partition); break;
-
 class OmdcParser : public OmdBaseParser
 {
 public:
@@ -67,7 +65,6 @@ public:
                 OMD_SWITCH_CASE(IndexDefinition);
                 OMD_SWITCH_CASE(IndicativeEquilibriumPrice);
                 OMD_SWITCH_CASE(LiquidityProvider);
-                OMD_SWITCH_CASE(Logon);
                 OMD_SWITCH_CASE(LogonResponse);
                 OMD_SWITCH_CASE(MarketDefinition);
                 OMD_SWITCH_CASE(MarketTurnover);
@@ -77,7 +74,6 @@ public:
                 OMD_SWITCH_CASE(OrderImbalance);
                 OMD_SWITCH_CASE(ReferencePrice);
                 OMD_SWITCH_CASE(RefreshComplete);
-                OMD_SWITCH_CASE(RetransmissionReq);
                 OMD_SWITCH_CASE(RetransmissionResp);
                 OMD_SWITCH_CASE(SecurityDefinition);
                 OMD_SWITCH_CASE(SecurityStatus);

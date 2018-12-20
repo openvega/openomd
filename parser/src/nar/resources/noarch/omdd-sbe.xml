@@ -13,6 +13,11 @@
     <type name="str32" length="32" primitiveType="char"/>
     <type name="str320" length="320" primitiveType="char"/>
     <composite name="groupSize8" description="Repeating group dimension" semanticType="NumInGroup">
+      <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
+      <type name="filler1" primitiveType="uint8"/>
+      <type name="blockLength" description="blockLength" primitiveType="uint16"/>
+    </composite>
+    <composite name="groupSize8Reverse" description="Repeating group dimension" semanticType="NumInGroup">
       <type name="filler1" primitiveType="uint8"/>
       <type name="blockLength" description="blockLength" primitiveType="uint16"/>
       <type name="numInGroup" description="Num of Entries" primitiveType="uint8"/>
@@ -191,8 +196,7 @@
   </message>
   <message name="AggregateOrderBookUpdate" id="353" description="AggregateOrderBookUpdate" semanticType="4">
     <field name="orderbookID" id="101" type="orderbookID"/>
-    <field name="filler1" id="201" type="str3"/>
-    <group name="NoEntries" id="102" dimensionType="groupSize8">
+    <group name="NoEntries" id="102" dimensionType="groupSize8Reverse">
       <field name="aggregateQuantity" id="103" type="uint64"/>
       <field name="price" id="104" type="int32"/>
       <field name="numberOfOrders" id="105" type="uint32"/>
