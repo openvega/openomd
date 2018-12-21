@@ -600,35 +600,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t intoTypeId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t infoTypeId() SBE_NOEXCEPT
     {
         return 105;
     }
 
-    static SBE_CONSTEXPR std::uint64_t intoTypeSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t infoTypeSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool intoTypeInActingVersion() SBE_NOEXCEPT
+    bool infoTypeInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= intoTypeSinceVersion();
+        return m_actingVersion >= infoTypeSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t intoTypeEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t infoTypeEncodingOffset() SBE_NOEXCEPT
     {
          return 325;
     }
 
 
-    static const char *intoTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *infoTypeMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -641,32 +641,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint8_t intoTypeNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t infoTypeNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR std::uint8_t intoTypeMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t infoTypeMinValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint8_t intoTypeMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t infoTypeMaxValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)254;
     }
 
-    static SBE_CONSTEXPR std::size_t intoTypeEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t infoTypeEncodingLength() SBE_NOEXCEPT
     {
         return 1;
     }
 
-    std::uint8_t intoType() const
+    std::uint8_t infoType() const
     {
         return (*((std::uint8_t *)(m_buffer + m_offset + 325)));
     }
 
-    MarketAlert &intoType(const std::uint8_t value)
+    MarketAlert &infoType(const std::uint8_t value)
     {
         *((std::uint8_t *)(m_buffer + m_offset + 325)) = (value);
         return *this;
@@ -764,14 +764,12 @@ public:
             m_buffer = buffer;
             m_bufferLength = bufferLength;
             m_dimensions.wrap(m_buffer, *pos, actingVersion, bufferLength);
-            // SBE_OMD_HACK
-            m_blockLength = sbeBlockLength();
+            m_blockLength = m_dimensions.blockLength();
             m_count = m_dimensions.numInGroup();
             m_index = -1;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + 1;
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
         inline void wrapForEncode(char *buffer, const std::uint8_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
@@ -797,8 +795,7 @@ public:
             m_blockLength = 320;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + 1;
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
         static SBE_CONSTEXPR std::uint64_t sbeHeaderSize() SBE_NOEXCEPT

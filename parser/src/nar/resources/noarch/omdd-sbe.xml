@@ -284,7 +284,7 @@
     <field name="filler" id="201" type="uint8"/>
     <field name="header" id="103" type="str320"/>
     <field name="lastFragment" id="104" type="char"/>
-    <field name="intoType" id="105" type="uint8"/>
+    <field name="infoType" id="105" type="uint8"/>
     <field name="priority" id="106" type="uint8"/>
     <group name="noLines" id="107" dimensionType="groupSize8">
       <field name="content" id="108" type="str320"/>
