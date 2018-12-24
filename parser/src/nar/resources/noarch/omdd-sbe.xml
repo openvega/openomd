@@ -181,7 +181,7 @@
   </message>
   <message name="ModifyOrder" id="331" semanticType="4">
     <field name="orderBookID" id="101" type="orderbookID"/>
-    <field name="orderId" id="102" type="uint64"/>
+    <field name="orderID" id="102" type="uint64"/>
     <field name="price" id="103" type="int32"/>
     <field name="quantity" id="104" type="uint32"/>
     <field name="side" id="105" type="uint8"/>
@@ -218,7 +218,7 @@
   </message>
   <message name="Trade" id="350" semanticType="4">
     <field name="orderBookID" id="101" type="orderbookID"/>
-    <field name="orderId" id="102" type="uint64"/>
+    <field name="orderID" id="102" type="uint64"/>
     <field name="price" id="103" type="int32"/>
     <field name="tradeID" id="104" type="uint64"/>
     <field name="comboGroupID" id="105" type="uint32"/>

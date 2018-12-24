@@ -408,7 +408,7 @@ TEST(OMDC_TEST, AddOrder)
         void onMessage(sbe::AddOrder const& ao, int32_t)
         {
             EXPECT_EQ(285, ao.securityCode());
-            EXPECT_EQ(18204674, ao.orderId());
+            EXPECT_EQ(18204674, ao.orderID());
             EXPECT_EQ(17460, ao.price());
             EXPECT_EQ(1000, ao.quantity());
             EXPECT_EQ(1, ao.side());
@@ -432,7 +432,7 @@ TEST(OMDC_TEST, ModifyOrder)
         void onMessage(sbe::ModifyOrder const& mo, int32_t)
         {
             EXPECT_EQ(20147, mo.securityCode());
-            EXPECT_EQ(52288513, mo.orderId());
+            EXPECT_EQ(52288513, mo.orderID());
             EXPECT_EQ(1332000, mo.quantity());
             EXPECT_EQ(1, mo.side());
             EXPECT_EQ(0, mo.orderBookPosition());
@@ -453,7 +453,7 @@ TEST(OMDC_TEST, DeleteOrder)
         void onMessage(sbe::DeleteOrder const& d, int32_t)
         {
             EXPECT_EQ(19133, d.securityCode());
-            EXPECT_EQ(77473795, d.orderId());
+            EXPECT_EQ(77473795, d.orderID());
             EXPECT_EQ(1, d.side());            
         }
         using OMDCProcessor::onMessage;
@@ -472,7 +472,7 @@ TEST(OMDC_TEST, AddOddLotOrder)
         void onMessage(sbe::AddOddLotOrder const& oo, int32_t)
         {
             EXPECT_EQ(35, oo.securityCode());
-            EXPECT_EQ(17237249, oo.orderId());
+            EXPECT_EQ(17237249, oo.orderID());
             EXPECT_EQ(4700, oo.price());
             EXPECT_EQ(284, oo.quantity());
             EXPECT_EQ(4588, oo.brokerID());
@@ -494,7 +494,7 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
         void onMessage(sbe::DeleteOddLotOrder const& dol, int32_t)
         {
             EXPECT_EQ(700, dol.securityCode());
-            EXPECT_EQ(1446382593, dol.orderId());
+            EXPECT_EQ(1446382593, dol.orderID());
             EXPECT_EQ(816, dol.brokerID());
             EXPECT_EQ(1, dol.side());
         }
