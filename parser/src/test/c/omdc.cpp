@@ -64,15 +64,6 @@ void processMsg(char* msg, size_t size)
     parser.parse(msg, size, processor, 0);
 }
 
-//struct Processor : public OMDCProcessor
-//{
-//    void onMessage(, int32_t)
-//    {
-//    }
-//    using OMDCProcessor::onMessage;
-//};
-//processMsg<Processor>(msg, sizeof(msg) - 1);
-
 TEST(OMDC_TEST, SequenceReset)
 {
     char msg[] = "\x18\x00\x01\x02\x01\x00\x00\x00\x80\x73\x01\x12\xc8\xf4\x12\x15" \
@@ -705,7 +696,14 @@ TEST(OMDC_TEST, Trade)
 
 TEST(OMDC_TEST, TradeCancel)
 {
-
+    //struct Processor : public OMDCProcessor
+    //{
+    //    void onMessage(, int32_t)
+    //    {
+    //    }
+    //    using OMDCProcessor::onMessage;
+    //};
+    //processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, TradeTicker)
@@ -874,7 +872,14 @@ TEST(OMDC_TEST, MarketTurnover)
 
 TEST(OMDC_TEST, Yield)
 {
-
+    //struct Processor : public OMDCProcessor
+    //{
+    //    void onMessage(, int32_t)
+    //    {
+    //    }
+    //    using OMDCProcessor::onMessage;
+    //};
+    //processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, News)
@@ -1053,12 +1058,26 @@ TEST(OMDC_TEST, IndexData)
 
 TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
 {
-
+    //struct Processor : public OMDCProcessor
+    //{
+    //    void onMessage(, int32_t)
+    //    {
+    //    }
+    //    using OMDCProcessor::onMessage;
+    //};
+    //processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, StockConnectMarketTurnover)
 {
-
+    //struct Processor : public OMDCProcessor
+    //{
+    //    void onMessage(, int32_t)
+    //    {
+    //    }
+    //    using OMDCProcessor::onMessage;
+    //};
+    //processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 }
 }

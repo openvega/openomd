@@ -69,7 +69,20 @@ TEST(OMDD_TEST, SequenceReset)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
+TEST(OMDD_TEST, DisasterRecoverySignal)
+{
+    char msg[] = "\x18\x00\x01\x00\x6e\x02\x00\x00\x80\x7f\x5e\x0a\xfd\x68\x6d\x14" \
+        "\x08\x00\x69\x00\x02\x00\x00\x00";
+    struct Processor : public OMDDProcessor
+    {
+        void onMessage(sbe::DisasterRecoverySignal const& dr, int32_t)
+        {
+            EXPECT_EQ(2, dr.drStatus());
+        }
+        using OMDDProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
+}
 TEST(OMDD_TEST, RefreshComplete)
 {
     char msg[] = "\x18\x00\x01\x0b\x01\x00\x00\x00\x00\x84\xdc\x89\xad\x3f\x69\x14" \
@@ -84,7 +97,6 @@ TEST(OMDD_TEST, RefreshComplete)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, CommodityDefinition)
 {
     char msg[] = "\x92\x05\x0f\xe1\xab\x09\x00\x00\x40\xbc\x55\x98\x90\xc3\xf2\x14" \
@@ -115,7 +127,6 @@ TEST(OMDD_TEST, CommodityDefinition)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, ClassDefinition)
 {
     char msg[] = "\x98\x05\x0c\xe1\x77\x0a\x00\x00\xc0\xf9\x22\xa4\x90\xc3\xf2\x14" \
@@ -156,7 +167,6 @@ TEST(OMDD_TEST, ClassDefinition)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, SeriesDefinitionBase)
 {
     char msg[] = "\xb0\x05\x18\x00\x68\x00\x00\x00\x80\xdf\xd9\x83\xb2\x3f\x69\x14" \
@@ -182,7 +192,6 @@ TEST(OMDD_TEST, SeriesDefinitionBase)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, SeriesDefinitionExtended)
 {
     char msg[] = "\x58\x05\x0d\xe1\xba\x0c\x00\x00\x80\x4e\xfc\xc9\x90\xc3\xf2\x14" \
@@ -219,7 +228,6 @@ TEST(OMDD_TEST, SeriesDefinitionExtended)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, CombinationDefinition)
 {
     char msg[] = "\xb0\x05\x48\xe1\x05\xec\x06\x00\x00\x31\x6f\xfb\xdd\xce\xf2\x14" \
@@ -238,7 +246,6 @@ TEST(OMDD_TEST, CombinationDefinition)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, MarketStatus)
 {
     char msg[] = "\xc0\x05\x1c\xe1\xd5\xde\x0a\x00\x40\x0e\x92\xc6\x53\xd5\xf2\x14" \
@@ -268,7 +275,6 @@ TEST(OMDD_TEST, MarketStatus)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, SeriesStatus)
 {
     char msg[] = "\xbc\x05\x79\xe1\x44\x97\x63\x00\xc0\x32\x91\x7d\x3f\xda\xf2\x14" \
@@ -285,20 +291,22 @@ TEST(OMDD_TEST, SeriesStatus)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, CommodityStatus)
 {
-    //struct Processor : public OMDDProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDDProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
+    char msg[] = "\x18\x00\x01\xe1\x51\xa7\xa0\x00\x40\x29\x10\x64\x3c\xe8\xf2\x14" \
+        "\x08\x00\x42\x01\xd3\x07\x4e\x00";
 
+    struct Processor : public OMDDProcessor
+    {
+        void onMessage(sbe::CommodityStatus const& cs, int32_t)
+        {
+            EXPECT_EQ(2003, cs.commodityCode());
+            EXPECT_EQ('N', cs.suspended());
+        }
+        using OMDDProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDD_TEST, AddOrder)
 {
     char msg[] = "\x30\x00\x01\xc8\x9b\xc2\x00\x00\xc0\xd5\xca\x46\x67\xe4\xf2\x14" \
