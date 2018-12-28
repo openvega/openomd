@@ -3,40 +3,38 @@
 
 namespace omdd
 {
-namespace sbe
-{
 class OMDDProcessor
 {
 #define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t){}
 
 public:
-    ONMESSAGE(AddOrder)
-    ONMESSAGE(AggregateOrderBookUpdate)
-    ONMESSAGE(CalculatedOpeningPrice)
-    ONMESSAGE(ClassDefinition)
-    ONMESSAGE(CombinationDefinition)
-    ONMESSAGE(CommodityDefinition)
-    ONMESSAGE(CommodityStatus)
-    ONMESSAGE(DeleteOrder)
-    ONMESSAGE(DisasterRecoverySignal)
-    ONMESSAGE(EstimatedAverageSettlementPrice)
-    ONMESSAGE(ImpliedVolatility)
-    ONMESSAGE(LogonResponse)
-    ONMESSAGE(MarketAlert)
-    ONMESSAGE(ModifyOrder)
-    ONMESSAGE(OpenInterest)
-    ONMESSAGE(OrderbookClear)
-    ONMESSAGE(QuoteRequest)
-    ONMESSAGE(RefreshComplete)
-    ONMESSAGE(RetransmissionResponse)
-    ONMESSAGE(SequenceReset)
-    ONMESSAGE(SeriesDefinitionBase)
-    ONMESSAGE(SeriesDefinitionExtended)
-    ONMESSAGE(SeriesStatistics)
-    ONMESSAGE(SeriesStatus)
-    ONMESSAGE(Trade)
-    ONMESSAGE(TradeAmendment)
-    ONMESSAGE(TradeStatistics)
+    ONMESSAGE(sbe::AddOrder)
+    ONMESSAGE(sbe::AggregateOrderBookUpdate)
+    ONMESSAGE(sbe::CalculatedOpeningPrice)
+    ONMESSAGE(sbe::ClassDefinition)
+    ONMESSAGE(sbe::CombinationDefinition)
+    ONMESSAGE(sbe::CommodityDefinition)
+    ONMESSAGE(sbe::CommodityStatus)
+    ONMESSAGE(sbe::DeleteOrder)
+    ONMESSAGE(sbe::DisasterRecoverySignal)
+    ONMESSAGE(sbe::EstimatedAverageSettlementPrice)
+    ONMESSAGE(sbe::ImpliedVolatility)
+    ONMESSAGE(sbe::LogonResponse)
+    ONMESSAGE(sbe::MarketAlert)
+    ONMESSAGE(sbe::ModifyOrder)
+    ONMESSAGE(sbe::OpenInterest)
+    ONMESSAGE(sbe::OrderbookClear)
+    ONMESSAGE(sbe::QuoteRequest)
+    ONMESSAGE(sbe::RefreshComplete)
+    ONMESSAGE(sbe::RetransmissionResponse)
+    ONMESSAGE(sbe::SequenceReset)
+    ONMESSAGE(sbe::SeriesDefinitionBase)
+    ONMESSAGE(sbe::SeriesDefinitionExtended)
+    ONMESSAGE(sbe::SeriesStatistics)
+    ONMESSAGE(sbe::SeriesStatus)
+    ONMESSAGE(sbe::Trade)
+    ONMESSAGE(sbe::TradeAmendment)
+    ONMESSAGE(sbe::TradeStatistics)
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }
@@ -331,15 +329,25 @@ TEST(OMDD_TEST, AddOrder)
 }
 TEST(OMDD_TEST, ModifyOrder)
 {
-    //struct Processor : public OMDDProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDDProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
-
+    // handcraft
+    char msg[] = "\x30\x00\x01\xc8\x9b\xc2\x00\x00\xc0\xd5\xca\x46\x67\xe4\xf2\x14" \
+        "\x20\x00\x4b\x01\xa4\x0f\x27\x00\xaf\x96\x02\x00\xc1\x4b\xf8\x5f" \
+        "\x20\x4e\x00\x00\x01\x00\x00\x00\x00\x02\x00\x00\x01\x00\x00\x00";
+    struct Processor : public OMDDProcessor
+    {
+        void onMessage(sbe::ModifyOrder const& mo, int32_t)
+        {
+            EXPECT_EQ(2559908, mo.orderBookID());
+            EXPECT_EQ(6915360520128337583, mo.orderID());
+            EXPECT_EQ(20000, mo.price());
+            EXPECT_EQ(1, mo.quantity());
+            EXPECT_EQ(0, mo.side());
+            EXPECT_EQ(0, mo.orderType());
+            EXPECT_EQ(1, mo.orderBookPosition());
+        }
+        using OMDDProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 TEST(OMDD_TEST, DeleteOrder)
 {
@@ -415,15 +423,18 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
 }
 TEST(OMDD_TEST, OrderbookClear)
 {
-    //struct Processor : public OMDDProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDDProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
-
+    // handcraft
+    char msg[] = "\x74\x00\x04\x00\x44\xfe\x27\x00\x80\xe8\xf1\x53\x9d\x4f\x69\x14" \
+        "\x08\x00\x4f\x01\x0e\x09\x9c\x01";
+    struct Processor : public OMDDProcessor
+    {
+        void onMessage(sbe::OrderbookClear const& obc, int32_t)
+        {
+            EXPECT_EQ(27003150, obc.orderbookID());
+        }
+        using OMDDProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 TEST(OMDD_TEST, QuoteRequest)
 {
@@ -472,15 +483,25 @@ TEST(OMDD_TEST, Trade)
 }
 TEST(OMDD_TEST, TradeAmendment)
 {
-    //struct Processor : public OMDDProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDDProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
-
+    // handcraft
+    char msg[] = "\x48\x00\x01\x00\xb1\x97\x00\x00\x40\xf1\x35\x94\x79\x7b\x69\x14" \
+        "\x28\x00\x64\x01\x63\xc6\x00\x00\x01\xd3\x59\x09\x00\x00\x00\x00" \
+        "\x80\x57\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\xaf\x26\x94" \
+        "\x79\x7b\x69\x14\x01\x00\x00\x00";
+    struct Processor : public OMDDProcessor
+    {
+        void onMessage(sbe::TradeAmendment const& ta, int32_t)
+        {
+            EXPECT_EQ(673801620517078627, ta.tradeID());
+            EXPECT_EQ(0, ta.comboGroupID());
+            EXPECT_EQ(22400, ta.price());
+            EXPECT_EQ(1, ta.quantity());
+            EXPECT_EQ(1470842515420000000, ta.tradeTime());
+            EXPECT_EQ(1, ta.tradeState());
+        }
+        using OMDDProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 TEST(OMDD_TEST, TradeStatistics)
 {
@@ -716,6 +737,5 @@ TEST(OMDD_TEST, ImpliedVolatility)
         using OMDDProcessor::onMessage;
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
-}
 }
 }
