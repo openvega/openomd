@@ -169,24 +169,25 @@ TEST(OMDD_TEST, ClassDefinition)
 }
 TEST(OMDD_TEST, SeriesDefinitionBase)
 {
-    char msg[] = "\xb0\x05\x18\x00\x68\x00\x00\x00\x80\xdf\xd9\x83\xb2\x3f\x69\x14" \
-        "\x3c\x00\x2f\x01\x5f\x09\x03\x00\x58\x49\x43\x32\x2e\x35\x30\x46" \
-        "\x37\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
-        "\x20\x20\x20\x20\x20\x20\x20\x20\x01\x03\x00\x00\xfa\x00\x00\x00" \
-        "\x32\x30\x31\x37\x30\x36\x32\x39\x03\x00\x01\x00";
+    char msg[] = "\xb0\x05\x18\x00\xc7\x24\x26\x00\x80\xdf\xe3\x86\xe9\x11\x5c\x15" \
+        "\x3c\x00\x2f\x01\x35\x10\xd5\x00\x48\x45\x42\x37\x33\x2e\x31\x34" \
+        "\x4f\x39\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x01\x02\x00\x00\x92\x1c\x00\x00" \
+        "\x32\x30\x31\x39\x30\x33\x32\x38\x02\x00\x02\x00";
 
     struct Processor : public OMDDProcessor
     {
         void onMessage(sbe::SeriesDefinitionBase const& sdb, int32_t)
         {
-            EXPECT_EQ(199007, sdb.orderbookID());
-            EXPECT_EQ("XIC2.50F7                       ", sdb.getSymbolAsString());
+            EXPECT_EQ(13963317, sdb.orderbookID());
+            EXPECT_EQ("HEB73.14O9                      ", sdb.getSymbolAsString());
             EXPECT_EQ(1, sdb.financialProduct());
-            EXPECT_EQ(3, sdb.numberOfDecimalsPrice());
+            EXPECT_EQ(2, sdb.numberOfDecimalsPrice());
             EXPECT_EQ(0, sdb.numberOfLegs());
-            EXPECT_EQ(250, sdb.strikePrice());
-            EXPECT_EQ("20170629", sdb.getExpirationDateAsString());
-            EXPECT_EQ(1, sdb.putOrCall());
+            EXPECT_EQ(7314, sdb.strikePrice());
+            EXPECT_EQ("20190328", sdb.getExpirationDateAsString());
+            EXPECT_EQ(2, sdb.decimalInStrikePrice());
+            EXPECT_EQ(2, sdb.putOrCall());
         }
         using OMDDProcessor::onMessage;
     };
@@ -194,35 +195,37 @@ TEST(OMDD_TEST, SeriesDefinitionBase)
 }
 TEST(OMDD_TEST, SeriesDefinitionExtended)
 {
-    char msg[] = "\x58\x05\x0d\xe1\xba\x0c\x00\x00\x80\x4e\xfc\xc9\x90\xc3\xf2\x14" \
-        "\x68\x00\x30\x01\x14\x04\x10\x00\x48\x47\x4e\x38\x37\x2e\x35\x30" \
-        "\x49\x37\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
-        "\x20\x20\x20\x20\x20\x20\x20\x20\x0c\x14\x06\x00\x14\x04\x3c\x39" \
-        "\x2e\x22\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x20\x20\x20" \
+    char msg[] = "\x58\x05\x0d\x00\xb3\xf0\x26\x00\x80\xdf\xe3\x86\xe9\x11\x5c\x15" \
+        "\x68\x00\x30\x01\xa8\x0a\xa6\x00\x43\x54\x43\x34\x2e\x30\x30\x4a" \
+        "\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
+        "\x20\x20\x20\x20\x20\x20\x20\x20\x0c\x14\x06\x00\xa8\x0a\x5e\x3b" \
+        "\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x20\x20\x20" \
         "\x20\x20\x20\x20\x20\x20\x20\x20\x01\x00\x00\x00\x00\x00\x00\x00" \
-        "\x32\x30\x31\x37\x30\x39\x32\x38\x00\x00\xb8\xf7\x9e\x77\xe8\x14" \
+        "\x32\x30\x31\x38\x31\x30\x33\x30\x00\x00\x3b\x4f\x04\x54\x62\x15" \
         "\x00\x00\x00\x00\x00\x00\x00\x00";
 
     struct Processor : public OMDDProcessor
     {
         void onMessage(sbe::SeriesDefinitionExtended const& sde, int32_t)
         {
-            EXPECT_EQ(1049620, sde.orderbookID());
-            EXPECT_EQ("HGN87.50I7                      ", sde.getSymbolAsString());
+            EXPECT_EQ(10881704, sde.orderbookID());
+            EXPECT_EQ("CTC4.00J8                       ", sde.getSymbolAsString());
             EXPECT_EQ(12, sde.country());
             EXPECT_EQ(20, sde.market());
             EXPECT_EQ(6, sde.instrumentGroup());
             EXPECT_EQ(0, sde.modifier());
-            EXPECT_EQ(1044, sde.commodityCode());
-            EXPECT_EQ(14652, sde.expirationDate());
-            EXPECT_EQ(8750, sde.strikePrice());
+            EXPECT_EQ(2728, sde.commodityCode());
+            EXPECT_EQ(15198, sde.expirationDate());
+            EXPECT_EQ(400, sde.strikePrice());
             EXPECT_EQ(0, sde.contractSize());
             EXPECT_EQ("            ", sde.getIsinCodeAsString());
             EXPECT_EQ(1, sde.seriesStatus());
             EXPECT_EQ(0, sde.effectiveTomorrow());
             EXPECT_EQ(0, sde.priceQuotationFactor());
-            EXPECT_EQ("20170928", sde.getEffectiveExpDateAsString());
-            EXPECT_EQ(1506585600000000000, sde.dateTimeLastTrading());
+            EXPECT_EQ(0, sde.priceMethod());
+            EXPECT_EQ("20181030", sde.getEffectiveExpDateAsString());
+            EXPECT_EQ(1540886400000000000, sde.dateTimeLastTrading());
+            EXPECT_EQ(0, sde.dateTimeFirstTrading());
         }
         using OMDDProcessor::onMessage;
     };
@@ -277,15 +280,16 @@ TEST(OMDD_TEST, MarketStatus)
 }
 TEST(OMDD_TEST, SeriesStatus)
 {
-    char msg[] = "\xbc\x05\x79\xe1\x44\x97\x63\x00\xc0\x32\x91\x7d\x3f\xda\xf2\x14" \
-        "\x0c\x00\x41\x01\x0e\x09\x03\x01\x4e\x00\x00\x00";
+    char msg[] = "\xbc\x05\x79\x00\x91\x4e\x26\x00\x40\x94\x97\x86\xe9\x11\x5c\x15" \
+        "\x0c\x00\x41\x01\xd6\x07\x2e\x01\x02\x01\x00\x00";
 
     struct Processor : public OMDDProcessor
     {
         void onMessage(sbe::SeriesStatus const& ss, int32_t)
         {
-            EXPECT_EQ(16976142, ss.orderbookID());
-            EXPECT_EQ(78, ss.suspended());
+            EXPECT_EQ(19793878, ss.orderbookID());
+            EXPECT_EQ(2, ss.suspensionIndicator());
+            EXPECT_EQ(1, ss.seriesStatus());
         }
         using OMDDProcessor::onMessage;
     };
@@ -293,15 +297,16 @@ TEST(OMDD_TEST, SeriesStatus)
 }
 TEST(OMDD_TEST, CommodityStatus)
 {
-    char msg[] = "\x18\x00\x01\xe1\x51\xa7\xa0\x00\x40\x29\x10\x64\x3c\xe8\xf2\x14" \
-        "\x08\x00\x42\x01\xd3\x07\x4e\x00";
+    char msg[] = "\x18\x00\x01\xb9\x0f\x1c\x00\x00\x80\xa4\x71\x0f\xff\x2a\x5c\x15" \
+        "\x08\x00\x42\x01\x88\x14\x59\x01";
 
     struct Processor : public OMDDProcessor
     {
         void onMessage(sbe::CommodityStatus const& cs, int32_t)
         {
-            EXPECT_EQ(2003, cs.commodityCode());
-            EXPECT_EQ('N', cs.suspended());
+            EXPECT_EQ(5256, cs.commodityCode());
+            EXPECT_EQ('Y', cs.suspended());
+            EXPECT_EQ(1, cs.locked());
         }
         using OMDDProcessor::onMessage;
     };

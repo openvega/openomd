@@ -1297,6 +1297,78 @@ public:
         return *this;
     }
 
+    static SBE_CONSTEXPR std::uint16_t priceMethodId() SBE_NOEXCEPT
+    {
+        return 115;
+    }
+
+    static SBE_CONSTEXPR std::uint64_t priceMethodSinceVersion() SBE_NOEXCEPT
+    {
+         return 0;
+    }
+
+    bool priceMethodInActingVersion() SBE_NOEXCEPT
+    {
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+#endif
+        return m_actingVersion >= priceMethodSinceVersion();
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+    }
+
+    static SBE_CONSTEXPR std::size_t priceMethodEncodingOffset() SBE_NOEXCEPT
+    {
+         return 74;
+    }
+
+
+    static const char *priceMethodMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    {
+        switch (metaAttribute)
+        {
+            case MetaAttribute::EPOCH: return "unix";
+            case MetaAttribute::TIME_UNIT: return "nanosecond";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
+            case MetaAttribute::PRESENCE: return "required";
+        }
+
+        return "";
+    }
+
+    static SBE_CONSTEXPR std::uint8_t priceMethodNullValue() SBE_NOEXCEPT
+    {
+        return SBE_NULLVALUE_UINT8;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t priceMethodMinValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)0;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t priceMethodMaxValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)254;
+    }
+
+    static SBE_CONSTEXPR std::size_t priceMethodEncodingLength() SBE_NOEXCEPT
+    {
+        return 1;
+    }
+
+    std::uint8_t priceMethod() const
+    {
+        return (*((std::uint8_t *)(m_buffer + m_offset + 74)));
+    }
+
+    SeriesDefinitionExtended &priceMethod(const std::uint8_t value)
+    {
+        *((std::uint8_t *)(m_buffer + m_offset + 74)) = (value);
+        return *this;
+    }
+
     static SBE_CONSTEXPR std::uint16_t filler1Id() SBE_NOEXCEPT
     {
         return 201;
@@ -1321,7 +1393,7 @@ public:
 
     static SBE_CONSTEXPR std::size_t filler1EncodingOffset() SBE_NOEXCEPT
     {
-         return 74;
+         return 75;
     }
 
 
@@ -1338,40 +1410,40 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1NullValue() SBE_NOEXCEPT
     {
-        return SBE_NULLVALUE_UINT16;
+        return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1MinValue() SBE_NOEXCEPT
     {
-        return (std::uint16_t)0;
+        return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1MaxValue() SBE_NOEXCEPT
     {
-        return (std::uint16_t)65534;
+        return (std::uint8_t)254;
     }
 
     static SBE_CONSTEXPR std::size_t filler1EncodingLength() SBE_NOEXCEPT
     {
-        return 2;
+        return 1;
     }
 
-    std::uint16_t filler1() const
+    std::uint8_t filler1() const
     {
-        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 74)));
+        return (*((std::uint8_t *)(m_buffer + m_offset + 75)));
     }
 
-    SeriesDefinitionExtended &filler1(const std::uint16_t value)
+    SeriesDefinitionExtended &filler1(const std::uint8_t value)
     {
-        *((std::uint16_t *)(m_buffer + m_offset + 74)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
+        *((std::uint8_t *)(m_buffer + m_offset + 75)) = (value);
         return *this;
     }
 
     static SBE_CONSTEXPR std::uint16_t effectiveExpDateId() SBE_NOEXCEPT
     {
-        return 115;
+        return 116;
     }
 
     static SBE_CONSTEXPR std::uint64_t effectiveExpDateSinceVersion() SBE_NOEXCEPT
@@ -1492,7 +1564,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t dateTimeLastTradingId() SBE_NOEXCEPT
     {
-        return 116;
+        return 117;
     }
 
     static SBE_CONSTEXPR std::uint64_t dateTimeLastTradingSinceVersion() SBE_NOEXCEPT
@@ -1562,35 +1634,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler2Id() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t dateTimeFirstTradingId() SBE_NOEXCEPT
     {
-        return 117;
+        return 118;
     }
 
-    static SBE_CONSTEXPR std::uint64_t filler2SinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t dateTimeFirstTradingSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool filler2InActingVersion() SBE_NOEXCEPT
+    bool dateTimeFirstTradingInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= filler2SinceVersion();
+        return m_actingVersion >= dateTimeFirstTradingSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t filler2EncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t dateTimeFirstTradingEncodingOffset() SBE_NOEXCEPT
     {
          return 92;
     }
 
 
-    static const char *filler2MetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *dateTimeFirstTradingMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -1603,85 +1675,36 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR char filler2NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int64_t dateTimeFirstTradingNullValue() SBE_NOEXCEPT
     {
-        return (char)0;
+        return SBE_NULLVALUE_INT64;
     }
 
-    static SBE_CONSTEXPR char filler2MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int64_t dateTimeFirstTradingMinValue() SBE_NOEXCEPT
     {
-        return (char)32;
+        return -9223372036854775807L;
     }
 
-    static SBE_CONSTEXPR char filler2MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int64_t dateTimeFirstTradingMaxValue() SBE_NOEXCEPT
     {
-        return (char)126;
+        return 9223372036854775807L;
     }
 
-    static SBE_CONSTEXPR std::size_t filler2EncodingLength() SBE_NOEXCEPT
-    {
-        return 1;
-    }
-
-    static SBE_CONSTEXPR std::uint64_t filler2Length() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t dateTimeFirstTradingEncodingLength() SBE_NOEXCEPT
     {
         return 8;
     }
 
-    const char *filler2() const
+    std::int64_t dateTimeFirstTrading() const
     {
-        return (m_buffer + m_offset + 92);
+        return SBE_LITTLE_ENDIAN_ENCODE_64(*((std::int64_t *)(m_buffer + m_offset + 92)));
     }
 
-    char filler2(const std::uint64_t index) const
+    SeriesDefinitionExtended &dateTimeFirstTrading(const std::int64_t value)
     {
-        if (index >= 8)
-        {
-            throw std::runtime_error("index out of range for filler2 [E104]");
-        }
-
-        return (*((char *)(m_buffer + m_offset + 92 + (index * 1))));
-    }
-
-    void filler2(const std::uint64_t index, const char value)
-    {
-        if (index >= 8)
-        {
-            throw std::runtime_error("index out of range for filler2 [E105]");
-        }
-
-        *((char *)(m_buffer + m_offset + 92 + (index * 1))) = (value);
-    }
-
-    std::uint64_t getFiller2(char *dst, const std::uint64_t length) const
-    {
-        if (length > 8)
-        {
-             throw std::runtime_error("length too large for getFiller2 [E106]");
-        }
-
-        std::memcpy(dst, m_buffer + m_offset + 92, sizeof(char) * length);
-        return length;
-    }
-
-    SeriesDefinitionExtended &putFiller2(const char *src)
-    {
-        std::memcpy(m_buffer + m_offset + 92, src, sizeof(char) * 8);
+        *((std::int64_t *)(m_buffer + m_offset + 92)) = SBE_LITTLE_ENDIAN_ENCODE_64(value);
         return *this;
     }
-
-    std::string getFiller2AsString() const
-    {
-        std::string result(m_buffer + m_offset + 92, 8);
-        return result;
-    }
-
-    SeriesDefinitionExtended &putFiller2(const std::string& str)
-    {
-        std::memcpy(m_buffer + m_offset + 92, str.c_str(), 8);
-        return *this;
-    }
-
 };
 }
 }

@@ -335,35 +335,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1Id() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t lockedId() SBE_NOEXCEPT
     {
-        return 201;
+        return 103;
     }
 
-    static SBE_CONSTEXPR std::uint64_t filler1SinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t lockedSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool filler1InActingVersion() SBE_NOEXCEPT
+    bool lockedInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= filler1SinceVersion();
+        return m_actingVersion >= lockedSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t filler1EncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t lockedEncodingOffset() SBE_NOEXCEPT
     {
          return 3;
     }
 
 
-    static const char *filler1MetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *lockedMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -376,32 +376,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler1NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t lockedNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler1MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t lockedMinValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler1MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t lockedMaxValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)254;
     }
 
-    static SBE_CONSTEXPR std::size_t filler1EncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t lockedEncodingLength() SBE_NOEXCEPT
     {
         return 1;
     }
 
-    std::uint8_t filler1() const
+    std::uint8_t locked() const
     {
         return (*((std::uint8_t *)(m_buffer + m_offset + 3)));
     }
 
-    CommodityStatus &filler1(const std::uint8_t value)
+    CommodityStatus &locked(const std::uint8_t value)
     {
         *((std::uint8_t *)(m_buffer + m_offset + 3)) = (value);
         return *this;

@@ -112,9 +112,9 @@
     <field name="numberOfLegs" id="105" type="uint8"/>
     <field name="strikePrice" id="106" type="uint32"/>
     <field name="expirationDate" id="107" type="date"/>
-    <field name="filler1" id="201" type="uint16"/>
-    <field name="putOrCall" id="108" type="uint8"/>
-    <field name="filler2" id="202" type="uint8"/>
+    <field name="decimalInStrikePrice" id="108" type="uint16"/>
+    <field name="putOrCall" id="109" type="uint8"/>
+    <field name="filler1" id="201" type="uint8"/>
   </message>
   <message name="SeriesDefinitionExtended" id="304" semanticType="4">
     <field name="orderbookID" id="101" type="orderbookID"/>
@@ -131,10 +131,11 @@
     <field name="seriesStatus" id="112" type="uint8"/>
     <field name="effectiveTomorrow" id="113" type="uint8"/>
     <field name="priceQuotationFactor" id="114" type="int32"/>
-    <field name="filler1" id="201" type="uint16"/>
-    <field name="effectiveExpDate" id="115" type="str8"/>
-    <field name="dateTimeLastTrading" id="116" type="int64"/>
-    <field name="filler2" id="117" type="str8"/>
+    <field name="priceMethod" id="115" type="uint8"/>
+    <field name="filler1" id="201" type="uint8"/>
+    <field name="effectiveExpDate" id="116" type="str8"/>
+    <field name="dateTimeLastTrading" id="117" type="int64"/>
+    <field name="dateTimeFirstTrading" id="118" type="int64"/>
   </message>
   <message name="CombinationDefinition" id="305" semanticType="4">
     <field name="comboOrderbookID" id="101" type="orderbookID"/>
@@ -161,13 +162,14 @@
   </message>
   <message name="SeriesStatus" id="321" semanticType="4">
     <field name="orderbookID" id="101" type="orderbookID"/>
-    <field name="suspended" id="102" type="char"/>
-    <field name="filler1" id="201" type="str3"/>
+    <field name="suspensionIndicator" id="102" type="uint8"/>
+    <field name="seriesStatus" id="103" type="uint8"/>
+    <field name="filler1" id="201" type="uint16"/>
   </message>
   <message name="CommodityStatus" id="322" semanticType="4">
     <field name="commodityCode" id="101" type="uint16"/>
     <field name="suspended" id="102" type="char"/>
-    <field name="filler1" id="201" type="uint8"/>
+    <field name="locked" id="103" type="uint8"/>
   </message>
   <message name="AddOrder" id="330" semanticType="4">
     <field name="orderBookID" id="101" type="orderbookID"/>

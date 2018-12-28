@@ -263,35 +263,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t suspendedId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t suspensionIndicatorId() SBE_NOEXCEPT
     {
         return 102;
     }
 
-    static SBE_CONSTEXPR std::uint64_t suspendedSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t suspensionIndicatorSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool suspendedInActingVersion() SBE_NOEXCEPT
+    bool suspensionIndicatorInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= suspendedSinceVersion();
+        return m_actingVersion >= suspensionIndicatorSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t suspendedEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t suspensionIndicatorEncodingOffset() SBE_NOEXCEPT
     {
          return 4;
     }
 
 
-    static const char *suspendedMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *suspensionIndicatorMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -304,34 +304,106 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR char suspendedNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t suspensionIndicatorNullValue() SBE_NOEXCEPT
     {
-        return (char)0;
+        return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR char suspendedMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t suspensionIndicatorMinValue() SBE_NOEXCEPT
     {
-        return (char)32;
+        return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR char suspendedMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t suspensionIndicatorMaxValue() SBE_NOEXCEPT
     {
-        return (char)126;
+        return (std::uint8_t)254;
     }
 
-    static SBE_CONSTEXPR std::size_t suspendedEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t suspensionIndicatorEncodingLength() SBE_NOEXCEPT
     {
         return 1;
     }
 
-    char suspended() const
+    std::uint8_t suspensionIndicator() const
     {
-        return (*((char *)(m_buffer + m_offset + 4)));
+        return (*((std::uint8_t *)(m_buffer + m_offset + 4)));
     }
 
-    SeriesStatus &suspended(const char value)
+    SeriesStatus &suspensionIndicator(const std::uint8_t value)
     {
-        *((char *)(m_buffer + m_offset + 4)) = (value);
+        *((std::uint8_t *)(m_buffer + m_offset + 4)) = (value);
+        return *this;
+    }
+
+    static SBE_CONSTEXPR std::uint16_t seriesStatusId() SBE_NOEXCEPT
+    {
+        return 103;
+    }
+
+    static SBE_CONSTEXPR std::uint64_t seriesStatusSinceVersion() SBE_NOEXCEPT
+    {
+         return 0;
+    }
+
+    bool seriesStatusInActingVersion() SBE_NOEXCEPT
+    {
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+#endif
+        return m_actingVersion >= seriesStatusSinceVersion();
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+    }
+
+    static SBE_CONSTEXPR std::size_t seriesStatusEncodingOffset() SBE_NOEXCEPT
+    {
+         return 5;
+    }
+
+
+    static const char *seriesStatusMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    {
+        switch (metaAttribute)
+        {
+            case MetaAttribute::EPOCH: return "unix";
+            case MetaAttribute::TIME_UNIT: return "nanosecond";
+            case MetaAttribute::SEMANTIC_TYPE: return "";
+            case MetaAttribute::PRESENCE: return "required";
+        }
+
+        return "";
+    }
+
+    static SBE_CONSTEXPR std::uint8_t seriesStatusNullValue() SBE_NOEXCEPT
+    {
+        return SBE_NULLVALUE_UINT8;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t seriesStatusMinValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)0;
+    }
+
+    static SBE_CONSTEXPR std::uint8_t seriesStatusMaxValue() SBE_NOEXCEPT
+    {
+        return (std::uint8_t)254;
+    }
+
+    static SBE_CONSTEXPR std::size_t seriesStatusEncodingLength() SBE_NOEXCEPT
+    {
+        return 1;
+    }
+
+    std::uint8_t seriesStatus() const
+    {
+        return (*((std::uint8_t *)(m_buffer + m_offset + 5)));
+    }
+
+    SeriesStatus &seriesStatus(const std::uint8_t value)
+    {
+        *((std::uint8_t *)(m_buffer + m_offset + 5)) = (value);
         return *this;
     }
 
@@ -359,7 +431,7 @@ public:
 
     static SBE_CONSTEXPR std::size_t filler1EncodingOffset() SBE_NOEXCEPT
     {
-         return 5;
+         return 6;
     }
 
 
@@ -376,85 +448,36 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR char filler1NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t filler1NullValue() SBE_NOEXCEPT
     {
-        return (char)0;
+        return SBE_NULLVALUE_UINT16;
     }
 
-    static SBE_CONSTEXPR char filler1MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t filler1MinValue() SBE_NOEXCEPT
     {
-        return (char)32;
+        return (std::uint16_t)0;
     }
 
-    static SBE_CONSTEXPR char filler1MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t filler1MaxValue() SBE_NOEXCEPT
     {
-        return (char)126;
+        return (std::uint16_t)65534;
     }
 
     static SBE_CONSTEXPR std::size_t filler1EncodingLength() SBE_NOEXCEPT
     {
-        return 1;
+        return 2;
     }
 
-    static SBE_CONSTEXPR std::uint64_t filler1Length() SBE_NOEXCEPT
+    std::uint16_t filler1() const
     {
-        return 3;
+        return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 6)));
     }
 
-    const char *filler1() const
+    SeriesStatus &filler1(const std::uint16_t value)
     {
-        return (m_buffer + m_offset + 5);
-    }
-
-    char filler1(const std::uint64_t index) const
-    {
-        if (index >= 3)
-        {
-            throw std::runtime_error("index out of range for filler1 [E104]");
-        }
-
-        return (*((char *)(m_buffer + m_offset + 5 + (index * 1))));
-    }
-
-    void filler1(const std::uint64_t index, const char value)
-    {
-        if (index >= 3)
-        {
-            throw std::runtime_error("index out of range for filler1 [E105]");
-        }
-
-        *((char *)(m_buffer + m_offset + 5 + (index * 1))) = (value);
-    }
-
-    std::uint64_t getFiller1(char *dst, const std::uint64_t length) const
-    {
-        if (length > 3)
-        {
-             throw std::runtime_error("length too large for getFiller1 [E106]");
-        }
-
-        std::memcpy(dst, m_buffer + m_offset + 5, sizeof(char) * length);
-        return length;
-    }
-
-    SeriesStatus &putFiller1(const char *src)
-    {
-        std::memcpy(m_buffer + m_offset + 5, src, sizeof(char) * 3);
+        *((std::uint16_t *)(m_buffer + m_offset + 6)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
         return *this;
     }
-
-    std::string getFiller1AsString() const
-    {
-        std::string result(m_buffer + m_offset + 5, 3);
-        return result;
-    }
-
-    SeriesStatus &putFiller1(const std::string& str)
-    {
-        std::memcpy(m_buffer + m_offset + 5, str.c_str(), 3);
-        return *this;
-    }
-
 };
 }
 }

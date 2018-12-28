@@ -793,35 +793,35 @@ public:
     }
 
 
-    static SBE_CONSTEXPR std::uint16_t filler1Id() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t decimalInStrikePriceId() SBE_NOEXCEPT
     {
-        return 201;
+        return 108;
     }
 
-    static SBE_CONSTEXPR std::uint64_t filler1SinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t decimalInStrikePriceSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool filler1InActingVersion() SBE_NOEXCEPT
+    bool decimalInStrikePriceInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= filler1SinceVersion();
+        return m_actingVersion >= decimalInStrikePriceSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t filler1EncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t decimalInStrikePriceEncodingOffset() SBE_NOEXCEPT
     {
          return 52;
     }
 
 
-    static const char *filler1MetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *decimalInStrikePriceMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -834,32 +834,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t decimalInStrikePriceNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT16;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t decimalInStrikePriceMinValue() SBE_NOEXCEPT
     {
         return (std::uint16_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler1MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t decimalInStrikePriceMaxValue() SBE_NOEXCEPT
     {
         return (std::uint16_t)65534;
     }
 
-    static SBE_CONSTEXPR std::size_t filler1EncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t decimalInStrikePriceEncodingLength() SBE_NOEXCEPT
     {
         return 2;
     }
 
-    std::uint16_t filler1() const
+    std::uint16_t decimalInStrikePrice() const
     {
         return SBE_LITTLE_ENDIAN_ENCODE_16(*((std::uint16_t *)(m_buffer + m_offset + 52)));
     }
 
-    SeriesDefinitionBase &filler1(const std::uint16_t value)
+    SeriesDefinitionBase &decimalInStrikePrice(const std::uint16_t value)
     {
         *((std::uint16_t *)(m_buffer + m_offset + 52)) = SBE_LITTLE_ENDIAN_ENCODE_16(value);
         return *this;
@@ -867,7 +867,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t putOrCallId() SBE_NOEXCEPT
     {
-        return 108;
+        return 109;
     }
 
     static SBE_CONSTEXPR std::uint64_t putOrCallSinceVersion() SBE_NOEXCEPT
@@ -937,35 +937,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t filler2Id() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t filler1Id() SBE_NOEXCEPT
     {
-        return 202;
+        return 201;
     }
 
-    static SBE_CONSTEXPR std::uint64_t filler2SinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t filler1SinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool filler2InActingVersion() SBE_NOEXCEPT
+    bool filler1InActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= filler2SinceVersion();
+        return m_actingVersion >= filler1SinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t filler2EncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t filler1EncodingOffset() SBE_NOEXCEPT
     {
          return 55;
     }
 
 
-    static const char *filler2MetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *filler1MetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -978,32 +978,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler2NullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1NullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler2MinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1MinValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint8_t filler2MaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t filler1MaxValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)254;
     }
 
-    static SBE_CONSTEXPR std::size_t filler2EncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t filler1EncodingLength() SBE_NOEXCEPT
     {
         return 1;
     }
 
-    std::uint8_t filler2() const
+    std::uint8_t filler1() const
     {
         return (*((std::uint8_t *)(m_buffer + m_offset + 55)));
     }
 
-    SeriesDefinitionBase &filler2(const std::uint8_t value)
+    SeriesDefinitionBase &filler1(const std::uint8_t value)
     {
         *((std::uint8_t *)(m_buffer + m_offset + 55)) = (value);
         return *this;
