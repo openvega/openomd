@@ -872,14 +872,18 @@ TEST(OMDC_TEST, MarketTurnover)
 
 TEST(OMDC_TEST, Yield)
 {
-    //struct Processor : public OMDCProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDCProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
+    char msg[] = "\xbc\x05\x4d\x2f\x93\x51\x02\x00\x80\x8a\x54\xcc\x26\x0d\x13\x15" \
+        "\x0c\x00\x2c\x00\x77\x52\x01\x00\xaa\x0d\x00\x00";
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::Yield const& y, int32_t)
+        {
+            EXPECT_EQ(86647, y.securityCode());
+            EXPECT_EQ(3498, y.yield());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, News)
@@ -1058,26 +1062,41 @@ TEST(OMDC_TEST, IndexData)
 
 TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
 {
-    //struct Processor : public OMDCProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDCProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
+    char msg[] = "\x28\x00\x01\x0c\x23\x0f\x00\x00\xc0\x8e\x48\x94\x29\x37\xb9\x14" \
+        "\x18\x00\x50\x00\x53\x48\x4e\x42\xba\x6d\xba\xe7\x02\x00\x00\x00" \
+        "\x00\x1c\xa0\x54\xfb\xc7\xad\x14";
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::StockConnectDailyQuotaBalance const& scDQB, int32_t)
+        {
+            EXPECT_EQ("SH", scDQB.getStockConnectMarketAsString());
+            EXPECT_EQ("NB", scDQB.getTradingDirectionAsString());
+            EXPECT_EQ(12477689274, scDQB.dailyQuotaBalance());
+            EXPECT_EQ(1490066934000000000, scDQB.dailyQuotaBalanceTime());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 
 TEST(OMDC_TEST, StockConnectMarketTurnover)
 {
-    //struct Processor : public OMDCProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDCProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
+    char msg[] = "\x30\x00\x01\x0c\x2c\x01\x00\x00\x80\x55\x76\x94\x29\x37\xb9\x14" \
+        "\x20\x00\x51\x00\x53\x5a\x53\x42\x28\x2a\xdf\x32\x00\x00\x00\x00" \
+        "\x87\x9e\xcf\x16\x00\x00\x00\x00\xaf\xc8\xae\x49\x00\x00\x00\x00";
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::StockConnectMarketTurnover const& scMT, int32_t)
+        {
+            EXPECT_EQ("SZ", scMT.getStockConnectMarketAsString());
+            EXPECT_EQ("SB", scMT.getTradingDirectionAsString());
+            EXPECT_EQ(853486120, scMT.buyTurnover());
+            EXPECT_EQ(382705287, scMT.sellTurnover());
+            EXPECT_EQ(1236191407, scMT.buySellTurnover());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
 }
 }
