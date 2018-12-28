@@ -3,50 +3,48 @@
 
 namespace omdc
 {
-namespace sbe
-{
 class OMDCProcessor
 {
 #define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t){}
 
 public:
-    ONMESSAGE(AddOddLotOrder)
-    ONMESSAGE(AddOrder)
-    ONMESSAGE(AggregateOrderBookUpdate)
-    ONMESSAGE(BrokerQueue)
-    ONMESSAGE(ClosingPrice)
-    ONMESSAGE(CurrencyRate)
-    ONMESSAGE(DeleteOddLotOrder)
-    ONMESSAGE(DeleteOrder)
-    ONMESSAGE(DisasterRecoverySignal)
-    ONMESSAGE(IndexData)
-    ONMESSAGE(IndexDefinition)
-    ONMESSAGE(IndicativeEquilibriumPrice)
-    ONMESSAGE(LiquidityProvider)
-    ONMESSAGE(Logon)
-    ONMESSAGE(LogonResponse)
-    ONMESSAGE(MarketDefinition)
-    ONMESSAGE(MarketTurnover)
-    ONMESSAGE(ModifyOrder)
-    ONMESSAGE(News)
-    ONMESSAGE(NominalPrice)
-    ONMESSAGE(OrderImbalance)
-    ONMESSAGE(ReferencePrice)
-    ONMESSAGE(RefreshComplete)
-    ONMESSAGE(RetransmissionReq)
-    ONMESSAGE(RetransmissionResp)
-    ONMESSAGE(SecurityDefinition)
-    ONMESSAGE(SecurityStatus)
-    ONMESSAGE(SequenceReset)
-    ONMESSAGE(Statistics)
-    ONMESSAGE(StockConnectDailyQuotaBalance)
-    ONMESSAGE(StockConnectMarketTurnover)
-    ONMESSAGE(Trade)
-    ONMESSAGE(TradeCancel)
-    ONMESSAGE(TradeTicker)
-    ONMESSAGE(TradingSessionStatus)
-    ONMESSAGE(VCMTrigger)
-    ONMESSAGE(Yield)
+    ONMESSAGE(sbe::AddOddLotOrder)
+    ONMESSAGE(sbe::AddOrder)
+    ONMESSAGE(sbe::AggregateOrderBookUpdate)
+    ONMESSAGE(sbe::BrokerQueue)
+    ONMESSAGE(sbe::ClosingPrice)
+    ONMESSAGE(sbe::CurrencyRate)
+    ONMESSAGE(sbe::DeleteOddLotOrder)
+    ONMESSAGE(sbe::DeleteOrder)
+    ONMESSAGE(sbe::DisasterRecoverySignal)
+    ONMESSAGE(sbe::IndexData)
+    ONMESSAGE(sbe::IndexDefinition)
+    ONMESSAGE(sbe::IndicativeEquilibriumPrice)
+    ONMESSAGE(sbe::LiquidityProvider)
+    ONMESSAGE(sbe::Logon)
+    ONMESSAGE(sbe::LogonResponse)
+    ONMESSAGE(sbe::MarketDefinition)
+    ONMESSAGE(sbe::MarketTurnover)
+    ONMESSAGE(sbe::ModifyOrder)
+    ONMESSAGE(sbe::News)
+    ONMESSAGE(sbe::NominalPrice)
+    ONMESSAGE(sbe::OrderImbalance)
+    ONMESSAGE(sbe::ReferencePrice)
+    ONMESSAGE(sbe::RefreshComplete)
+    ONMESSAGE(sbe::RetransmissionReq)
+    ONMESSAGE(sbe::RetransmissionResp)
+    ONMESSAGE(sbe::SecurityDefinition)
+    ONMESSAGE(sbe::SecurityStatus)
+    ONMESSAGE(sbe::SequenceReset)
+    ONMESSAGE(sbe::Statistics)
+    ONMESSAGE(sbe::StockConnectDailyQuotaBalance)
+    ONMESSAGE(sbe::StockConnectMarketTurnover)
+    ONMESSAGE(sbe::Trade)
+    ONMESSAGE(sbe::TradeCancel)
+    ONMESSAGE(sbe::TradeTicker)
+    ONMESSAGE(sbe::TradingSessionStatus)
+    ONMESSAGE(sbe::VCMTrigger)
+    ONMESSAGE(sbe::Yield)
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }
@@ -82,11 +80,9 @@ TEST(OMDC_TEST, SequenceReset)
 TEST(OMDC_TEST, Logon)
 {
 }
-
 TEST(OMDC_TEST, LogonResponse)
 {
 }
-
 TEST(OMDC_TEST, DisasterRecoverySignal)
 {
     char msg[] = "\x18\x00\x01\x00\xe4\x01\x00\x00\x40\x1c\xe4\x8e\xff\xfd\x3c\x14" \
@@ -102,17 +98,14 @@ TEST(OMDC_TEST, DisasterRecoverySignal)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, RetransmissionRequest)
 {
 
 }
-
 TEST(OMDC_TEST, RetransmissionResponse)
 {
 
 }
-
 TEST(OMDC_TEST, RefreshComplete)
 {
     char msg[] = "\x18\x00\x01\x5d\x01\x00\x00\x00\x40\x87\x44\xa5\xa2\x10\x45\x15" \
@@ -127,7 +120,6 @@ TEST(OMDC_TEST, RefreshComplete)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, MarketDefinition)
 {
     char msg[] = "\x90\x00\x04\x5c\x51\x9a\x00\x00\x80\xc7\x49\x0b\xc4\xfd\x3c\x14" \
@@ -148,7 +140,6 @@ TEST(OMDC_TEST, MarketDefinition)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, SecurityDefinition)
 {
     // Warrant
@@ -310,7 +301,6 @@ TEST(OMDC_TEST, SecurityDefinition)
     };
     processMsg<CbbcProcessor>(cbbcMsg, sizeof(cbbcMsg) - 1);
 }
-
 TEST(OMDC_TEST, LiquidityProvider)
 {
     char msg[] = "\xbc\x05\x79\x02\x46\x37\x00\x00\x40\xaa\xe1\x57\x0f\xf5\x12\x15" \
@@ -331,7 +321,6 @@ TEST(OMDC_TEST, LiquidityProvider)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, CurrencyRate)
 {
     char msg[] = "\xc0\x05\x06\x2f\x78\x86\x15\x00\xc0\x95\x39\x59\xc8\xf9\x12\x15" \
@@ -348,7 +337,6 @@ TEST(OMDC_TEST, CurrencyRate)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, TradingSessionStatus)
 {
     char msg[] = "\x48\x00\x03\x00\x75\xd6\x08\x00\x00\x09\xda\xdd\x49\x22\x13\x15" \
@@ -370,7 +358,6 @@ TEST(OMDC_TEST, TradingSessionStatus)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, SecurityStatus)
 {
     char msg[] = "\x30\x01\x18\xdd\x31\x00\x00\x00\x00\x99\x00\x43\x06\xf5\x12\x15" \
@@ -387,7 +374,6 @@ TEST(OMDC_TEST, SecurityStatus)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, AddOrder)
 {
     char msg[] = "\x30\x00\x01\xdd\xf7\x71\x01\x00\x40\x06\x28\xec\x06\x0d\x13\x15" \
@@ -411,7 +397,6 @@ TEST(OMDC_TEST, AddOrder)
     processMsg<Processor>(msg, sizeof(msg) - 1);
     
 }
-
 TEST(OMDC_TEST, ModifyOrder)
 {
     char msg[] = "\xb0\x05\x38\x00\x27\x89\x05\x00\xc0\xed\x53\xf9\x24\x0d\x13\x15" \
@@ -432,7 +417,6 @@ TEST(OMDC_TEST, ModifyOrder)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, DeleteOrder)
 {
     char msg[] = "\x44\x00\x02\xba\xe8\xb2\x08\x00\x80\x91\xfe\xec\x45\x0d\x13\x15" \
@@ -451,7 +435,6 @@ TEST(OMDC_TEST, DeleteOrder)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, AddOddLotOrder)
 {
     char msg[] = "\x08\x02\x12\x01\x49\x01\x00\x00\x00\xff\xed\xbc\x39\x0d\x13\x15" \
@@ -473,7 +456,6 @@ TEST(OMDC_TEST, AddOddLotOrder)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, DeleteOddLotOrder)
 {
     char msg[] = "\x24\x00\x01\x02\x23\x01\x00\x00\xc0\x9c\xfb\x65\x47\x22\x13\x15" \
@@ -493,7 +475,6 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, AggregateOrderBookUpdate)
 {
     char msg[] = "\xe0\x04\x14\xc6\xd0\x18\x12\x00\x00\x0d\xe0\xec\x45\x0d\x13\x15\xcc\x00\x35\x00\xd5\x49\x00\x00\x05\x01\x00\x08" \
@@ -583,7 +564,6 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
     processMsg<Processor>(msg, sizeof(msg) - 1);
 
 }
-
 TEST(OMDC_TEST, BrokerQueue)
 {
     char msg[] = "\xc4\x02\x07\x00\x70\x7c" \
@@ -652,7 +632,6 @@ TEST(OMDC_TEST, BrokerQueue)
 
 
 }
-
 TEST(OMDC_TEST, OrderImbalance)
 {
     char msg[] = "\xbc\x05\x18\x2f\x35\x25\x31\x01\x00\x12\xf6\xae\x71\x22\x13\x15" \
@@ -671,7 +650,6 @@ TEST(OMDC_TEST, OrderImbalance)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, Trade)
 {
     char msg[] = "\x54\x01\x0a\xc6\xb3\x8d\x09\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
@@ -693,19 +671,22 @@ TEST(OMDC_TEST, Trade)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, TradeCancel)
 {
-    //struct Processor : public OMDCProcessor
-    //{
-    //    void onMessage(, int32_t)
-    //    {
-    //    }
-    //    using OMDCProcessor::onMessage;
-    //};
-    //processMsg<Processor>(msg, sizeof(msg) - 1);
+    // handcraft data
+    char msg[] = "\x54\x01\x0a\xc6\xb3\x8d\x09\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
+        "\x0c\x00\x33\x00\x44\x0a\x00\x00\x6b\x01\x00\x00";
+    struct Processor : public OMDCProcessor
+    {
+        void onMessage(sbe::TradeCancel const& tc, int32_t)
+        {
+            EXPECT_EQ(2628, tc.securityCode());
+            EXPECT_EQ(363, tc.tradeID());
+        }
+        using OMDCProcessor::onMessage;
+    };
+    processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, TradeTicker)
 {
     char msg[] = "\x38\x05\x15\xc6\xb8\x92\x04\x00\xc0\x8a\x46\xec\x06\x0d\x13\x15" \
@@ -727,7 +708,6 @@ TEST(OMDC_TEST, TradeTicker)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, ClosingPrice)
 {
     char msg[] = "\x20\x00\x01\x00\x52\xef\x08\x00\x80\xbb\xfa\xbf\xbe\x22\x13\x15" \
@@ -745,7 +725,6 @@ TEST(OMDC_TEST, ClosingPrice)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, NominalPrice)
 {
     char msg[] = "\x44\x01\x06\xc6\xcd\x92\x04\x00\xc0\x8a\x46\xec\x06\x0d\x13\x15" \
@@ -762,7 +741,6 @@ TEST(OMDC_TEST, NominalPrice)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, IndicativeEquilibriumPrice)
 {
     char msg[] = "\x24\x00\x01\x00\x59\x00\x00\x00\xc0\x59\x2e\x8f\x5e\x0b\x13\x15" \
@@ -781,7 +759,6 @@ TEST(OMDC_TEST, IndicativeEquilibriumPrice)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, ReferencePrice)
 {
     char msg[] = "\x44\x05\x2f\x2f\x2b\x36\x31\x01\x00\xd8\x46\x2e\x72\x22\x13\x15" \
@@ -801,7 +778,6 @@ TEST(OMDC_TEST, ReferencePrice)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, VCMTrigger)
 {
     char msg[] = "\xc0\x05\x48\xcd\x50\x12\x02\x00\x80\x0d\x4d\xbe\x45\x2c\x63\x14" \
@@ -824,7 +800,6 @@ TEST(OMDC_TEST, VCMTrigger)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, Statistics)
 {
     char msg[] = "\x44\x00\x01\x00\x9d\xd2\x08\x00\x40\x82\x82\x10\x47\x22\x13\x15" \
@@ -851,7 +826,6 @@ TEST(OMDC_TEST, Statistics)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, MarketTurnover)
 {
     char msg[] = "\xb0\x00\x08\x00\x31\x87\x01\x00\x00\x48\x34\xba\x47\x22\x13\x15" 
@@ -869,7 +843,6 @@ TEST(OMDC_TEST, MarketTurnover)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, Yield)
 {
     char msg[] = "\xbc\x05\x4d\x2f\x93\x51\x02\x00\x80\x8a\x54\xcc\x26\x0d\x13\x15" \
@@ -885,7 +858,6 @@ TEST(OMDC_TEST, Yield)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, News)
 {
     char msg[] = "\x34\x05\x01\x00\x3c\x31\x00\x00\x80\x9b\x07\x4e\x79\x3e\x63\x14" \
@@ -1005,7 +977,6 @@ TEST(OMDC_TEST, News)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, IndexDefinition)
 {
     char msg[] = "\x24\x00\x01\x00\x01\x00\x00\x00\xc0\xb8\x9f\xd5\x03\xf5\x12\x15" \
@@ -1023,7 +994,6 @@ TEST(OMDC_TEST, IndexDefinition)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, IndexData)
 {
     char msg[] = "\x80\x00\x01\x84\x4e\x63\x02\x00\xc0\xe2\x32\x4b\xe8\x23\x13\x15" \
@@ -1059,7 +1029,6 @@ TEST(OMDC_TEST, IndexData)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
 {
     char msg[] = "\x28\x00\x01\x0c\x23\x0f\x00\x00\xc0\x8e\x48\x94\x29\x37\xb9\x14" \
@@ -1078,7 +1047,6 @@ TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 }
-
 TEST(OMDC_TEST, StockConnectMarketTurnover)
 {
     char msg[] = "\x30\x00\x01\x0c\x2c\x01\x00\x00\x80\x55\x76\x94\x29\x37\xb9\x14" \
@@ -1097,6 +1065,5 @@ TEST(OMDC_TEST, StockConnectMarketTurnover)
         using OMDCProcessor::onMessage;
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
-}
 }
 }
