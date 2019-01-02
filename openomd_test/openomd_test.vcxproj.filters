@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\test\c\omdc.cpp">
+    <ClCompile Include="src\test\c\omdc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\test\c\omdd.cpp">
+    <ClCompile Include="src\test\c\omdd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\test\include\openomd\parser-test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <Xml Include="pom.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

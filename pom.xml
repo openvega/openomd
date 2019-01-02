@@ -185,6 +185,7 @@
     </dependency>
   </dependencies>
   <modules>
-    <module>parser</module>
+    <module>mdhandler</module>
+    <module>mdtest</module>
   </modules>
 </project>
