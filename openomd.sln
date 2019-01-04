@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5BC88974-D306-4D04-89BA-B27F08122BE7}"
 	ProjectSection(SolutionItems) = preProject
+		copydll.bat = copydll.bat
 		pom.xml = pom.xml
 		README.md = README.md
 	EndProjectSection

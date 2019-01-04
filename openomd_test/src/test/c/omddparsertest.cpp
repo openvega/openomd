@@ -1,49 +1,8 @@
 #include <gtest/gtest.h>
-#include "openomd/omddparser.h"
+#include "openomd/omdtest.h"
 
 namespace omdd
 {
-class OMDDProcessor
-{
-#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t){}
-
-public:
-    ONMESSAGE(sbe::AddOrder)
-    ONMESSAGE(sbe::AggregateOrderBookUpdate)
-    ONMESSAGE(sbe::CalculatedOpeningPrice)
-    ONMESSAGE(sbe::ClassDefinition)
-    ONMESSAGE(sbe::CombinationDefinition)
-    ONMESSAGE(sbe::CommodityDefinition)
-    ONMESSAGE(sbe::CommodityStatus)
-    ONMESSAGE(sbe::DeleteOrder)
-    ONMESSAGE(sbe::DisasterRecoverySignal)
-    ONMESSAGE(sbe::EstimatedAverageSettlementPrice)
-    ONMESSAGE(sbe::ImpliedVolatility)
-    ONMESSAGE(sbe::LogonResponse)
-    ONMESSAGE(sbe::MarketAlert)
-    ONMESSAGE(sbe::ModifyOrder)
-    ONMESSAGE(sbe::OpenInterest)
-    ONMESSAGE(sbe::OrderbookClear)
-    ONMESSAGE(sbe::QuoteRequest)
-    ONMESSAGE(sbe::RefreshComplete)
-    ONMESSAGE(sbe::RetransmissionResponse)
-    ONMESSAGE(sbe::SequenceReset)
-    ONMESSAGE(sbe::SeriesDefinitionBase)
-    ONMESSAGE(sbe::SeriesDefinitionExtended)
-    ONMESSAGE(sbe::SeriesStatistics)
-    ONMESSAGE(sbe::SeriesStatus)
-    ONMESSAGE(sbe::Trade)
-    ONMESSAGE(sbe::TradeAmendment)
-    ONMESSAGE(sbe::TradeStatistics)
-    void onUnknownMessage(uint16_t, uint16_t)
-    {
-    }
-    void onError(std::exception const& ex)
-    {
-        printf("OMDDProcessor error %s\n", ex.what());
-    }
-};
-
 template <typename _Processor>
 void processMsg(char* msg, size_t size)
 {
@@ -684,7 +643,7 @@ TEST(OMDD_TEST, MarketAlert)
         {
             EXPECT_EQ(1, ma.alertID());
             EXPECT_EQ(72, ma.source());
-            std::wstring header((const wchar_t*)ma.header());
+            std::wstring header(reinterpret_cast<const wchar_t*>(ma.header()));
             EXPECT_EQ(L"Start of Volatility Control Mechanism cool-off period: [HSIQ7]", header);
             EXPECT_EQ('N', ma.lastFragment());
             EXPECT_EQ(2, ma.infoType());

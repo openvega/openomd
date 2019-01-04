@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\test\c\omdc.cpp" />
-    <ClCompile Include="src\test\c\omdd.cpp" />
+    <ClCompile Include="src\test\c\omdcparsertest.cpp" />
+    <ClCompile Include="src\test\c\omdchandlertest.cpp" />
+    <ClCompile Include="src\test\c\omddparsertest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pom.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\test\include\openomd\omdtest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1ebfd4e7-64ad-4e23-8288-a7775bef2900}</ProjectGuid>
@@ -96,7 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\main\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -104,8 +108,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\x86-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>$(TargetDir)$(TargetFileName)</Command>
@@ -118,7 +122,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\main\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -126,8 +130,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>$(TargetDir)$(TargetFileName)</Command>
@@ -142,7 +146,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\main\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -152,8 +156,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\x86-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>$(TargetDir)$(TargetFileName)</Command>
@@ -168,7 +172,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\main\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\target\test-nar\gmock-1.8.1-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -178,8 +182,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>$(TargetDir)$(TargetFileName)</Command>

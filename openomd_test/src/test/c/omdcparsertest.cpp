@@ -1,59 +1,8 @@
 #include <gtest/gtest.h>
-#include "openomd/omdcparser.h"
+#include "openomd/omdtest.h"
 
 namespace omdc
 {
-class OMDCProcessor
-{
-#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t){}
-
-public:
-    ONMESSAGE(sbe::AddOddLotOrder)
-    ONMESSAGE(sbe::AddOrder)
-    ONMESSAGE(sbe::AggregateOrderBookUpdate)
-    ONMESSAGE(sbe::BrokerQueue)
-    ONMESSAGE(sbe::ClosingPrice)
-    ONMESSAGE(sbe::CurrencyRate)
-    ONMESSAGE(sbe::DeleteOddLotOrder)
-    ONMESSAGE(sbe::DeleteOrder)
-    ONMESSAGE(sbe::DisasterRecoverySignal)
-    ONMESSAGE(sbe::IndexData)
-    ONMESSAGE(sbe::IndexDefinition)
-    ONMESSAGE(sbe::IndicativeEquilibriumPrice)
-    ONMESSAGE(sbe::LiquidityProvider)
-    ONMESSAGE(sbe::Logon)
-    ONMESSAGE(sbe::LogonResponse)
-    ONMESSAGE(sbe::MarketDefinition)
-    ONMESSAGE(sbe::MarketTurnover)
-    ONMESSAGE(sbe::ModifyOrder)
-    ONMESSAGE(sbe::News)
-    ONMESSAGE(sbe::NominalPrice)
-    ONMESSAGE(sbe::OrderImbalance)
-    ONMESSAGE(sbe::ReferencePrice)
-    ONMESSAGE(sbe::RefreshComplete)
-    ONMESSAGE(sbe::RetransmissionReq)
-    ONMESSAGE(sbe::RetransmissionResp)
-    ONMESSAGE(sbe::SecurityDefinition)
-    ONMESSAGE(sbe::SecurityStatus)
-    ONMESSAGE(sbe::SequenceReset)
-    ONMESSAGE(sbe::Statistics)
-    ONMESSAGE(sbe::StockConnectDailyQuotaBalance)
-    ONMESSAGE(sbe::StockConnectMarketTurnover)
-    ONMESSAGE(sbe::Trade)
-    ONMESSAGE(sbe::TradeCancel)
-    ONMESSAGE(sbe::TradeTicker)
-    ONMESSAGE(sbe::TradingSessionStatus)
-    ONMESSAGE(sbe::VCMTrigger)
-    ONMESSAGE(sbe::Yield)
-    void onUnknownMessage(uint16_t, uint16_t)
-    {
-    }
-    void onError(std::exception const& ex)
-    {
-        printf("OMDCProcessor error %s\n", ex.what());
-    }
-};
-
 template <typename _Processor>
 void processMsg(char* msg, size_t size)
 {

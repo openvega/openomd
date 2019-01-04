@@ -22,11 +22,11 @@
     <Filter Include="Header Files\parser\omdd">
       <UniqueIdentifier>{17941339-d9be-4689-8302-fb2204676707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\net">
+      <UniqueIdentifier>{62766c9d-68bc-4204-b657-c42c108113f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\main\include\openomd\multicastutil.h">
-      <Filter>Header Files\parser</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\openomd\omdbaseparser.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
@@ -266,6 +266,15 @@
     </ClInclude>
     <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h">
       <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\multicastutil.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\pcaputil.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\ethernet.h">
+      <Filter>Header Files\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,8 +11,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <dummyversion>1.0-dummy</dummyversion>
-    <gmock.version>1.8.0</gmock.version>
-    <boost.version>1.59.0</boost.version>
+    <gmock.version>1.8.1</gmock.version>
+    <boost.version>1.68.0</boost.version>
     <sbe.version>1.7.4</sbe.version>
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->
     <wpcap.win.version>4.1.2</wpcap.win.version>
@@ -159,13 +159,19 @@
       <dependency>
         <groupId>io.github.openvega</groupId>
         <artifactId>boost</artifactId>
-        <version>1.68.0</version>
+        <version>${boost.version}</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>wpcap</artifactId>
+        <version>${wpcap.version}</version>
         <type>nar</type>
       </dependency>
       <dependency>
         <groupId>io.github.openvega</groupId>
         <artifactId>gmock</artifactId>
-        <version>1.8.1</version>
+        <version>${gmock.version}</version>
         <type>nar</type>
       </dependency>
       <dependency>
@@ -185,7 +191,7 @@
     </dependency>
   </dependencies>
   <modules>
-    <module>mdhandler</module>
-    <module>mdtest</module>
+    <module>openomd_handler</module>
+    <module>openomd_test</module>
   </modules>
 </project>

@@ -31,4 +31,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.openvega</groupId>
+      <artifactId>wpcap</artifactId>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
 </project>
