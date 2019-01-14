@@ -8,7 +8,7 @@ namespace omdc
 {
 struct PrintProcessor : OMDCProcessor
 {
-    void onMessage(sbe::SequenceReset const& sr, int32_t)
+    void onMessage(sbe::SequenceReset const& sr, int32_t, uint32_t)
     {
         _count++;
     }
@@ -31,7 +31,7 @@ TEST(OMDCHandler, pcap)
     public:
         void onReceive(int32_t byteRecvd, uint8_t* data, int32_t max, int32_t partition)
         {
-            _parser.parse((char*)data, byteRecvd, _processor, 0);
+            _parser.parse((char*)data, byteRecvd, _processor, partition);
         }
     };
     
@@ -54,21 +54,16 @@ TEST(OMDCHandler, pcap)
     fopen_s(&pcapFile, tmpFilename, "wb+");
 
     Callback callback;
-    try
-    {
-        fwrite(pcapData, sizeof(pcapData), 1, pcapFile);
-        fflush(pcapFile);
-        fclose(pcapFile);
-        openomd::PcapUtil<Callback> pcapUtil{ tmpFilename, callback};
-        pcapUtil.init();
-        pcapUtil.start();
-        pcapUtil.run();
-        pcapUtil.stop();
-    }
-    catch (std::exception const& ex)
-    {
-        printf("exception %s\n", ex.what());
-    }
+    fwrite(pcapData, sizeof(pcapData), 1, pcapFile);
+    fflush(pcapFile);
+    fclose(pcapFile);
+
+    openomd::PcapUtil<Callback> pcapUtil{ tmpFilename, callback};
+    pcapUtil.init();
+    pcapUtil.start();
+    pcapUtil.run();
+    pcapUtil.stop();
+    
     remove(tmpFilename);
 
     EXPECT_EQ(2, callback._processor._count);

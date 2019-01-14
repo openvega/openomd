@@ -44,12 +44,12 @@ namespace openomd
 class OmdcParser : public OmdBaseParser
 {
 public:
-    template <typename _Callback>
-    static void parse(char* data, size_t bytesRecvd, _Callback& callback, int32_t partition)
+    template <typename _Processor>
+    static void parse(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition)
     {
         using namespace omdc::sbe;
-        parseHelper(data, bytesRecvd, callback, partition, 
-            [](uint16_t type, char* pos, uint16_t msgSize, _Callback& callback, int32_t partition) {
+        parseHelper(data, bytesRecvd, processor, partition,
+            [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, int32_t partition, uint32_t seqNum) {
             switch (type)
             {
                 OMD_SWITCH_CASE(AddOddLotOrder);
@@ -88,7 +88,7 @@ public:
                 OMD_SWITCH_CASE(VCMTrigger);
                 OMD_SWITCH_CASE(Yield);
             default:
-                callback.onUnknownMessage(type, msgSize);
+                processor.onUnknownMessage(type, msgSize);
                 break;
             }
         });

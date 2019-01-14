@@ -35,12 +35,12 @@ namespace openomd
 class OmddParser : public OmdBaseParser
 {
 public:
-    template <typename _Callback>
-    static void parse(char* data, size_t bytesRecvd, _Callback& callback, int32_t partition)
+    template <typename _Processor>
+    static void parse(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition)
     {
         using namespace omdd::sbe;
-        parseHelper(data, bytesRecvd, callback, partition,
-            [](uint16_t type, char* pos, uint16_t msgSize, _Callback& callback, int32_t partition) {
+        parseHelper(data, bytesRecvd, processor, partition,
+            [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, int32_t partition, uint32_t seqNum) {
             switch (type)
             {
                 OMD_SWITCH_CASE(AddOrder);
@@ -71,7 +71,7 @@ public:
                 OMD_SWITCH_CASE(TradeAmendment);
                 OMD_SWITCH_CASE(TradeStatistics);
             default:
-                callback.onUnknownMessage(type, msgSize);
+                processor.onUnknownMessage(type, msgSize);
                 break;
             }
         });

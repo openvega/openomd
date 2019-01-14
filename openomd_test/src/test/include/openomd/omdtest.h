@@ -4,10 +4,12 @@
 
 namespace omdc
 {
-#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t){}
+#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t, uint32_t){}
 class OMDCProcessor
 {
 public:
+    bool checkPktSeq(int32_t partition, openomd::PktHdr const& pkdHdr, char* pos) { return true; }
+    bool checkMsgSeq(int32_t, uint32_t) { return true; }
     ONMESSAGE(sbe::AddOddLotOrder)
     ONMESSAGE(sbe::AddOrder)
     ONMESSAGE(sbe::AggregateOrderBookUpdate)
@@ -60,6 +62,8 @@ namespace omdd
 class OMDDProcessor
 {
 public:
+    bool checkPktSeq(int32_t partition, openomd::PktHdr const& pkdHdr, char* pos) { return true; }
+    bool checkMsgSeq(int32_t, uint32_t) { return true; }
     ONMESSAGE(sbe::AddOrder)
     ONMESSAGE(sbe::AggregateOrderBookUpdate)
     ONMESSAGE(sbe::CalculatedOpeningPrice)

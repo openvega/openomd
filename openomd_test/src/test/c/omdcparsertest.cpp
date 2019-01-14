@@ -17,7 +17,7 @@ TEST(OMDC_TEST, SequenceReset)
         "\x08\x00\x64\x00\x01\x00\x00\x00";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::SequenceReset const& sr, int32_t partition)
+        void onMessage(sbe::SequenceReset const& sr, int32_t, uint32_t)
         {
             EXPECT_EQ(1, sr.newSeqNo());
         }
@@ -39,7 +39,7 @@ TEST(OMDC_TEST, DisasterRecoverySignal)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::DisasterRecoverySignal const& dr, int32_t)
+        void onMessage(sbe::DisasterRecoverySignal const& dr, int32_t, uint32_t)
         {
             EXPECT_EQ(2, dr.drStatus());
         }
@@ -61,7 +61,7 @@ TEST(OMDC_TEST, RefreshComplete)
         "\x08\x00\xcb\x00\x00\x00\x00\x00";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::RefreshComplete const& rc, int32_t partition)
+        void onMessage(sbe::RefreshComplete const& rc, int32_t, uint32_t)
         {
             EXPECT_EQ(0, rc.lastSeqNum());
         }
@@ -78,7 +78,7 @@ TEST(OMDC_TEST, MarketDefinition)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::MarketDefinition const& md, int32_t)
+        void onMessage(sbe::MarketDefinition const& md, int32_t, uint32_t)
         {
             EXPECT_EQ("NASD", md.getMarketCodeAsString());
             EXPECT_EQ("NASDAQ-AMEX BOARD        ", md.getMarketNameAsString());
@@ -126,7 +126,7 @@ TEST(OMDC_TEST, SecurityDefinition)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::SecurityDefinition& sd, int32_t)
+        void onMessage(sbe::SecurityDefinition& sd, int32_t, uint32_t)
         {
             EXPECT_EQ(11407, sd.securityCode());
             EXPECT_EQ("MAIN", sd.getMarketCodeAsString());
@@ -206,7 +206,7 @@ TEST(OMDC_TEST, SecurityDefinition)
 
     struct CbbcProcessor : public OMDCProcessor
     {
-        void onMessage(sbe::SecurityDefinition& sd, int32_t)
+        void onMessage(sbe::SecurityDefinition& sd, int32_t, uint32_t)
         {
             EXPECT_EQ(60678, sd.securityCode());
             EXPECT_EQ("MAIN", sd.getMarketCodeAsString());
@@ -257,7 +257,7 @@ TEST(OMDC_TEST, LiquidityProvider)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::LiquidityProvider& lp, int32_t)
+        void onMessage(sbe::LiquidityProvider& lp, int32_t, uint32_t)
         {
             EXPECT_EQ(11560, lp.securityCode());
             auto& lps = lp.noLiquidityProviders();
@@ -277,7 +277,7 @@ TEST(OMDC_TEST, CurrencyRate)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::CurrencyRate const& cr, int32_t)
+        void onMessage(sbe::CurrencyRate const& cr, int32_t, uint32_t)
         {
             EXPECT_EQ("GBP", cr.getCurrencyCodeAsString());
             EXPECT_EQ(107500, cr.currencyRate());
@@ -294,7 +294,7 @@ TEST(OMDC_TEST, TradingSessionStatus)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::TradingSessionStatus const& ts, int32_t partition)
+        void onMessage(sbe::TradingSessionStatus const& ts, int32_t, uint32_t)
         {
             EXPECT_EQ("MAIN", ts.getMarketCodeAsString());
             EXPECT_EQ(105, ts.tradingSessionSubID());
@@ -314,7 +314,7 @@ TEST(OMDC_TEST, SecurityStatus)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::SecurityStatus const& ss, int32_t partition)
+        void onMessage(sbe::SecurityStatus const& ss, int32_t, uint32_t)
         {
             EXPECT_EQ(25158, ss.securityCode());
             EXPECT_EQ(2, ss.suspensionIndicator());
@@ -331,7 +331,7 @@ TEST(OMDC_TEST, AddOrder)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::AddOrder const& ao, int32_t)
+        void onMessage(sbe::AddOrder const& ao, int32_t, uint32_t)
         {
             EXPECT_EQ(285, ao.securityCode());
             EXPECT_EQ(18204674, ao.orderID());
@@ -354,7 +354,7 @@ TEST(OMDC_TEST, ModifyOrder)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::ModifyOrder const& mo, int32_t)
+        void onMessage(sbe::ModifyOrder const& mo, int32_t, uint32_t)
         {
             EXPECT_EQ(20147, mo.securityCode());
             EXPECT_EQ(52288513, mo.orderID());
@@ -374,7 +374,7 @@ TEST(OMDC_TEST, DeleteOrder)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::DeleteOrder const& d, int32_t)
+        void onMessage(sbe::DeleteOrder const& d, int32_t, uint32_t)
         {
             EXPECT_EQ(19133, d.securityCode());
             EXPECT_EQ(77473795, d.orderID());
@@ -392,7 +392,7 @@ TEST(OMDC_TEST, AddOddLotOrder)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::AddOddLotOrder const& oo, int32_t)
+        void onMessage(sbe::AddOddLotOrder const& oo, int32_t, uint32_t)
         {
             EXPECT_EQ(35, oo.securityCode());
             EXPECT_EQ(17237249, oo.orderID());
@@ -413,7 +413,7 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::DeleteOddLotOrder const& dol, int32_t)
+        void onMessage(sbe::DeleteOddLotOrder const& dol, int32_t, uint32_t)
         {
             EXPECT_EQ(700, dol.securityCode());
             EXPECT_EQ(1446382593, dol.orderID());
@@ -438,7 +438,7 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t)
+        void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t, uint32_t)
         {
             EXPECT_EQ(18901, aob.securityCode());
             auto& en = aob.noEntries();
@@ -531,7 +531,7 @@ TEST(OMDC_TEST, BrokerQueue)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::BrokerQueue& bq, int32_t)
+        void onMessage(sbe::BrokerQueue& bq, int32_t, uint32_t)
         {
             EXPECT_EQ(3188, bq.securityCode());
             auto& items = bq.items();
@@ -589,7 +589,7 @@ TEST(OMDC_TEST, OrderImbalance)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::OrderImbalance const& oib, int32_t)
+        void onMessage(sbe::OrderImbalance const& oib, int32_t, uint32_t)
         {
             EXPECT_EQ(1358, oib.securityCode());
             EXPECT_EQ(66, oib.orderImbalanceDirection());
@@ -607,7 +607,7 @@ TEST(OMDC_TEST, Trade)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::Trade const& t, int32_t)
+        void onMessage(sbe::Trade const& t, int32_t, uint32_t)
         {
             EXPECT_EQ(2628, t.securityCode());
             EXPECT_EQ(363, t.tradeID());
@@ -627,7 +627,7 @@ TEST(OMDC_TEST, TradeCancel)
         "\x0c\x00\x33\x00\x44\x0a\x00\x00\x6b\x01\x00\x00";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::TradeCancel const& tc, int32_t)
+        void onMessage(sbe::TradeCancel const& tc, int32_t, uint32_t)
         {
             EXPECT_EQ(2628, tc.securityCode());
             EXPECT_EQ(363, tc.tradeID());
@@ -644,7 +644,7 @@ TEST(OMDC_TEST, TradeTicker)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::TradeTicker const& tt, int32_t)
+        void onMessage(sbe::TradeTicker const& tt, int32_t, uint32_t)
         {
             EXPECT_EQ(388, tt.securityCode());
             EXPECT_EQ(44, tt.tickerID());
@@ -664,7 +664,7 @@ TEST(OMDC_TEST, ClosingPrice)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::ClosingPrice const& cp, int32_t)
+        void onMessage(sbe::ClosingPrice const& cp, int32_t, uint32_t)
         {
             EXPECT_EQ(1398, cp.securityCode());
             EXPECT_EQ(6780, cp.closingPrice());
@@ -681,7 +681,7 @@ TEST(OMDC_TEST, NominalPrice)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::NominalPrice const& np, int32_t)
+        void onMessage(sbe::NominalPrice const& np, int32_t, uint32_t)
         {
             EXPECT_EQ(65169, np.securityCode());
             EXPECT_EQ(110, np.nominalPrice());
@@ -698,7 +698,7 @@ TEST(OMDC_TEST, IndicativeEquilibriumPrice)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::IndicativeEquilibriumPrice const& iep, int32_t)
+        void onMessage(sbe::IndicativeEquilibriumPrice const& iep, int32_t, uint32_t)
         {
             EXPECT_EQ(700, iep.securityCode());
             EXPECT_EQ(430000, iep.price());
@@ -716,7 +716,7 @@ TEST(OMDC_TEST, ReferencePrice)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::ReferencePrice const& rp, int32_t)
+        void onMessage(sbe::ReferencePrice const& rp, int32_t, uint32_t)
         {
             EXPECT_EQ(3110, rp.securityCode());
             EXPECT_EQ(31450, rp.referencePrice());
@@ -736,7 +736,7 @@ TEST(OMDC_TEST, VCMTrigger)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::VCMTrigger const& vcm, int32_t)
+        void onMessage(sbe::VCMTrigger const& vcm, int32_t, uint32_t)
         {
             EXPECT_EQ(2403, vcm.securityCode());
             EXPECT_EQ(1469066315000000000, vcm.coolingOffStartTime());
@@ -759,7 +759,7 @@ TEST(OMDC_TEST, Statistics)
     
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::Statistics const& s, int32_t)
+        void onMessage(sbe::Statistics const& s, int32_t, uint32_t)
         {
             EXPECT_EQ(3188, s.securityCode());
             EXPECT_EQ(9982000, s.sharesTraded());
@@ -782,7 +782,7 @@ TEST(OMDC_TEST, MarketTurnover)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::MarketTurnover const& mt, int32_t)
+        void onMessage(sbe::MarketTurnover const& mt, int32_t, uint32_t)
         {
             EXPECT_EQ("MAIN", mt.getMarketCodeAsString());
             EXPECT_EQ("HKD", mt.getCurrencyCodeAsString());
@@ -798,7 +798,7 @@ TEST(OMDC_TEST, Yield)
         "\x0c\x00\x2c\x00\x77\x52\x01\x00\xaa\x0d\x00\x00";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::Yield const& y, int32_t)
+        void onMessage(sbe::Yield const& y, int32_t, uint32_t)
         {
             EXPECT_EQ(86647, y.securityCode());
             EXPECT_EQ(3498, y.yield());
@@ -898,7 +898,7 @@ TEST(OMDC_TEST, News)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::News& news, int32_t)
+        void onMessage(sbe::News& news, int32_t, uint32_t)
         {
             EXPECT_EQ("EXN", news.getNewsTypeAsString());
             EXPECT_EQ("005", news.getNewsIDAsString());
@@ -933,7 +933,7 @@ TEST(OMDC_TEST, IndexDefinition)
         "\x43\x4e\x59\x20";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::IndexDefinition const& id, int32_t partition)
+        void onMessage(sbe::IndexDefinition const& id, int32_t, uint32_t)
         {
             EXPECT_EQ("000001     ", id.getIndexCodeAsString());
             EXPECT_EQ(67, id.indexSource());
@@ -956,7 +956,7 @@ TEST(OMDC_TEST, IndexData)
 
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::IndexData const& id, int32_t)
+        void onMessage(sbe::IndexData const& id, int32_t, uint32_t)
         {
             EXPECT_EQ("H11108     ", id.getIndexCodeAsString());
             EXPECT_EQ(32, id.indexStatus());
@@ -985,7 +985,7 @@ TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
         "\x00\x1c\xa0\x54\xfb\xc7\xad\x14";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::StockConnectDailyQuotaBalance const& scDQB, int32_t)
+        void onMessage(sbe::StockConnectDailyQuotaBalance const& scDQB, int32_t, uint32_t)
         {
             EXPECT_EQ("SH", scDQB.getStockConnectMarketAsString());
             EXPECT_EQ("NB", scDQB.getTradingDirectionAsString());
@@ -1003,7 +1003,7 @@ TEST(OMDC_TEST, StockConnectMarketTurnover)
         "\x87\x9e\xcf\x16\x00\x00\x00\x00\xaf\xc8\xae\x49\x00\x00\x00\x00";
     struct Processor : public OMDCProcessor
     {
-        void onMessage(sbe::StockConnectMarketTurnover const& scMT, int32_t)
+        void onMessage(sbe::StockConnectMarketTurnover const& scMT, int32_t, uint32_t)
         {
             EXPECT_EQ("SZ", scMT.getStockConnectMarketAsString());
             EXPECT_EQ("SB", scMT.getTradingDirectionAsString());
