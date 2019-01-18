@@ -7,13 +7,11 @@
 
 namespace openomd
 {
-class BasePrintProcessor
+class BasePrintProcessor : public PcapLineArbitration
 {
 public:
     BasePrintProcessor(std::set<int32_t> const& msgIds);
 
-    bool checkPktSeq(int32_t partition, openomd::PktHdr const& pktHdr, char* pos) { return true; }
-    bool checkMsgSeq(int32_t, uint32_t) { return true; }
     void onUnknownMessage(uint16_t, uint16_t);
 
     void onError(std::exception const& ex);

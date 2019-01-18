@@ -291,6 +291,9 @@
     <ClInclude Include="src\main\include\openomd\recoverypolicy.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
+    <ClInclude Include="src\main\include\openomd\vectorbasedcache.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h.sbeomdhack">

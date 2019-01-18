@@ -1,15 +1,15 @@
 #pragma once
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
+#include "openomd/linearbitration.h"
 
 namespace omdc
 {
 #define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t, uint32_t){}
-class OMDCProcessor
+
+class OMDCProcessor : public openomd::NoRecoveryLineArbitration
 {
 public:
-    bool checkPktSeq(int32_t partition, openomd::PktHdr const& pkdHdr, char* pos) { return true; }
-    bool checkMsgSeq(int32_t, uint32_t) { return true; }
     ONMESSAGE(sbe::AddOddLotOrder)
     ONMESSAGE(sbe::AddOrder)
     ONMESSAGE(sbe::AggregateOrderBookUpdate)
@@ -59,11 +59,9 @@ public:
 
 namespace omdd
 {
-class OMDDProcessor
+class OMDDProcessor : public openomd::NoRecoveryLineArbitration
 {
 public:
-    bool checkPktSeq(int32_t partition, openomd::PktHdr const& pkdHdr, char* pos) { return true; }
-    bool checkMsgSeq(int32_t, uint32_t) { return true; }
     ONMESSAGE(sbe::AddOrder)
     ONMESSAGE(sbe::AggregateOrderBookUpdate)
     ONMESSAGE(sbe::CalculatedOpeningPrice)

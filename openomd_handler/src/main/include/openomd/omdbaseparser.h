@@ -14,14 +14,75 @@ protected:
         processor.onMessage(msg, partition, seqNum);
     }
 
+    //template <typename _Processor, typename _Func>
+    //static void parseHelper(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition, _Func func)
+    //{
+    //    static const auto MSG_HDR_SIZE = static_cast<int16_t>(sizeof(MsgHdr));
+    //    if (bytesRecvd >= sizeof(PktHdr))
+    //    {
+    //        PktHdr* pktHdr = (PktHdr*)data;
+    //        if (processor.checkPktSeq(partition, *pktHdr, data))
+    //        {
+    //            auto byteProcess = sizeof(PktHdr);
+    //            int64_t byteLeft = 0;
+    //            uint16_t msgCnt = 0;
+    //            while ((byteLeft = bytesRecvd - byteProcess) > MSG_HDR_SIZE)
+    //            {
+    //                auto* pos = data + byteProcess;
+    //                MsgHdr* msgHdr = (MsgHdr*)(pos);
+    //                if (msgHdr->size == 0 || msgHdr->size > byteLeft)
+    //                {
+    //                    processor.onError(std::exception("Invalid message size"));
+    //                    break;
+    //                }
+    //                try
+    //                {
+    //                    auto msgSeq = pktHdr->seqNum + msgCnt;
+    //                    if (processor.checkMsgSeq(partition, msgSeq))
+    //                    {
+    //                        func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, partition, msgSeq);
+    //                    }   
+    //                }
+    //                catch (std::exception const& ex)
+    //                {
+    //                    processor.onError(ex);
+    //                }
+    //                byteProcess += msgHdr->size;
+    //                ++msgCnt;
+    //            }
+    //        }
+    //    }
+    //}
+
     template <typename _Processor, typename _Func>
     static void parseHelper(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition, _Func func)
+    {
+        parseHelperInternal(data, bytesRecvd, processor, partition, func, 
+            [&](int32_t fPartition, PktHdr const& pktHdr, char* fData)
+            {
+                return processor.checkPktSeq(fPartition, pktHdr, fData);
+            }, 
+            [&]()
+            {
+                processor.processCache([&](char* data, size_t bytesRecvd) {
+                    parseHelperInternal(data, bytesRecvd, processor, partition, func, 
+                    [&](int32_t fPartition, PktHdr const& pktHdr, char* fData)
+                    {
+                        return processor.checkPktSeqWithtouRecovery(fPartition, pktHdr, fData);
+                    }, []() {});
+                });
+                
+            });
+    }
+private:
+    template <typename _Processor, typename _Func, typename _CheckSeqFunc, typename _ProcessCacheFunc>
+    static void parseHelperInternal(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition, _Func func, _CheckSeqFunc checkSeqFunc, _ProcessCacheFunc _processCacheFunc)
     {
         static const auto MSG_HDR_SIZE = static_cast<int16_t>(sizeof(MsgHdr));
         if (bytesRecvd >= sizeof(PktHdr))
         {
             PktHdr* pktHdr = (PktHdr*)data;
-            if (processor.checkPktSeq(partition, *pktHdr, data))
+            if (checkSeqFunc(partition, *pktHdr, data))
             {
                 auto byteProcess = sizeof(PktHdr);
                 int64_t byteLeft = 0;
@@ -41,7 +102,7 @@ protected:
                         if (processor.checkMsgSeq(partition, msgSeq))
                         {
                             func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, partition, msgSeq);
-                        }   
+                        }
                     }
                     catch (std::exception const& ex)
                     {
@@ -51,7 +112,7 @@ protected:
                     ++msgCnt;
                 }
                 // Try consume cached packet
-
+                _processCacheFunc();
             }
         }
     }
