@@ -19,19 +19,8 @@ public:
 
 private:
     template <typename _RecoveryFunc>
-    bool checkPktSeqInternal(int32_t partition, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
-    {
-        if ((pktHdr.seqNum + pktHdr.msgCnt) < _nextSeqNum)  // duplicated
-        {
-            return false;
-        }
-        if (pktHdr.seqNum > _nextSeqNum)   // gap
-        {
-            func();
-            return false;
-        }
-        return true;
-    }
+    bool checkPktSeqInternal(int32_t partition, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func);
+
     uint32_t _nextSeqNum = 1;
 };
 
@@ -49,6 +38,22 @@ template <typename _Cache, typename _RecoveryPolicy>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqWithtouRecovery(int32_t partition, openomd::PktHdr const& pktHdr, char* pos)
 {
     return checkPktSeqInternal(partition, pktHdr, pos, []() {});
+}
+
+template <typename _Cache, typename _RecoveryPolicy>
+template <typename _RecoveryFunc>
+bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(int32_t partition, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
+{
+    if ((pktHdr.seqNum + pktHdr.msgCnt) < _nextSeqNum)  // duplicated
+    {
+        return false;
+    }
+    if (pktHdr.seqNum > _nextSeqNum)   // gap
+    {
+        func();
+        return false;
+    }
+    return true;
 }
 
 template <typename _Cache, typename _RecoveryPolicy>
