@@ -8,7 +8,7 @@ void processMsg(char* msg, size_t size)
 {
     _Processor processor;
     openomd::OmddParser parser;
-    parser.parse(msg, size, processor, 0);
+    parser.parse(msg, size, processor);
 }
 
 TEST(OMDD_TEST, SequenceReset)
@@ -18,7 +18,7 @@ TEST(OMDD_TEST, SequenceReset)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::SequenceReset const& sr, int32_t, uint32_t)
+        void onMessage(sbe::SequenceReset const& sr, uint32_t)
         {
             EXPECT_EQ(1, sr.newSeqNo());
         }
@@ -32,7 +32,7 @@ TEST(OMDD_TEST, DisasterRecoverySignal)
         "\x08\x00\x69\x00\x02\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::DisasterRecoverySignal const& dr, int32_t, uint32_t)
+        void onMessage(sbe::DisasterRecoverySignal const& dr, uint32_t)
         {
             EXPECT_EQ(2, dr.drStatus());
         }
@@ -46,7 +46,7 @@ TEST(OMDD_TEST, RefreshComplete)
         "\x08\x00\xcb\x00\x00\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::RefreshComplete const& rc, int32_t, uint32_t)
+        void onMessage(sbe::RefreshComplete const& rc, uint32_t)
         {
             EXPECT_EQ(0, rc.lastSeqNum());
         }
@@ -66,7 +66,7 @@ TEST(OMDD_TEST, CommodityDefinition)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::CommodityDefinition const& comm, int32_t, uint32_t)
+        void onMessage(sbe::CommodityDefinition const& comm, uint32_t)
         {
             EXPECT_EQ(2006, comm.commodityCode());
             EXPECT_EQ(2, comm.decimalInUnderlyingPrice());
@@ -98,7 +98,7 @@ TEST(OMDD_TEST, ClassDefinition)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::ClassDefinition const& cdef, int32_t, uint32_t)
+        void onMessage(sbe::ClassDefinition const& cdef, uint32_t)
         {
             EXPECT_EQ(12, cdef.country());
             EXPECT_EQ(20, cdef.market());
@@ -134,7 +134,7 @@ TEST(OMDD_TEST, SeriesDefinitionBase)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::SeriesDefinitionBase const& sdb, int32_t, uint32_t)
+        void onMessage(sbe::SeriesDefinitionBase const& sdb, uint32_t)
         {
             EXPECT_EQ(199007, sdb.orderbookID());
             EXPECT_EQ("XIC2.50F7                       ", sdb.getSymbolAsString());
@@ -162,7 +162,7 @@ TEST(OMDD_TEST, SeriesDefinitionExtended)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::SeriesDefinitionExtended const& sde, int32_t, uint32_t)
+        void onMessage(sbe::SeriesDefinitionExtended const& sde, uint32_t)
         {
             EXPECT_EQ(1049620, sde.orderbookID());
             EXPECT_EQ("HGN87.50I7                      ", sde.getSymbolAsString());
@@ -192,7 +192,7 @@ TEST(OMDD_TEST, CombinationDefinition)
         "\x01\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::CombinationDefinition const& cd, int32_t, uint32_t)
+        void onMessage(sbe::CombinationDefinition const& cd, uint32_t)
         {
             EXPECT_EQ(5379053, cd.comboOrderbookID());
             EXPECT_EQ(725997, cd.legOrderbookID());
@@ -213,7 +213,7 @@ TEST(OMDD_TEST, MarketStatus)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::MarketStatus const& ms, int32_t, uint32_t)
+        void onMessage(sbe::MarketStatus const& ms, uint32_t)
         {
             EXPECT_EQ(1, ms.stateLevel());
             EXPECT_EQ(3, ms.market());
@@ -239,7 +239,7 @@ TEST(OMDD_TEST, SeriesStatus)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::SeriesStatus const& ss, int32_t, uint32_t)
+        void onMessage(sbe::SeriesStatus const& ss, uint32_t)
         {
             EXPECT_EQ(16976142, ss.orderbookID());
             EXPECT_EQ(78, ss.suspended());
@@ -255,7 +255,7 @@ TEST(OMDD_TEST, CommodityStatus)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::CommodityStatus const& cs, int32_t, uint32_t)
+        void onMessage(sbe::CommodityStatus const& cs, uint32_t)
         {
             EXPECT_EQ(2003, cs.commodityCode());
             EXPECT_EQ('N', cs.suspended());
@@ -271,7 +271,7 @@ TEST(OMDD_TEST, AddOrder)
         "\x20\x4e\x00\x00\x01\x00\x00\x00\x00\x02\x00\x00\x01\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::AddOrder const& ao, int32_t, uint32_t)
+        void onMessage(sbe::AddOrder const& ao, uint32_t)
         {
             EXPECT_EQ(2559908, ao.orderBookID());
             EXPECT_EQ(6915360520128337583, ao.orderID());
@@ -294,7 +294,7 @@ TEST(OMDD_TEST, ModifyOrder)
         "\x20\x4e\x00\x00\x01\x00\x00\x00\x00\x02\x00\x00\x01\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::ModifyOrder const& mo, int32_t, uint32_t)
+        void onMessage(sbe::ModifyOrder const& mo, uint32_t)
         {
             EXPECT_EQ(2559908, mo.orderBookID());
             EXPECT_EQ(6915360520128337583, mo.orderID());
@@ -316,7 +316,7 @@ TEST(OMDD_TEST, DeleteOrder)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::DeleteOrder const& dl, int32_t, uint32_t)
+        void onMessage(sbe::DeleteOrder const& dl, uint32_t)
         {
             EXPECT_EQ(27003150, dl.orderBookID());
             EXPECT_EQ(6738016441394313329, dl.orderID());
@@ -345,7 +345,7 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::AggregateOrderBookUpdate& aob, int32_t, uint32_t)
+        void onMessage(sbe::AggregateOrderBookUpdate& aob, uint32_t)
         {
             EXPECT_EQ(29689813, aob.orderbookID());
             auto& entries = aob.noEntries();
@@ -387,7 +387,7 @@ TEST(OMDD_TEST, OrderbookClear)
         "\x08\x00\x4f\x01\x0e\x09\x9c\x01";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::OrderbookClear const& obc, int32_t, uint32_t)
+        void onMessage(sbe::OrderbookClear const& obc, uint32_t)
         {
             EXPECT_EQ(27003150, obc.orderbookID());
         }
@@ -402,7 +402,7 @@ TEST(OMDD_TEST, QuoteRequest)
 
     struct Processor : public OMDDProcessor
     {
-        void onmessage(sbe::QuoteRequest const& qr, int32_t, uint32_t)
+        void onmessage(sbe::QuoteRequest const& qr, uint32_t)
         {
             EXPECT_EQ(22415940, qr.orderbookID());
             EXPECT_EQ(0, qr.numberOfLots());
@@ -422,7 +422,7 @@ TEST(OMDD_TEST, Trade)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::Trade const& t, int32_t, uint32_t)
+        void onMessage(sbe::Trade const& t, uint32_t)
         {
             EXPECT_EQ(266148, t.orderBookID());
             EXPECT_EQ(6738016441400186135, t.orderID());
@@ -449,7 +449,7 @@ TEST(OMDD_TEST, TradeAmendment)
         "\x79\x7b\x69\x14\x01\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::TradeAmendment const& ta, int32_t, uint32_t)
+        void onMessage(sbe::TradeAmendment const& ta, uint32_t)
         {
             EXPECT_EQ(673801620517078627, ta.tradeID());
             EXPECT_EQ(0, ta.comboGroupID());
@@ -472,7 +472,7 @@ TEST(OMDD_TEST, TradeStatistics)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::TradeStatistics const& ts, int32_t, uint32_t)
+        void onMessage(sbe::TradeStatistics const& ts, uint32_t)
         {
             EXPECT_EQ(19073304, ts.orderbookID());
             EXPECT_EQ(INT_MIN, ts.price());
@@ -499,7 +499,7 @@ TEST(OMDD_TEST, SeriesStatistics)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::SeriesStatistics const& ss, int32_t, uint32_t)
+        void onMessage(sbe::SeriesStatistics const& ss, uint32_t)
         {
             EXPECT_EQ(17696786, ss.orderbookID());
             EXPECT_EQ(0, ss.session());
@@ -522,7 +522,7 @@ TEST(OMDD_TEST, CalculatedOpeningPrice)
         "\x00\x00\x00\x00\x00\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::CalculatedOpeningPrice const& cop, int32_t, uint32_t)
+        void onMessage(sbe::CalculatedOpeningPrice const& cop, uint32_t)
         {
             EXPECT_EQ(135073, cop.orderbookID());
             EXPECT_EQ(INT_MIN, cop.calculatedOpeningPrice());
@@ -540,7 +540,7 @@ TEST(OMDD_TEST, EstimatedAverageSettlementPrice)
         "\x00\x00\x00\x00";
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::EstimatedAverageSettlementPrice const& eas, int32_t, uint32_t)
+        void onMessage(sbe::EstimatedAverageSettlementPrice const& eas, uint32_t)
         {
             EXPECT_EQ(69, eas.easType());
             EXPECT_EQ("1211                ", eas.getInstrumentCodeAsString());
@@ -639,7 +639,7 @@ TEST(OMDD_TEST, MarketAlert)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::MarketAlert& ma, int32_t, uint32_t)
+        void onMessage(sbe::MarketAlert& ma, uint32_t)
         {
             EXPECT_EQ(1, ma.alertID());
             EXPECT_EQ(72, ma.source());
@@ -666,7 +666,7 @@ TEST(OMDD_TEST, OpenInterest)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::OpenInterest const& oi, int32_t, uint32_t)
+        void onMessage(sbe::OpenInterest const& oi, uint32_t)
         {
             EXPECT_EQ(1, oi.dayIndicator());
             EXPECT_EQ(16911116, oi.orderbookID());
@@ -688,7 +688,7 @@ TEST(OMDD_TEST, ImpliedVolatility)
 
     struct Processor : public OMDDProcessor
     {
-        void onMessage(sbe::ImpliedVolatility const& iv, int32_t, uint32_t)
+        void onMessage(sbe::ImpliedVolatility const& iv, uint32_t)
         {
             EXPECT_EQ(36637565, iv.orderbookID());
             EXPECT_EQ(230000, iv.impliedVolatility());

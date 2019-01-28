@@ -3,32 +3,32 @@
 
 namespace openomd
 {
-#define OMD_SWITCH_CASE(MESSAGE) case MESSAGE::sbeTemplateId(): process<MESSAGE>(pos, msgSize, processor, partition, seqNum); break;
+#define OMD_SWITCH_CASE(MESSAGE) case MESSAGE::sbeTemplateId(): process<MESSAGE>(pos, msgSize, processor, seqNum); break;
 class OmdBaseParser
 {
 protected:
     template <typename _Msg, typename _Processor>
-    static void process(char* buffer, size_t size, _Processor& processor, int32_t partition, uint32_t seqNum)
+    static void process(char* buffer, size_t size, _Processor& processor, uint32_t seqNum)
     {
         _Msg msg(buffer, size, _Msg::sbeBlockLength(), _Msg::sbeSchemaVersion());
-        processor.onMessage(msg, partition, seqNum);
+        processor.onMessage(msg, seqNum);
     }
 
     template <typename _Processor, typename _Func>
-    static void parseHelper(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition, _Func func)
+    static void parseHelper(char* data, size_t bytesRecvd, _Processor& processor, _Func func)
     {
-        parseHelperInternal(data, bytesRecvd, processor, partition, func, 
-            [&](int32_t fPartition, PktHdr const& pktHdr, char* fData)
+        parseHelperInternal(data, bytesRecvd, processor, func, 
+            [&](PktHdr const& pktHdr, char* fData)
             {
-                return processor.checkPktSeq(fPartition, pktHdr, fData);
+                return processor.checkPktSeq(pktHdr, fData);
             }, 
             [&]()
             {
                 processor.processCache([&](char* data, size_t bytesRecvd) {
-                    parseHelperInternal(data, bytesRecvd, processor, partition, func, 
-                    [&](int32_t fPartition, PktHdr const& pktHdr, char* fData)
+                    parseHelperInternal(data, bytesRecvd, processor, func, 
+                    [&](PktHdr const& pktHdr, char* fData)
                     {
-                        return processor.checkPktSeqWithtouRecovery(fPartition, pktHdr, fData);
+                        return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
                     }, []() {});
                 });
                 
@@ -36,13 +36,13 @@ protected:
     }
 private:
     template <typename _Processor, typename _Func, typename _CheckSeqFunc, typename _ProcessCacheFunc>
-    static void parseHelperInternal(char* data, size_t bytesRecvd, _Processor& processor, int32_t partition, _Func func, _CheckSeqFunc checkSeqFunc, _ProcessCacheFunc _processCacheFunc)
+    static void parseHelperInternal(char* data, size_t bytesRecvd, _Processor& processor, _Func func, _CheckSeqFunc checkSeqFunc, _ProcessCacheFunc _processCacheFunc)
     {
         static const auto MSG_HDR_SIZE = static_cast<int16_t>(sizeof(MsgHdr));
         if (bytesRecvd >= sizeof(PktHdr))
         {
             PktHdr* pktHdr = (PktHdr*)data;
-            if (checkSeqFunc(partition, *pktHdr, data))
+            if (checkSeqFunc(*pktHdr, data))
             {
                 auto byteProcess = sizeof(PktHdr);
                 int64_t byteLeft = 0;
@@ -59,9 +59,9 @@ private:
                     try
                     {
                         auto msgSeq = pktHdr->seqNum + msgCnt;
-                        if (processor.checkMsgSeq(partition, msgSeq))
+                        if (processor.checkMsgSeq(msgSeq))
                         {
-                            func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, partition, msgSeq);
+                            func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
                         }
                     }
                     catch (std::exception const& ex)

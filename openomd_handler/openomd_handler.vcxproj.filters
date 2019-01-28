@@ -28,6 +28,9 @@
     <Filter Include="Header Files\recovery">
       <UniqueIdentifier>{d95f6c17-a3ad-4348-b7b6-756f8755fa13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\orderbook">
+      <UniqueIdentifier>{6c55533a-d4a7-494c-a751-729ec6c9057e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\include\openomd\omdbaseparser.h">
@@ -293,6 +296,9 @@
     </ClInclude>
     <ClInclude Include="src\main\include\openomd\vectorbasedcache.h">
       <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\fulltick.h">
+      <Filter>Header Files\orderbook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

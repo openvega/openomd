@@ -37,7 +37,7 @@ public:
         std::string const& listenIp,
         std::string const& multicastIp,
         std::string const& outboundIp,
-        uint16_t port, int32_t partition, _CB& callback, IOServiceLC& ioServiceLC)
+        uint16_t port, int32_t channel, _CB& callback, IOServiceLC& ioServiceLC)
         : _callback{callback}
         , _ioService{ioServiceLC.ioService()}
         , _socket{ioServiceLC.ioService()}
@@ -46,7 +46,7 @@ public:
         , _multicastIp{multicastIp}
         , _outboundIp{outboundIp}
         , _port{port}
-        , _partition{partition}
+        , _channel{channel}
     {
         _name.append("MulticastReceiver-").append(multicastIp).append("-").append(std::to_string(_port));
         //LOG_INFO(_log) << _name << " listening on " << listenIp;
@@ -82,7 +82,7 @@ private:
     std::string _multicastIp;
     std::string _outboundIp;
     uint16_t _port;
-    int32_t _partition;
+    int32_t _channel;
     std::string _name;
 
     boost::asio::ip::udp::endpoint _senderEp;
@@ -154,7 +154,7 @@ void MulticastReceiver<_CB>::processData(const boost::system::error_code& error,
     }
     else
     {
-        _callback.onReceive(bytesRecvd, data, maxLength, _partition);
+        _callback.onReceive(bytesRecvd, data, maxLength);
         registerAsyncReceive(&MulticastReceiver::processData, this);
     }
 }

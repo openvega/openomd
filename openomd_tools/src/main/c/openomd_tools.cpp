@@ -2,6 +2,16 @@
 #include "cxxopts.hpp"
 #include "omdprintprocessor.h"
 
+uint32_t convertIp(const char* ip)
+{
+    struct in_addr addr;
+    if (inet_pton(AF_INET, ip, &addr))
+    {
+        return addr.s_addr;
+    }
+    throw std::exception("wrong ip");
+}
+
 int main(int32_t argc, char* argv[])
 {
     using namespace std;
@@ -28,17 +38,24 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " pcap=" << pcapFile << " " << endl;
             if (protocol == "omdc")
             {
-                set<int32_t> config{ 0 };
-                openomd::OmdcPrintProcessor processor{ config };
-                openomd::OmdPcapRunner<openomd::OmdcPrintProcessor, openomd::OmdcParser> runner;
-                runner.run(pcapFile, processor);
+
+                openomd::OmdPcapRunner<openomd::OmdcPrintProcessor, openomd::OmdcParser> runner{
+                    {{30, convertIp("239.1.1.24"), 51000, convertIp("239.1.127.24"), 51000},
+                     {31, convertIp("239.1.1.24"), 51001, convertIp("239.1.127.24"), 51001},
+                     {32, convertIp("239.1.1.24"), 51002, convertIp("239.1.127.24"), 51002},
+                     {33, convertIp("239.1.1.24"), 51003, convertIp("239.1.127.24"), 51003},
+                     {34, convertIp("239.1.1.24"), 51004, convertIp("239.1.127.24"), 51004},
+                     {35, convertIp("239.1.1.24"), 51005, convertIp("239.1.127.24"), 51005},
+                     {36, convertIp("239.1.1.24"), 51006, convertIp("239.1.127.24"), 51006},
+                     {37, convertIp("239.1.1.24"), 51007, convertIp("239.1.127.24"), 51007},
+                     {38, convertIp("239.1.1.24"), 51008, convertIp("239.1.127.24"), 51008}}, 
+                     pcapFile };
+                runner.run();
             }
             else if (protocol == "omdd")
             {
-                set<int32_t> config{ 0 };
-                openomd::OmddPrintProcessor processor{ config };
-                openomd::OmdPcapRunner<openomd::OmddPrintProcessor, openomd::OmddParser> runner;
-                runner.run(pcapFile, processor);
+                openomd::OmdPcapRunner<openomd::OmddPrintProcessor, openomd::OmddParser> runner{ {} , pcapFile };
+                runner.run();
             }
 
         }

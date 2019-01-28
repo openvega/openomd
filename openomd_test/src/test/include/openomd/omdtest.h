@@ -5,7 +5,7 @@
 
 namespace omdc
 {
-#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, int32_t, uint32_t){}
+#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, uint32_t){}
 
 class OMDCProcessor : public openomd::NoRecoveryLineArbitration
 {

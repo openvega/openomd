@@ -108,7 +108,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;Ws2_32.lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>target\nar\lib\x86-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -130,7 +130,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;Ws2_32.lib;gmock-$(GmockVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -156,7 +156,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;Ws2_32.lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>target\nar\lib\x86-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-x86-Windows-msvc-static\lib\x86-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -182,7 +182,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;Ws2_32.lib;gmock-$(GmockVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\test-nar\gmock-$(GmockVersion)-amd64-Windows-msvc-static\lib\amd64-Windows-msvc\static\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

@@ -130,10 +130,8 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
         {
             auto * udpPacket = reinterpret_cast<UdpFrame<> const*>(pktData);
             uint32_t byteRecvd = pkthdr->len - sizeof(UdpHdr);
-            printf("%x%x %d\n", udpPacket->_hdr.ip_dst.s_addr, udpPacket->_hdr.uh_dport,
-                ((udpPacket->_hdr.ip_dst.s_addr & 0xFF000000) >> 8) | udpPacket->_hdr.uh_dport);
             _callback.onReceive(byteRecvd, const_cast<uint8_t*>(&udpPacket->_payload[0]), ETHERNET_MAX_PAYLOAD, 
-                ((udpPacket->_hdr.ip_dst.s_addr & 0xFF000000) >> 8) | udpPacket->_hdr.uh_dport);    // Parition = last_byte_in_IP >> 8 | port
+                udpPacket->_hdr.ip_dst.s_addr, ntohs(udpPacket->_hdr.uh_dport));
         }
         }
     }
