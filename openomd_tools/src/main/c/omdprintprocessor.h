@@ -16,24 +16,15 @@ public:
 
     void onError(std::exception const& ex);
 protected:
-    template <typename _MSG, typename _F>
-    void onPrintMessage(_MSG const& m, _F f)
+    
+    template <typename _Msg>
+    void onPrintMessage(_Msg const& m, uint32_t seqNum)
     {
-//        if (_msgIds.find(_MSG::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
+        //        if (_msgIds.find(_MSG::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
         {
-            f(m);
+            std::cout << seqNum << " " << m << std::endl;
         }
     }
-
-    template <typename _MSG, typename _F>
-    void onPrintMessage(_MSG& m, _F f)
-    {
-//        if (_msgIds.find(_MSG::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
-        {
-            f(m);
-        }
-    }
-
 //    std::set<int32_t> _msgIds;
 };
 

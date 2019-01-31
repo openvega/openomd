@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_map>
-#include <vector>
 #include "openomd/recoverypolicy.h"
 #include "openomd/vectorbasedcache.h"
 
@@ -13,7 +12,8 @@ public:
     bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos);
     bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos);
     bool checkMsgSeq(uint32_t);
-    
+    void resetSeqNum(uint32_t newSeqNum);
+
     template <typename _Func>
     void processCache(_Func func);
 
@@ -44,7 +44,7 @@ template <typename _Cache, typename _RecoveryPolicy>
 template <typename _RecoveryFunc>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
 {
-    if ((pktHdr.seqNum + pktHdr.msgCnt) < _nextSeqNum)  // duplicated
+    if ((pktHdr.seqNum + pktHdr.msgCnt - 1) < _nextSeqNum)  // duplicated
     {
         return false;
     }
@@ -72,6 +72,12 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
 }
 
 template <typename _Cache, typename _RecoveryPolicy>
+void LineArbitration<_Cache, _RecoveryPolicy>::resetSeqNum(uint32_t newSeqNum)
+{
+    _nextSeqNum = newSeqNum;
+}
+
+template <typename _Cache, typename _RecoveryPolicy>
 template <typename _Func>
 void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
 {
@@ -96,6 +102,5 @@ void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
     }
 }
 
-using NoRecoveryLineArbitration = LineArbitration<MapBasedCache, NoopRecoveryPolicy>;
 using PcapLineArbitration = LineArbitration<MapBasedCache, PcapRecoveryPolicy>;
 }

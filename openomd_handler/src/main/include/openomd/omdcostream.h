@@ -39,39 +39,190 @@
 #include <omdc_sbe/VCMTrigger.h>
 #include <omdc_sbe/Yield.h>
 
-//std::ostream& operator<<(std::ostream& os, const & m)
-//{
-//    return os;
-//}
-
 namespace omdc
 {
 namespace sbe
 {
 inline std::ostream& operator<<(std::ostream& os, const AddOrder& m)
 {
-    os << "AddOrder s=" << m.securityCode() << " id=" << m.orderID() << " p=" << m.price() << " q=" << m.quantity() << " s=" << m.side() << " t=" << m.orderType() << " p=" << m.orderBookPosition();
+    os << "ao s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << "@" << m.price() << " t=" << m.orderType() << " p=" << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, const ModifyOrder& m)
 {
-    os << "ModifyOrder s=" << m.securityCode() << " id=" << m.orderID() << " q=" << m.quantity() << " s=" << m.side() << " p=" << m.orderBookPosition();
+    os << "mo s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << " p=" << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, const DeleteOrder& m)
 {
-    os << "DeleteOrder s=" << m.securityCode() << " id=" << m.orderID() << " s=" << m.side();
+    os << "do s=" << m.securityCode() << " id=" << m.orderID() << " s=" << m.side();
     return os;
 }
-inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate& m)
+inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
 {
-    os << "AggOrderBook s=" << m.securityCode() << std::endl;
+    auto & m = const_cast<AggregateOrderBookUpdate&>(cm);
+    os << "aob s=" << m.securityCode() << std::endl;
     auto& en = m.noEntries();
     while (en.hasNext())
     {
         en.next();
-        os << " s=" << en.side() << " l=" << (int16_t)en.priceLevel() << " a=" << (int16_t)en.updateAction() << " " << en.aggregateQuantity() << "@" << en.price() << "(" << en.numberOfOrders() << ")" << std::endl;
+        os << " " << en.side() << " l=" << (int16_t)en.priceLevel() << " a=" << (int16_t)en.updateAction() << " " << en.aggregateQuantity() << "@" << en.price() << "(" << en.numberOfOrders() << ")" << std::endl;
     }
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, AddOddLotOrder const& m)
+{
+    os << "aoo";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, BrokerQueue const& m)
+{
+    os << "bq";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, ClosingPrice const& m)
+{
+    os << "cp";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, CurrencyRate const& m)
+{
+    os << "cr";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, DeleteOddLotOrder const& m)
+{
+    os << "doo";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, DisasterRecoverySignal const& m)
+{
+    os << "dr";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, IndexData const& m)
+{
+    os << "id";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, IndexDefinition const& m)
+{
+    os << "idef";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, IndicativeEquilibriumPrice const& m)
+{
+    os << "iep";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, LiquidityProvider const& m)
+{
+    os << "lp";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, LogonResponse const& m)
+{
+    os << "lr";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, MarketDefinition const& m)
+{
+    os << "md";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, MarketTurnover const& m)
+{
+    os << "mt";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, News const& m)
+{
+    os << "ns";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, NominalPrice const& m)
+{
+    os << "np";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, OrderImbalance const& m)
+{
+    os << "ob";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, ReferencePrice const& m)
+{
+    os << "rp";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, RefreshComplete const& m)
+{
+    os << "rc";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, RetransmissionResp const& m)
+{
+    os << "rr";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, SecurityDefinition const& m)
+{
+    os << "sd";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, SecurityStatus const& m)
+{
+    os << "ss";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, SequenceReset const& m)
+{
+    os << "sr";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, Statistics const& m)
+{
+    os << "st";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, StockConnectDailyQuotaBalance const& m)
+{
+    os << "scdb";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, StockConnectMarketTurnover const& m)
+{
+    os << "scmt";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, Trade const& m)
+{
+    os << "t";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, TradeCancel const& m)
+{
+    os << "tc";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, TradeTicker const& m)
+{
+    os << "tt";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, TradingSessionStatus const& m)
+{
+    os << "tss";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, VCMTrigger const& m)
+{
+    os << "vcm";
+    return os;
+}
+inline std::ostream& operator<<(std::ostream& os, Yield const& m)
+{
+    os << "y";
     return os;
 }
 }

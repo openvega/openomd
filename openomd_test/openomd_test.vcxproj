@@ -22,6 +22,7 @@
     <ClCompile Include="src\test\c\omdcparsertest.cpp" />
     <ClCompile Include="src\test\c\omdchandlertest.cpp" />
     <ClCompile Include="src\test\c\omddparsertest.cpp" />
+    <ClCompile Include="src\test\c\orderbooktest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pom.xml" />

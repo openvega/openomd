@@ -3,10 +3,11 @@
 #include "openomd/omdcparser.h"
 #include "openomd/omdtest.h"
 #include "openomd/pcaputil.h"
+#include "openomd/linearbitration.h"
 
 namespace omdc
 {
-struct PrintProcessor : OMDCProcessor
+struct PrintProcessor : OMDCProcessor<openomd::PcapLineArbitration>
 {
     void onMessage(sbe::SequenceReset const& sr, uint32_t)
     {
