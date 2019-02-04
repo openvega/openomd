@@ -21,8 +21,8 @@ public:
         auto pos = _orders.find(_OrderIdPolicy::id(orderId, side));
         if (pos != _orders.end())
         {
-            updateDepth(side, pos->price, (quantity - pos->quantity));
-            pos->quantity = quantity;
+            updateDepth(side, pos->second.price, (quantity - pos->second.quantity));
+            pos->second.quantity = quantity;
         }
     }
 
@@ -33,16 +33,16 @@ public:
         {
             if (tPos->second.price == price)
             {
-                updateDepth(side, pos->price, (quantity - pos->quantity), true);
+                updateDepth(side, pos->second.price, (quantity - pos->second.quantity), true);
             }
             else
             {
-                updateDepth(side, pos->price, pos->quantity * -1);
+                updateDepth(side, pos->second.price, pos->second.quantity * -1);
                 insertDepth(side, price, quantity);
             }
-            pos->price = price;
-            pos->quantity = quantity;
-            pos->orderType = orderType;
+            pos->second.price = price;
+            pos->second.quantity = quantity;
+            pos->second.orderType = orderType;
         }
     }
     
@@ -51,11 +51,16 @@ public:
         auto pos = _orders.find(_OrderIdPolicy::id(orderId, side));
         if (pos != _orders.end())
         {
-            updateDepth(side, pos->price, pos->quantity * -1, true);
+            updateDepth(side, pos->second.price, pos->second.quantity * -1, true);
             _orders.erase(pos);
         }
     }
 
+    void clear()
+    {
+
+        _orders.clear();
+    }
     _DepthPolicy const& depth() const
     {
         return _dp;
