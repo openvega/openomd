@@ -3,13 +3,13 @@
 
 namespace openomd
 {
-template < typename _OrderIdPolicy, /*typename _UpdatePolicy, */ typename _OrderTypePolicy, typename _OrderStoragePolicy, typename _DepthPolicy>
+template < typename _OrderIdPolicy, typename _OrderTypePolicy, typename _DepthPolicy>
 class FullTickOrderBook
 {
 public:
     void addOrder(uint64_t orderId, px_t price, uint32_t quantity, uint16_t side, uint16_t orderType)
     {
-        auto result = _orders.emplace(_OrderIdPolicy::id(orderId, side), _OrderStoragePolicy::mapped_type(price, quantity, orderType));
+        auto result = _orders.emplace(_OrderIdPolicy::id(orderId, side), _OrderIdPolicy::OrderMap::mapped_type(price, quantity, orderType));
         if (result.second)
         {
             insertDepth(side, price, quantity);
@@ -31,13 +31,13 @@ public:
         auto pos = _orders.find(_OrderIdPolicy::id(orderId, side));
         if (pos != _orders.end())
         {
-            if (tPos->second.price == price)
+            if (pos->second.price == price)
             {
-                updateDepth(side, pos->second.price, (quantity - pos->second.quantity), true);
+                updateDepth(side, pos->second.price, (quantity - pos->second.quantity), false);
             }
             else
             {
-                updateDepth(side, pos->second.price, pos->second.quantity * -1);
+                updateDepth(side, pos->second.price, pos->second.quantity * -1, true);
                 insertDepth(side, price, quantity);
             }
             pos->second.price = price;
@@ -58,13 +58,16 @@ public:
 
     void clear()
     {
-
         _orders.clear();
+        _dp._depth[0].clear();
+        _dp._depth[1].clear();
     }
+
     _DepthPolicy const& depth() const
     {
         return _dp;
     }
+
 private:
     // TODO: insertDepth and updateDepth should move to DepthPolicy
     void insertDepth(uint16_t side, px_t price, uint32_t quantity)
@@ -116,9 +119,21 @@ private:
         }
     }
 
-    _OrderStoragePolicy _orders;
+    typename _OrderIdPolicy::OrderMap _orders;
     _DepthPolicy _dp;
 };
 
-using OMDCFullTick = FullTickOrderBook<UniqueOrderIdPolicy, OMDCOrderTypePolicy, OrderMapPolicy, VectorDepth>;
+class OMDCFullTick : public FullTickOrderBook<UniqueOrderIdPolicy, OMDCOrderTypePolicy, VectorDepth>
+{
+    void modifyOrder(uint64_t, px_t, uint32_t, uint16_t, uint16_t) = delete;
+public:
+    using FullTickOrderBook<UniqueOrderIdPolicy, OMDCOrderTypePolicy, VectorDepth>::modifyOrder;
+};
+
+class OMDDFullTick : public FullTickOrderBook<OrderSideIdPolicy, OMDDOrderTypePolicy, VectorDepth>
+{
+    void modifyOrder(uint64_t, uint32_t, uint16_t) = delete;
+public:
+    using FullTickOrderBook<OrderSideIdPolicy, OMDDOrderTypePolicy, VectorDepth>::modifyOrder;
+};
 }

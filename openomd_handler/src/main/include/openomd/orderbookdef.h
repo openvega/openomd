@@ -4,11 +4,18 @@
 #include <limits>
 #include <unordered_map>
 #include <vector>
+#include <boost/container_hash/hash.hpp>
 
 namespace openomd
 {
 using px_t = int32_t;
 using lvQty_t = uint32_t;
+
+enum Side
+{
+    Buy = 0,
+    Sell =1
+};
 
 struct Level
 {
@@ -71,16 +78,27 @@ struct OrderDetail
 
 struct UniqueOrderIdPolicy
 {
+    using OrderMap = std::unordered_map<uint64_t, OrderDetail>;
     static uint64_t id(uint64_t orderId, uint16_t side)
     {
         return orderId;
     }
 };
+
+//struct OrderSideId
+//{
+//    uint64_t orderId;
+//    uint16_t side;
+//};
+using OrderSideId = std::pair<uint64_t, uint16_t>;
 struct OrderSideIdPolicy
 {
-    static std::pair<uint64_t, uint16_t> id(uint64_t orderId, uint16_t side)
+    
+    using OrderMap = std::unordered_map<OrderSideId, OrderDetail, boost::hash<OrderSideId>>;
+
+    static OrderSideId id(uint64_t orderId, uint16_t side)
     {
-        return std::make_pair(orderId, side);
+        return OrderSideId{ orderId, side };
     }
 };
 
@@ -99,5 +117,4 @@ struct OMDDOrderTypePolicy
     }
 };
 
-using OrderMapPolicy = std::unordered_map<uint64_t, OrderDetail>;
 }
