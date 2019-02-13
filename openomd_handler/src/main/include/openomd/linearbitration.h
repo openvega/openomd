@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "openomd/recoverypolicy.h"
-#include "openomd/vectorbasedcache.h"
+#include "openomd/msgcache.h"
 
 namespace openomd
 {
@@ -50,7 +50,6 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktH
     }
     if (pktHdr.seqNum > _nextSeqNum)   // gap
     {
-        printf("gap detected %d %d\n", pktHdr.seqNum, _nextSeqNum);
         func();
         return false;
     }

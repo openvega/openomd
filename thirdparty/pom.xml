@@ -19,5 +19,10 @@
       <artifactId>boost</artifactId>
       <type>nar</type>
     </dependency>
+    <dependency>
+      <groupId>io.github.openvega</groupId>
+      <artifactId>boost_system</artifactId>
+      <type>nar</type>
+    </dependency>
   </dependencies>
 </project>

@@ -164,6 +164,12 @@
       </dependency>
       <dependency>
         <groupId>io.github.openvega</groupId>
+        <artifactId>boost_system</artifactId>
+        <version>${boost.version}</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.github.openvega</groupId>
         <artifactId>wpcap</artifactId>
         <version>${wpcap.version}</version>
         <type>nar</type>

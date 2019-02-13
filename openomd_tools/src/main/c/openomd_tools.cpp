@@ -1,6 +1,9 @@
 #include <iostream>
 #include "cxxopts.hpp"
+#include "openomd/linearbitration.h"
 #include "omdprintprocessor.h"
+#include "pcaprunner.h"
+#include "multicastrunner.h"
 
 uint32_t convertIp(const char* ip)
 {
@@ -19,9 +22,7 @@ int main(int32_t argc, char* argv[])
     options.add_options()
         ("f,function", "pcapdump,udpdump", cxxopts::value<string>())
         ("p,protocol", "omdc,omdd", cxxopts::value<string>())
-        ("c,pcap", "Pcap file", cxxopts::value<string>())
-        ("i,ip", "IP address", cxxopts::value<string>())
-        ("t,port", "Ports", cxxopts::value<uint16_t>());
+        ("c,pcap", "Pcap file", cxxopts::value<string>());
     try
     {
         auto result = options.parse(argc, argv);
@@ -38,8 +39,7 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " pcap=" << pcapFile << " " << endl;
             if (protocol == "omdc")
             {
-
-                openomd::OmdPcapRunner<openomd::OmdcPrintProcessor, openomd::OmdcParser> runner{
+                openomd::OmdPcapRunner<openomd::OmdcPrintProcessor<openomd::PcapLineArbitration>, openomd::OmdcParser> runner{
                     {{30, convertIp("239.1.1.24"), 51000, convertIp("239.1.127.24"), 51000},
                      {31, convertIp("239.1.1.24"), 51001, convertIp("239.1.127.24"), 51001},
                      {32, convertIp("239.1.1.24"), 51002, convertIp("239.1.127.24"), 51002},
@@ -54,14 +54,32 @@ int main(int32_t argc, char* argv[])
             }
             else if (protocol == "omdd")
             {
-                openomd::OmdPcapRunner<openomd::OmddPrintProcessor, openomd::OmddParser> runner{ {} , pcapFile };
+                openomd::OmdPcapRunner<openomd::OmddPrintProcessor<openomd::PcapLineArbitration>, openomd::OmddParser> runner{ {} , pcapFile };
                 runner.run();
             }
 
         }
         else if (function == "udpdump")
         {
+            if (result.count("p") == 0)
+            {
+                cerr << options.help();
+                return -1;
+            }
+            auto protocol = result["p"].as<string>();
+            cout << "function=" << function << " p=" << protocol << " " << endl;
+            if (protocol == "omdc")
+            {
 
+            }
+            else if (protocol == "omdd")
+            {
+                openomd::OmdMulticastRunner<openomd::OmddPrintProcessor<openomd::PcapLineArbitration>, openomd::OmddParser> runner{
+                    {{121, "239.1.1.222", 52001, "", "", "", "239.1.127.222", 52001, "", "", ""},
+                     {221, "239.1.1.222", 52002, "", "", "", "239.1.127.222", 52002, "", "", ""}}
+                };
+                runner.run();
+            }
         }
         else
         {

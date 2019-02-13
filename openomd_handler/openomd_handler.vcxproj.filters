@@ -294,9 +294,6 @@
     <ClInclude Include="src\main\include\openomd\recoverypolicy.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\include\openomd\vectorbasedcache.h">
-      <Filter>Header Files\parser</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\openomd\fulltick.h">
       <Filter>Header Files\orderbook</Filter>
     </ClInclude>
@@ -304,6 +301,12 @@
       <Filter>Header Files\orderbook</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\openomd\omddostream.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\nooplinearbitration.h">
+      <Filter>Header Files\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\msgcache.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
   </ItemGroup>

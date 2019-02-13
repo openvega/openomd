@@ -23,12 +23,12 @@
     <ClCompile Include="src\main\c\openomd_tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main\c\omdprintprocessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\main\c\omdprintprocessor.h">
+    <ClInclude Include="src\main\include\pcaprunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\multicastrunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
