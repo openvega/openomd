@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <stdio.h>
 #include <gtest/gtest.h>
 #include "openomd/omdcparser.h"
 #include "openomd/omdtest.h"
@@ -49,10 +49,9 @@ TEST(OMDCHandler, pcap)
         "\x00\x20\x77\x35\x18\x00\x01\x0c\x02\x00\x00\x00\x80\x81\xf4\xda" \
         "\xce\x2d\xb9\x14\x08\x00\x64\x00\x01\x00\x00\x00\x0a";
 
-    char tmpFilename[64];
-    tmpnam_s(tmpFilename, sizeof(tmpFilename));
-    FILE* pcapFile;
-    fopen_s(&pcapFile, tmpFilename, "wb+");
+    char tmpFilename[1024];
+    tmpnam(tmpFilename);
+    FILE* pcapFile = fopen(tmpFilename, "wb+");
 
     Callback callback;
     fwrite(pcapData, sizeof(pcapData), 1, pcapFile);

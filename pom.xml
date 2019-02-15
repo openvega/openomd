@@ -120,6 +120,7 @@
               <cpp>
                 <options>
                   <option>/FS</option>
+                  <option>/Zc:__cplusplus</option>
                 </options>
                 <defines>
                   <define>_ENABLE_ATOMIC_ALIGNMENT_FIX</define>
@@ -199,5 +200,6 @@
   <modules>
     <module>openomd_handler</module>
     <module>openomd_test</module>
+    <module>openomd_tools</module>
   </modules>
 </project>

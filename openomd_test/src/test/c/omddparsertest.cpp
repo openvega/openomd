@@ -1,4 +1,7 @@
 #include <gtest/gtest.h>
+#if defined(__linux__)
+#include <codecvt>
+#endif
 #include "openomd/omdtest.h"
 
 namespace omdd
@@ -369,7 +372,7 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
                 entries.next();
             }
             EXPECT_EQ(20, entries.aggregateQuantity());
-            EXPECT_EQ(2147483648, entries.price());
+            EXPECT_EQ(SBE_NULLVALUE_INT32, entries.price());
             EXPECT_EQ(2, entries.numberOfOrders());
             EXPECT_EQ(0, entries.side());
             EXPECT_EQ(255, entries.priceLevel());
@@ -643,14 +646,18 @@ TEST(OMDD_TEST, MarketAlert)
         {
             EXPECT_EQ(1, ma.alertID());
             EXPECT_EQ(72, ma.source());
+#if defined(__linux__)
+            std::string header = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(headeru16);
+            EXPECT_EQ("Start of Volatility Control Mechanism cool-off period: [HSIQ7]", header);
+#else
             std::wstring header(reinterpret_cast<const wchar_t*>(ma.header()));
             EXPECT_EQ(L"Start of Volatility Control Mechanism cool-off period: [HSIQ7]", header);
+#endif
             EXPECT_EQ('N', ma.lastFragment());
             EXPECT_EQ(2, ma.infoType());
             EXPECT_EQ(4, ma.priority());
             auto &lines = ma.noLines();
             EXPECT_EQ(3, lines.count());
-
         }
         using OMDDProcessor::onMessage;
     };

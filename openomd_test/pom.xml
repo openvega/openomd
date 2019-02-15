@@ -19,10 +19,17 @@
         <artifactId>nar-maven-plugin</artifactId>
         <configuration>
           <cpp>
-            <options>
-              <option>/Zc:__cplusplus</option>
-            </options>
+            <systemIncludePaths>
+              <systemIncludePath>${project.parent.basedir}/thirdparty/target/nar/include</systemIncludePath>
+            </systemIncludePaths>
           </cpp>
+          <linker>
+            <sysLibs combine.children="append">
+              <sysLib><name>pcap</name></sysLib>
+              <sysLib><name>gomp</name></sysLib>
+              <sysLib><name>Ws2_32</name></sysLib>
+            </sysLibs>
+          </linker>
           <libraries>
             <library>
               <type>static</type>

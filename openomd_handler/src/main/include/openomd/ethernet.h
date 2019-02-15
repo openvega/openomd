@@ -15,24 +15,37 @@ constexpr auto ETHER_ADDR_LEN = 6;;
 #endif
 
 #if defined(__linux__)
+#include <net/ethernet.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/udp.h>
+#include <netinet/tcp.h>
+#define BEGIN_PACK
+#define END_PACK      __attribute__((__packed__));
+BEGIN_PACK
 struct vlan_header {
     uint8_t ether_dhost[ETH_ALEN];
     uint8_t ether_shost[ETH_ALEN];
     uint16_t h_vlan_proto;
     uint16_t h_vlan_TCI;
     uint16_t ether_type;
-};
+}
+END_PACK
+#else
+#define BEGIN_PACK __pragma(pack(push, 1))
+#define END_PACK   ; __pragma(pack(pop))
 #endif
 
-__pragma(pack(push, 1))
-
+BEGIN_PACK
 struct EthernetHdr
 {
     uint8_t ether_dhost[ETHER_ADDR_LEN];
     uint8_t ether_short[ETHER_ADDR_LEN];
     uint16_t ether_type;
-};
+}
+END_PACK
 
+BEGIN_PACK
 struct IpHdr : public EthernetHdr
 {
     uint8_t ip_vhl; // header length, version
@@ -49,23 +62,29 @@ struct IpHdr : public EthernetHdr
     uint8_t ip_p;       // protocol
     uint16_t up_sum;    // checksum
     struct in_addr ip_src, ip_dst;  //source and dest address
-} UNALIGNED;
+}
+END_PACK
 
+BEGIN_PACK
 struct UdpHdr : public IpHdr
 {
     uint16_t uh_sport;  // source port
     uint16_t uh_dport;  // destination port
     uint16_t uh_ulen;   // udp length
     uint16_t uh_sum;    // udp checksum
-};
+}
+END_PACK
 
+BEGIN_PACK
 template <size_t _Size = ETHERNET_MAX_PAYLOAD>
 struct UdpFrame
 {
     UdpHdr _hdr;
     uint8_t _payload[_Size];
-};
+}
+END_PACK
 
+BEGIN_PACK
 struct TcpHdr : public IpHdr
 {
     uint16_t th_sport;  // source port
@@ -77,15 +96,15 @@ struct TcpHdr : public IpHdr
     uint16_t th_win;    // window
     uint16_t th_sum;    // checksum
     uint16_t th_urp;    // urgent pointer
-};
+}
+END_PACK
 
+BEGIN_PACK
 template <size_t _Size = ETHERNET_MAX_PAYLOAD>
 struct TcpFrame
 {
     TcpHdr _hdr;
     uint8_t _payload[_Size];
-};
-
-; __pragma(pack(pop))
-
+}
+END_PACK
 }

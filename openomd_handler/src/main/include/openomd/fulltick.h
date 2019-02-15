@@ -9,7 +9,7 @@ class FullTickOrderBook
 public:
     void addOrder(uint64_t orderId, px_t price, uint32_t quantity, uint16_t side, uint16_t orderType)
     {
-        auto result = _orders.emplace(_OrderIdPolicy::id(orderId, side), _OrderIdPolicy::OrderMap::mapped_type(price, quantity, orderType));
+        auto result = _orders.emplace(_OrderIdPolicy::id(orderId, side), typename _OrderIdPolicy::OrderMap::mapped_type{price, quantity, orderType});
         if (result.second)
         {
             insertDepth(side, price, quantity);
@@ -78,7 +78,7 @@ private:
             if (pos->price > price)
             {
                 // insert
-                _dp._depth[side].insert(pos, _DepthPolicy::_Level{ price, quantity, 1 });
+                _dp._depth[side].insert(pos, typename _DepthPolicy::_Level{ price, quantity, 1 });
                 insertAtEnd = false;
                 break;
             }
@@ -92,7 +92,7 @@ private:
         }
         if (insertAtEnd)
         {
-            _dp._depth[side].emplace_back(_DepthPolicy::_Level{ price, quantity, 1 });
+            _dp._depth[side].emplace_back(typename _DepthPolicy::_Level{ price, quantity, 1 });
         }
     }
 

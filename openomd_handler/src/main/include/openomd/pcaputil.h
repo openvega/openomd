@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include <pcap.h>
 #include <string>
 #include "ethernet.h"
@@ -87,10 +88,10 @@ inline void PcapUtil<_CB, _PBPolicy>::start()
     static const int32_t NSEC_TCPDUMP_MAGIC = 0xa1b23c4d;
     
     struct pcap_file_header hdr;
-    FILE* pcapFile;
-    if (fopen_s(&pcapFile, _pcapFile.c_str(), "rb"))
+    FILE* pcapFile = fopen(_pcapFile.c_str(), "rb");
+    if (pcapFile == nullptr)
     {
-        throw std::exception("Fail to fopen pcap file");
+        throw std::runtime_error("Fail to fopen pcap file");
     }
     size_t readCount = fread((char *)&hdr, 1, sizeof(hdr), pcapFile);
     if (readCount == sizeof(hdr))
@@ -105,7 +106,7 @@ inline void PcapUtil<_CB, _PBPolicy>::start()
     _pcapt = pcap_open_offline(_pcapFile.c_str(), errMsg);
     if (!_pcapt)
     {
-        throw std::exception(errMsg);
+        throw std::runtime_error(errMsg);
     }
     
 }
@@ -124,7 +125,7 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
         {
         case IPPROTO_TCP:
         {
-            throw std::exception("TCP pcap replay is not support");
+            throw std::runtime_error("TCP pcap replay is not support");
         }
         case IPPROTO_UDP:
         {

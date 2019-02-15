@@ -12,7 +12,7 @@ uint32_t convertIp(const char* ip)
     {
         return addr.s_addr;
     }
-    throw std::exception("wrong ip");
+    throw std::runtime_error("wrong ip");
 }
 
 int main(int32_t argc, char* argv[])

@@ -53,7 +53,7 @@ private:
                     MsgHdr* msgHdr = (MsgHdr*)(pos);
                     if (msgHdr->size == 0 || msgHdr->size > byteLeft)
                     {
-                        processor.onError(std::exception("Invalid message size"));
+                        processor.onError(std::runtime_error("Invalid message size"));
                         break;
                     }
                     try
