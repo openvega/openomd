@@ -128,6 +128,11 @@
                   <!--<define>${project.artifactId}_exports</define>-->
                 </defines>
               </cpp>
+              <linker>
+                <sysLibs>
+                  <sysLib><name>Ws2_32</name></sysLib>
+                </sysLibs>
+              </linker>
             </configuration>
           </plugin>
         </plugins>

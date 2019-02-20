@@ -27,7 +27,6 @@
             <sysLibs combine.children="append">
               <sysLib><name>pcap</name></sysLib>
               <sysLib><name>gomp</name></sysLib>
-              <sysLib><name>Ws2_32</name></sysLib>
             </sysLibs>
           </linker>
           <libraries>

@@ -647,6 +647,7 @@ TEST(OMDD_TEST, MarketAlert)
             EXPECT_EQ(1, ma.alertID());
             EXPECT_EQ(72, ma.source());
 #if defined(__linux__)
+            std::u16string headeru16(reinterpret_cast<const char16_t*>(ma.header()));
             std::string header = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(headeru16);
             EXPECT_EQ("Start of Volatility Control Mechanism cool-off period: [HSIQ7]", header);
 #else
