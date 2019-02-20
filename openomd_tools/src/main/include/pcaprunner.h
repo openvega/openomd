@@ -1,4 +1,7 @@
 #pragma once
+#if defined(__linux__)
+#include <arpa/inet.h>
+#endif
 #include <map>
 #include "openomd/pcaputil.h"
 #include "channelconfig.h"

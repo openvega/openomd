@@ -98,26 +98,26 @@ inline void MulticastReceiver<_CB>::init()
     try
     {
         using namespace boost::asio;
-        ip::udp::endpoint bindEp(_bindIp.empty() ? ip::address_v4::any() : ip::address_v4::from_string(_bindIp), _port);
+        boost::asio::ip::udp::endpoint bindEp(_bindIp.empty() ? boost::asio::ip::address_v4::any() : boost::asio::ip::address_v4::from_string(_bindIp), _port);
 
         _socket.open(bindEp.protocol());
-        _socket.set_option(ip::udp::socket::reuse_address(true));
-        _socket.set_option(ip::multicast::enable_loopback(true));
-        _socket.set_option(ip::multicast::hops(255));
+        _socket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
+        _socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
+        _socket.set_option(boost::asio::ip::multicast::hops(255));
         if (!_outboundIp.empty())
         {
-            _socket.set_option(ip::multicast::outbound_interface(ip::address_v4::from_string(_outboundIp)));
+            _socket.set_option(boost::asio::ip::multicast::outbound_interface(boost::asio::ip::address_v4::from_string(_outboundIp)));
         }
         _socket.bind(bindEp);
         //LOG_INFO(_log) << "MulticastReceiver bind successfully";
         boost::system::error_code ec;
         if (_listenIp.empty())
         {
-            _socket.set_option(ip::multicast::join_group(ip::address_v4::from_string(_multicastIp)));
+            _socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(_multicastIp)));
         }
         else
         {
-            _socket.set_option(ip::multicast::join_group(ip::address_v4::from_string(_multicastIp), ip::address_v4::from_string(_listenIp)));
+            _socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(_multicastIp), boost::asio::ip::address_v4::from_string(_listenIp)));
         }
         //LOG_INFO(_log) << "MulticastReceiver join multicast group successfully";
     }
