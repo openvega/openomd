@@ -1,17 +1,19 @@
 #pragma once
 #include <map>
 #include "openomd/pcaputil.h"
+#include "channelconfig.h"
 
 namespace openomd
 {
-struct PcapChannelConfig
+uint32_t convertIp(std::string const& ip)
 {
-    int32_t channel;
-    uint32_t ipA;
-    uint16_t portA;
-    uint32_t ipB;
-    uint16_t portB;
-};
+    struct in_addr addr;
+    if (inet_pton(AF_INET, ip.c_str(), &addr))
+    {
+        return addr.s_addr;
+    }
+    throw std::runtime_error("wrong ip");
+}
 
 template <typename _Processor, typename _Parser>
 class OmdPcapRunner
@@ -23,11 +25,11 @@ public:
         std::map<int32_t, _Processor> _processors;
         _Parser _parser;
 
-        Callback(std::vector<PcapChannelConfig> const& channelConfig)
+        Callback(std::vector<ChannelConfig> const& channelConfig)
         {
             for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-                _addressToChannel.emplace(std::make_pair(c.ipA, c.portA), c.channel);
-                _addressToChannel.emplace(std::make_pair(c.ipB, c.portB), c.channel);
+                _addressToChannel.emplace(std::make_pair(convertIp(c.ipA), c.portA), c.channel);
+                _addressToChannel.emplace(std::make_pair(convertIp(c.ipB), c.portB), c.channel);
                 _processors.emplace(c.channel, _Processor{});
             });
         }
@@ -42,7 +44,7 @@ public:
         }
     };
 
-    OmdPcapRunner(std::vector<PcapChannelConfig> const& channelConfig, std::string const& pcapFile)
+    OmdPcapRunner(std::vector<ChannelConfig> const& channelConfig, std::string const& pcapFile)
         : _callback{ channelConfig }, _pcapFile{ pcapFile }
     {
     }

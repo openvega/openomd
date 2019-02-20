@@ -1,24 +1,10 @@
 #pragma once
 #include <vector>
 #include "openomd/multicastutil.h"
+#include "channelconfig.h"
 
 namespace openomd
 {
-struct MulticastChannelConfig
-{
-    int32_t channel;
-    std::string ipA;
-    uint16_t portA;
-    std::string bindIpA;
-    std::string outboundIpA;
-    std::string listenIpA;
-
-    std::string ipB;
-    uint16_t portB;
-    std::string bindIpB;
-    std::string outboundIpB;
-    std::string listenIpB;
-};
 template <typename _Processor, typename _Parser>
 class OmdMulticastRunner
 {
@@ -34,7 +20,7 @@ public:
         }
     };
 
-    OmdMulticastRunner(std::vector<MulticastChannelConfig> const& channelConfig)
+    OmdMulticastRunner(std::vector<ChannelConfig> const& channelConfig)
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
             _callbacks.emplace_back(Callback{});
