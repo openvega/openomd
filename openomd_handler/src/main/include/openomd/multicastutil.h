@@ -154,7 +154,7 @@ void MulticastReceiver<_CB>::processData(const boost::system::error_code& error,
     }
     else
     {
-        _callback.onReceive(bytesRecvd, data, maxLength);
+        _callback.onReceive(bytesRecvd, reinterpret_cast<uint8_t*>(data), maxLength);
         registerAsyncReceive(&MulticastReceiver::processData, this);
     }
 }

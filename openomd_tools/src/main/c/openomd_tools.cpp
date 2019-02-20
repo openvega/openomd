@@ -74,12 +74,18 @@ int main(int32_t argc, char* argv[])
             if (protocol == "omdc")
             {
                 OmdMulticastRunner<OmdcPrintProcessor<NoopLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                runner.init();
+                runner.start();
                 runner.run();
+                runner.stop();
             }
             else if (protocol == "omdd")
             {
                 OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg)};
+                runner.init();
+                runner.start();
                 runner.run();
+                runner.stop();
             }
         }
         else
