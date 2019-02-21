@@ -52,6 +52,21 @@ public:
         //LOG_INFO(_log) << _name << " listening on " << listenIp;
     }
 
+    explicit MulticastReceiver(std::string const& listenIp,
+        std::string const& multicastIp,
+        uint16_t port, int32_t channel, _CB& callback, IOServiceLC& ioServiceLC)
+        : _callback{ callback }
+        , _ioService{ ioServiceLC.ioService() }
+        , _socket{ ioServiceLC.ioService() }
+        , _listenIp{ listenIp }
+        , _multicastIp{ multicastIp }
+        , _port{ port }
+        , _channel{ channel }
+    {
+        _name.append("MulticastReceiver-").append(multicastIp).append("-").append(std::to_string(_port));
+        //LOG_INFO(_log) << _name << " listening on " << listenIp;
+    }
+
     std::string const& name() const
     {
         return _name;

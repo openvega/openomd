@@ -25,8 +25,8 @@ public:
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
             _callbacks.emplace_back(Callback{});
             Callback& callback = _callbacks.back();
-            _receivers.emplace_back(MulticastReceiver<Callback>{c.bindIpA, c.listenIpA, c.ipA, c.outboundIpA, c.portA, c.channel, callback, _ioServiceLC});
-            _receivers.emplace_back(MulticastReceiver<Callback>{c.bindIpB, c.listenIpB, c.ipB, c.outboundIpB, c.portB, c.channel, callback, _ioServiceLC});
+            _receivers.emplace_back(MulticastReceiver<Callback>{c.listenIpA, c.ipA, c.portA, c.channel, callback, _ioServiceLC});
+            _receivers.emplace_back(MulticastReceiver<Callback>{c.listenIpB, c.ipB, c.portB, c.channel, callback, _ioServiceLC});
         });
     }
 

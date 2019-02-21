@@ -15,14 +15,10 @@ ChannelConfig ChannelConfig::convert(std::string const & s)
         atol(vs[0].c_str()),
         vs[1],
         atol(vs[2].c_str()),
-        vs[3], 
+        vs[3],
         vs[4],
-        vs[5],
-        vs[6],
-        atol(vs[7].c_str()),
-        vs[8],
-        vs[9],
-        vs[10]
+        atol(vs[5].c_str()),
+        vs[6]
     };
     return config;
 }
