@@ -1,4 +1,5 @@
 #pragma once
+#include <set>
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
 #include "openomd/omdcostream.h"
@@ -26,12 +27,12 @@ protected:
     template <typename _Msg>
     void onPrintMessage(_Msg const& m, uint32_t seqNum)
     {
-        //        if (_msgIds.find(_MSG::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
+        //if (_msgIds.find(_Msg::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
         {
-            std::cout << seqNum << " " << m << std::endl;
+            //std::cout << seqNum << " " << m << std::endl;
         }
     }
-//    std::set<int32_t> _msgIds;
+    std::set<int32_t> _msgIds;
 };
 
 template <typename _LineArbitration>

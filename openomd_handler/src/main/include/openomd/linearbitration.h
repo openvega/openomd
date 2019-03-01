@@ -82,6 +82,7 @@ void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
 {
     if (_Cache::_buffer.empty())
     {
+        _RecoveryPolicy::stopRecovery();
         return;
     }
 

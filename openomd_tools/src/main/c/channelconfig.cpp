@@ -11,14 +11,19 @@ ChannelConfig ChannelConfig::convert(std::string const & s)
     std::vector<std::string> vs;
     std::copy(tk.begin(), tk.end(), std::back_inserter(vs));
 
+    int32_t i= 0;
     ChannelConfig config{
-        atol(vs[0].c_str()),
-        vs[1],
-        atol(vs[2].c_str()),
-        vs[3],
-        vs[4],
-        atol(vs[5].c_str()),
-        vs[6]
+        atol(vs[i++].c_str()),  // channel id
+        vs[i++],                // ipA
+        atol(vs[i++].c_str()),  // portA
+        vs[i++],                // refresh ipA
+        atol(vs[i++].c_str()),  // refresh portA
+        vs[i++],                // listen ipA
+        vs[i++],                // ipB
+        atol(vs[i++].c_str()),  // portB
+        vs[i++],                // refresh ipB
+        atol(vs[i++].c_str()),  // refresh portB
+        vs[i++]                 // listen ipB
     };
     return config;
 }
