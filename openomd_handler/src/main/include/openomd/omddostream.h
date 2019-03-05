@@ -57,13 +57,13 @@ inline std::ostream& operator<<(std::ostream& os, CalculatedOpeningPrice const& 
 }
 inline std::ostream& operator<<(std::ostream& os, ClassDefinition const& m)
 {
-    os << "cld cty=" << (int16_t)m.country() << " mkt=" (int16_t)m.market() << " ig=" << (int16_t)m.instrumentGroup() << " m=" << (int16_t)m.modifier() << " cc=" << m.commodityCode() << " pqf=" << m.priceQuotationFactor() << " cs=" << m.contractSize() << " dsp=" << m.decimalInStrikePrice() << " dcs=" << m.decimalInContractSize()
-            << " dp=" << m.decimalInPremium() << " rt=" << m.rankingType() << " tb=" << m.tradable() << " pu=" << m.premiumUnit4Price() << " bc=" << m.baseCurrency() << " icid=" << m.instrumentClassID() << " icn=" << m.instrumentClassName() << " if=" << m.isFractions() << " sc=" << m.settlementCurrencyID() << " et=" m.effectiveTomorrow() << " tss=" << m.tickStepSize();
+    os << "cld cty=" << (int16_t)m.country() << " mkt=" << (int16_t)m.market() << " ig=" << (int16_t)m.instrumentGroup() << " m=" << (int16_t)m.modifier() << " cc=" << m.commodityCode() << " pqf=" << m.priceQuotationFactor() << " cs=" << m.contractSize() << " dsp=" << m.decimalInStrikePrice() << " dcs=" << m.decimalInContractSize()
+            << " dp=" << m.decimalInPremium() << " rt=" << m.rankingType() << " tb=" << m.tradable() << " pu=" << m.premiumUnit4Price() << " bc=" << m.baseCurrency() << " icid=" << m.instrumentClassID() << " icn=" << m.instrumentClassName() << " if=" << m.isFractions() << " sc=" << m.settlementCurrencyID() << " et=" << m.effectiveTomorrow() << " tss=" << m.tickStepSize();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CombinationDefinition const& m)
 {
-    os << "cbd cob=" << m.comboOrderbookID() << " lob=" << m.legOrderbookID() << " ls=" m.legSize() << " lr=" << m.legRatio();
+    os << "cbd cob=" << m.comboOrderbookID() << " lob=" << m.legOrderbookID() << " ls=" << m.legSide() << " lr=" << m.legRatio();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CommodityDefinition const& m)
