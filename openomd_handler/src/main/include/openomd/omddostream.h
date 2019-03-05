@@ -35,27 +35,35 @@ namespace sbe
 {
 inline std::ostream& operator<<(std::ostream& os, AddOrder const& m)
 {
-    os << "ao s=" << m.orderBookID();
+    os << "ao ob=" << m.orderBookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << m.side() << " t=" << m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
     return os;
 }
-inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& m)
+inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
 {
-    os << "aob";
+    auto &m = const_cast<AggregateOrderBookUpdate&>(cm);
+    os << "aob ob=" << m.orderbookID() << std::endl;
+    auto& en = m.noEntries();
+    while (en.hasNext())
+    {
+        en.next();
+        os << " " << en.side() << " l=" << (int16_t)en.priceLevel() << " a=" << (int16_t)en.updateAction() << " " << en.aggregateQuantity() << "@" << en.price() << "(" << en.numberOfOrders() << ")" << std::endl;
+    }
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CalculatedOpeningPrice const& m)
 {
-    os << "cop";
+    os << "cop ob=" << m.orderbookID() << " cop=" << m.calculatedOpeningPrice() << " q=" << m.quantity();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, ClassDefinition const& m)
 {
-    os << "cld";
+    os << "cld cty=" << (int16_t)m.country() << " mkt=" (int16_t)m.market() << " ig=" << (int16_t)m.instrumentGroup() << " m=" << (int16_t)m.modifier() << " cc=" << m.commodityCode() << " pqf=" << m.priceQuotationFactor() << " cs=" << m.contractSize() << " dsp=" << m.decimalInStrikePrice() << " dcs=" << m.decimalInContractSize()
+            << " dp=" << m.decimalInPremium() << " rt=" << m.rankingType() << " tb=" << m.tradable() << " pu=" << m.premiumUnit4Price() << " bc=" << m.baseCurrency() << " icid=" << m.instrumentClassID() << " icn=" << m.instrumentClassName() << " if=" << m.isFractions() << " sc=" << m.settlementCurrencyID() << " et=" m.effectiveTomorrow() << " tss=" << m.tickStepSize();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CombinationDefinition const& m)
 {
-    os << "cbd";
+    os << "cbd cob=" << m.comboOrderbookID() << " lob=" << m.legOrderbookID() << " ls=" m.legSize() << " lr=" << m.legRatio();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CommodityDefinition const& m)
