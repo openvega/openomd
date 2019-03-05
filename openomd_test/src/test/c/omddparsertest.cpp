@@ -105,7 +105,7 @@ TEST(OMDD_TEST, ClassDefinition)
         {
             EXPECT_EQ(12, cdef.country());
             EXPECT_EQ(20, cdef.market());
-            EXPECT_EQ(6, cdef.intsrumentGroup());
+            EXPECT_EQ(6, cdef.instrumentGroup());
             EXPECT_EQ(0, cdef.modifier());
             EXPECT_EQ(1109, cdef.commodityCode());
             EXPECT_EQ(2000, cdef.priceQuotationFactor());
@@ -276,7 +276,7 @@ TEST(OMDD_TEST, AddOrder)
     {
         void onMessage(sbe::AddOrder const& ao, uint32_t)
         {
-            EXPECT_EQ(2559908, ao.orderBookID());
+            EXPECT_EQ(2559908, ao.orderbookID());
             EXPECT_EQ(6915360520128337583, ao.orderID());
             EXPECT_EQ(20000, ao.price());
             EXPECT_EQ(1, ao.quantity());
@@ -299,7 +299,7 @@ TEST(OMDD_TEST, ModifyOrder)
     {
         void onMessage(sbe::ModifyOrder const& mo, uint32_t)
         {
-            EXPECT_EQ(2559908, mo.orderBookID());
+            EXPECT_EQ(2559908, mo.orderbookID());
             EXPECT_EQ(6915360520128337583, mo.orderID());
             EXPECT_EQ(20000, mo.price());
             EXPECT_EQ(1, mo.quantity());
@@ -321,7 +321,7 @@ TEST(OMDD_TEST, DeleteOrder)
     {
         void onMessage(sbe::DeleteOrder const& dl, uint32_t)
         {
-            EXPECT_EQ(27003150, dl.orderBookID());
+            EXPECT_EQ(27003150, dl.orderbookID());
             EXPECT_EQ(6738016441394313329, dl.orderID());
             EXPECT_EQ(0, dl.side());
         }
@@ -427,7 +427,7 @@ TEST(OMDD_TEST, Trade)
     {
         void onMessage(sbe::Trade const& t, uint32_t)
         {
-            EXPECT_EQ(266148, t.orderBookID());
+            EXPECT_EQ(266148, t.orderbookID());
             EXPECT_EQ(6738016441400186135, t.orderID());
             EXPECT_EQ(22400, t.price());
             EXPECT_EQ(673801620517078627, t.tradeID());

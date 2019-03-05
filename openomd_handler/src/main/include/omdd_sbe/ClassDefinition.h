@@ -335,35 +335,35 @@ public:
         return *this;
     }
 
-    static SBE_CONSTEXPR std::uint16_t intsrumentGroupId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t instrumentGroupId() SBE_NOEXCEPT
     {
         return 103;
     }
 
-    static SBE_CONSTEXPR std::uint64_t intsrumentGroupSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t instrumentGroupSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool intsrumentGroupInActingVersion() SBE_NOEXCEPT
+    bool instrumentGroupInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= intsrumentGroupSinceVersion();
+        return m_actingVersion >= instrumentGroupSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t intsrumentGroupEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t instrumentGroupEncodingOffset() SBE_NOEXCEPT
     {
          return 2;
     }
 
 
-    static const char *intsrumentGroupMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *instrumentGroupMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -376,32 +376,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint8_t intsrumentGroupNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t instrumentGroupNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT8;
     }
 
-    static SBE_CONSTEXPR std::uint8_t intsrumentGroupMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t instrumentGroupMinValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)0;
     }
 
-    static SBE_CONSTEXPR std::uint8_t intsrumentGroupMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint8_t instrumentGroupMaxValue() SBE_NOEXCEPT
     {
         return (std::uint8_t)254;
     }
 
-    static SBE_CONSTEXPR std::size_t intsrumentGroupEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t instrumentGroupEncodingLength() SBE_NOEXCEPT
     {
         return 1;
     }
 
-    std::uint8_t intsrumentGroup() const
+    std::uint8_t instrumentGroup() const
     {
         return (*((std::uint8_t *)(m_buffer + m_offset + 2)));
     }
 
-    ClassDefinition &intsrumentGroup(const std::uint8_t value)
+    ClassDefinition &instrumentGroup(const std::uint8_t value)
     {
         *((std::uint8_t *)(m_buffer + m_offset + 2)) = (value);
         return *this;

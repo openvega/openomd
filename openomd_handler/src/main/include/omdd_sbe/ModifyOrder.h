@@ -191,35 +191,35 @@ public:
         return m_actingVersion;
     }
 
-    static SBE_CONSTEXPR std::uint16_t orderBookIDId() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint16_t orderbookIDId() SBE_NOEXCEPT
     {
         return 101;
     }
 
-    static SBE_CONSTEXPR std::uint64_t orderBookIDSinceVersion() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint64_t orderbookIDSinceVersion() SBE_NOEXCEPT
     {
          return 0;
     }
 
-    bool orderBookIDInActingVersion() SBE_NOEXCEPT
+    bool orderbookIDInActingVersion() SBE_NOEXCEPT
     {
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
 #endif
-        return m_actingVersion >= orderBookIDSinceVersion();
+        return m_actingVersion >= orderbookIDSinceVersion();
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
     }
 
-    static SBE_CONSTEXPR std::size_t orderBookIDEncodingOffset() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderbookIDEncodingOffset() SBE_NOEXCEPT
     {
          return 0;
     }
 
 
-    static const char *orderBookIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
+    static const char *orderbookIDMetaAttribute(const MetaAttribute::Attribute metaAttribute) SBE_NOEXCEPT
     {
         switch (metaAttribute)
         {
@@ -232,32 +232,32 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint32_t orderBookIDNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDNullValue() SBE_NOEXCEPT
     {
         return SBE_NULLVALUE_UINT32;
     }
 
-    static SBE_CONSTEXPR std::uint32_t orderBookIDMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDMinValue() SBE_NOEXCEPT
     {
         return 0;
     }
 
-    static SBE_CONSTEXPR std::uint32_t orderBookIDMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t orderbookIDMaxValue() SBE_NOEXCEPT
     {
         return 4294967294;
     }
 
-    static SBE_CONSTEXPR std::size_t orderBookIDEncodingLength() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::size_t orderbookIDEncodingLength() SBE_NOEXCEPT
     {
         return 4;
     }
 
-    std::uint32_t orderBookID() const
+    std::uint32_t orderbookID() const
     {
         return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::uint32_t *)(m_buffer + m_offset + 0)));
     }
 
-    ModifyOrder &orderBookID(const std::uint32_t value)
+    ModifyOrder &orderbookID(const std::uint32_t value)
     {
         *((std::uint32_t *)(m_buffer + m_offset + 0)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
         return *this;

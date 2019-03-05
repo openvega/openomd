@@ -83,7 +83,7 @@
   <message name="ClassDefinition" id="302" semanticType="4">
     <field name="country" id="101" type="uint8"/>
     <field name="market" id="102" type="uint8"/>
-    <field name="intsrumentGroup" id="103" type="uint8"/>
+    <field name="instrumentGroup" id="103" type="uint8"/>
     <field name="modifier" id="104" type="uint8"/>
     <field name="commodityCode" id="105" type="uint16"/>
     <field name="filler1" id="201" type="uint16"/>
@@ -170,7 +170,7 @@
     <field name="filler1" id="201" type="uint8"/>
   </message>
   <message name="AddOrder" id="330" semanticType="4">
-    <field name="orderBookID" id="101" type="orderbookID"/>
+    <field name="orderbookID" id="101" type="orderbookID"/>
     <field name="orderID" id="102" type="uint64"/>
     <field name="price" id="103" type="int32"/>
     <field name="quantity" id="104" type="uint32"/>
@@ -180,7 +180,7 @@
     <field name="orderBookPosition" id="108" type="uint32"/>
   </message>
   <message name="ModifyOrder" id="331" semanticType="4">
-    <field name="orderBookID" id="101" type="orderbookID"/>
+    <field name="orderbookID" id="101" type="orderbookID"/>
     <field name="orderID" id="102" type="uint64"/>
     <field name="price" id="103" type="int32"/>
     <field name="quantity" id="104" type="uint32"/>
@@ -190,7 +190,7 @@
     <field name="orderBookPosition" id="107" type="uint32"/>
   </message>
   <message name="DeleteOrder" id="332" semanticType="4">
-    <field name="orderBookID" id="101" type="orderbookID"/>
+    <field name="orderbookID" id="101" type="orderbookID"/>
     <field name="orderID" id="102" type="uint64"/>
     <field name="side" id="103" type="uint8"/>
   </message>
@@ -217,7 +217,7 @@
     <field name="filler1" id="201" type="str3"/>
   </message>
   <message name="Trade" id="350" semanticType="4">
-    <field name="orderBookID" id="101" type="orderbookID"/>
+    <field name="orderbookID" id="101" type="orderbookID"/>
     <field name="orderID" id="102" type="uint64"/>
     <field name="price" id="103" type="int32"/>
     <field name="tradeID" id="104" type="uint64"/>

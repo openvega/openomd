@@ -35,7 +35,7 @@ namespace sbe
 {
 inline std::ostream& operator<<(std::ostream& os, AddOrder const& m)
 {
-    os << "ao ob=" << m.orderBookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << m.side() << " t=" << m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    os << "ao ob=" << m.orderbookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << m.side() << " t=" << m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
