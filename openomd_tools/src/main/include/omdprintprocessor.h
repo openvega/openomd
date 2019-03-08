@@ -117,5 +117,6 @@ public:
     void onMessage(omdd::sbe::Trade const& m, uint32_t s) { onPrintMessage(m, s); }
     void onMessage(omdd::sbe::TradeAmendment const& m, uint32_t s) { onPrintMessage(m, s); }
     void onMessage(omdd::sbe::TradeStatistics const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdd::sbe::MarketStatus const& m, uint32_t s) { onPrintMessage(m, s); }
 };
 }

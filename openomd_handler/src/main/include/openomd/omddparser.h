@@ -70,6 +70,7 @@ public:
                 OMD_SWITCH_CASE(Trade);
                 OMD_SWITCH_CASE(TradeAmendment);
                 OMD_SWITCH_CASE(TradeStatistics);
+                OMD_SWITCH_CASE(MarketStatus);
             default:
                 processor.onUnknownMessage(type, msgSize);
                 break;

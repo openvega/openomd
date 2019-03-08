@@ -223,10 +223,10 @@ TEST(OMDD_TEST, MarketStatus)
             EXPECT_EQ(0, ms.instrument());
             EXPECT_EQ(0, ms.orderbookID());
             EXPECT_EQ(0, ms.commodityCode());
-            EXPECT_EQ("        ", ms.actualStartDate());
-            EXPECT_EQ("      ", ms.actualStartTime());
-            EXPECT_EQ("        ", ms.plannedStartDate());
-            EXPECT_EQ("      ", ms.plannedStartTime());
+            EXPECT_EQ("        ", ms.getActualStartDateAsString());
+            EXPECT_EQ("      ", ms.getActualStartTimeAsString());
+            EXPECT_EQ("        ", ms.getPlannedStartDateAsString());
+            EXPECT_EQ("      ", ms.getPlannedStartTimeAsString());
             EXPECT_EQ(0, ms.secondsToStateChange());
             EXPECT_EQ(2, ms.state());
             EXPECT_EQ(115, ms.priority());
