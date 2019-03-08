@@ -73,7 +73,7 @@ inline std::ostream& operator<<(std::ostream& os, CommodityDefinition const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, CommodityStatus const& m)
 {
-    os <<"cms cc=" << m.commodityCode() << " ss=" << m.suspended();
+    os <<"cms cc=" << m.commodityCode() << " ss=" << m.suspended() << " lk=" << (uint16_t)m.locked();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, DeleteOrder const& m)
@@ -148,13 +148,13 @@ inline std::ostream& operator<<(std::ostream& os, SequenceReset const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesDefinitionBase const& m)
 {
-    os <<"sd ob=" << m.orderbookID() << " sym=" << m.getSymbolAsString() << " fp=" << (uint16_t)m.financialProduct() << " ndp=" << m.numberOfDecimalsPrice() << " nl=" << (uint16_t)m.numberOfLegs() << " sp=" << m.strikePrice() << " ed=" << m.getExpirationDateAsString() << " pc=" << (uint16_t)m.putOrCall();
+    os <<"sd ob=" << m.orderbookID() << " sym=" << m.getSymbolAsString() << " fp=" << (uint16_t)m.financialProduct() << " ndp=" << m.numberOfDecimalsPrice() << " nl=" << (uint16_t)m.numberOfLegs() << " sp=" << m.strikePrice() << " ed=" << m.getExpirationDateAsString() << " dis=" << m.decimalInStrikePrice() << " pc=" << (uint16_t)m.putOrCall();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesDefinitionExtended const& m)
 {
     os <<"sde ob=" << m.orderbookID() << " sym=" << m.getSymbolAsString() << " c=" << (uint16_t)m.country() << " mkt=" << (uint16_t)m.market() << " ig=" << (uint16_t)m.instrumentGroup() << " m=" << (uint16_t)m.modifier() << " cc=" << m.commodityCode() << " ed=" << m.expirationDate() << " sp=" << m.strikePrice() << " cs=" << m.contractSize() 
-        << " ic=" << m.getIsinCodeAsString() << " ss=" << (uint16_t)m.seriesStatus() << " et=" << (uint16_t)m.effectiveTomorrow() << " pqf=" << m.priceQuotationFactor() << " exp=" << m.getEffectiveExpDateAsString() << " dt=" << m.dateTimeLastTrading();
+        << " ic=" << m.getIsinCodeAsString() << " ss=" << (uint16_t)m.seriesStatus() << " et=" << (uint16_t)m.effectiveTomorrow() << " pqf=" << m.priceQuotationFactor() << " pm=" << (uint16_t)m.priceMethod() << " exp=" << m.getEffectiveExpDateAsString() << " dlt=" << m.dateTimeLastTrading() << " dft=" << m.dateTimeFirstTrading();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesStatistics const& m)
@@ -164,7 +164,7 @@ inline std::ostream& operator<<(std::ostream& os, SeriesStatistics const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesStatus const& m)
 {
-    os <<"sss ob=" << m.orderbookID() << " ss=" << m.suspended();
+    os <<"sss ob=" << m.orderbookID() << " si=" << (uint16_t)m.suspensionIndicator() << " ss=" << (uint16_t)m.seriesStatus();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, Trade const& m)
