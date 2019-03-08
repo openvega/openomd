@@ -47,14 +47,14 @@ public:
         }
     };
 
-    OmdPcapRunner(std::vector<ChannelConfig> const& channelConfig, std::string const& pcapFile)
-        : _callback{ channelConfig }, _pcapFile{ pcapFile }
+    OmdPcapRunner(std::vector<ChannelConfig> const& channelConfig, std::string const& pcapFile, bool sll)
+        : _callback{ channelConfig }, _pcapFile{ pcapFile }, _sll{sll}
     {
     }
 
     void run()
     {
-        openomd::PcapUtil<Callback> pcapUtil{ _pcapFile, _callback };
+        openomd::PcapUtil<Callback> pcapUtil{ _pcapFile, _callback , _sll};
         pcapUtil.init();
         pcapUtil.start();
         pcapUtil.run();
@@ -64,5 +64,6 @@ public:
 private:
     Callback _callback;
     std::string _pcapFile;
+    bool _sll;
 };
 }

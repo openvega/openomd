@@ -45,8 +45,8 @@ class PcapUtil : public _PBPolicy
 {
     
 public:
-    PcapUtil(std::string const& pcapFile, _CB& callback, double speed = 1) 
-        : _PBPolicy{ speed }, _pcapFile{ pcapFile }, _callback{ callback }
+    PcapUtil(std::string const& pcapFile, _CB& callback, bool sll= false, double speed = 1)
+        : _PBPolicy{ speed }, _pcapFile{ pcapFile }, _callback{ callback }, _sll{sll}
     {
     }
 
@@ -74,6 +74,7 @@ public:
 private:
     std::string _pcapFile;
     _CB& _callback;
+    bool _sll;
     pcap_t* _pcapt = nullptr;
 };
 
@@ -120,7 +121,8 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
     while ( (retCode = pcap_next_ex(_pcapt, &pkthdr, &pktData)) == 1)
     {
         wait(pkthdr->ts);
-        auto *ipPacket = reinterpret_cast<IpHdr const*>(pktData);
+        const uint8_t* pos = pktData + (_sll ? 2:0);
+        auto *ipPacket = reinterpret_cast<IpHdr const*>(pos);
         switch (ipPacket->ip_p)
         {
         case IPPROTO_TCP:
@@ -129,7 +131,7 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
         }
         case IPPROTO_UDP:
         {
-            auto * udpPacket = reinterpret_cast<UdpFrame<> const*>(pktData);
+            auto * udpPacket = reinterpret_cast<UdpFrame<> const*>(pos);
             uint32_t byteRecvd = pkthdr->len - sizeof(UdpHdr);
             _callback.onReceive(byteRecvd, const_cast<uint8_t*>(&udpPacket->_payload[0]), ETHERNET_MAX_PAYLOAD, 
                 udpPacket->_hdr.ip_dst.s_addr, ntohs(udpPacket->_hdr.uh_dport));

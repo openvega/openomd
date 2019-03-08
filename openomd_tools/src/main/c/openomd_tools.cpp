@@ -32,7 +32,8 @@ int main(int32_t argc, char* argv[])
         ("f,function", "pcapdump,udpdump", cxxopts::value<string>())
         ("p,protocol", "omdc,omdd", cxxopts::value<string>())
         ("c,pcap", "Pcap file", cxxopts::value<string>())
-        ("n,networkconf", "network configuration file", cxxopts::value<string>());
+        ("n,networkconf", "network configuration file", cxxopts::value<string>())
+        ("s,sll","1,0", cxxopts::value<int32_t>());
     try
     {
         auto result = options.parse(argc, argv);
@@ -44,19 +45,24 @@ int main(int32_t argc, char* argv[])
                 cerr << options.help() << endl;
                 return -1;
             }
+            bool sll = false;
+            if (result.count("s") == 1 && result["s"].as<int32_t>() == 1)
+            {
+                sll = true;
+            }
             auto protocol = result["p"].as<string>();
             auto pcapFile = result["c"].as<string>();
             auto networkCfg = result["n"].as<string>();
-            cout << "function=" << function << " p=" << protocol << " pcap=" << pcapFile << " netconf=" << networkCfg << endl;
+            cout << "function=" << function << " p=" << protocol << " pcap=" << pcapFile << " netconf=" << networkCfg << " sll=" << sll << endl;
             if (protocol == "omdc")
             {
                 
-                OmdPcapRunner<OmdcPrintProcessor<PcapLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg), pcapFile };
+                OmdPcapRunner<OmdcPrintProcessor<PcapLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg), pcapFile, sll };
                 runner.run();
             }
             else if (protocol == "omdd")
             {
-                OmdPcapRunner<OmddPrintProcessor<PcapLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg), pcapFile };
+                OmdPcapRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg), pcapFile, sll };
                 runner.run();
             }
 

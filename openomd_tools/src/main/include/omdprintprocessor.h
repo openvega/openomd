@@ -29,7 +29,7 @@ protected:
     {
         //if (_msgIds.find(_Msg::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
         {
-            //std::cout << seqNum << " " << m << std::endl;
+            std::cout << seqNum << " " << m << std::endl;
         }
     }
     std::set<int32_t> _msgIds;

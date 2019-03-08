@@ -58,7 +58,7 @@ inline std::ostream& operator<<(std::ostream& os, CalculatedOpeningPrice const& 
 inline std::ostream& operator<<(std::ostream& os, ClassDefinition const& m)
 {
     os << "cld cty=" << (int16_t)m.country() << " mkt=" << (int16_t)m.market() << " ig=" << (int16_t)m.instrumentGroup() << " m=" << (int16_t)m.modifier() << " cc=" << m.commodityCode() << " pqf=" << m.priceQuotationFactor() << " cs=" << m.contractSize() << " dsp=" << m.decimalInStrikePrice() << " dcs=" << m.decimalInContractSize()
-            << " dp=" << m.decimalInPremium() << " rt=" << m.rankingType() << " tb=" << m.tradable() << " pu=" << m.premiumUnit4Price() << " bc=" << m.getBaseCurrencyAsString() << " icid=" << m.instrumentClassID() << " icn=" << m.instrumentClassName() << " if=" << m.isFractions() << " sc=" << m.settlementCurrencyID() << " et=" << m.effectiveTomorrow() << " tss=" << m.tickStepSize();
+            << " dp=" << m.decimalInPremium() << " rt=" << m.rankingType() << " tb=" << (uint16_t)m.tradable() << " pu=" << (uint16_t)m.premiumUnit4Price() << " bc=" << m.getBaseCurrencyAsString() << " icid=" << m.getInstrumentClassIDAsString() << " icn=" << m.getInstrumentClassNameAsString() << " if=" << m.isFractions() << " sc=" << m.getSettlementCurrencyIDAsString() << " et=" << (uint16_t)m.effectiveTomorrow() << " tss=" << m.tickStepSize();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, CombinationDefinition const& m)
@@ -148,7 +148,7 @@ inline std::ostream& operator<<(std::ostream& os, SequenceReset const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesDefinitionBase const& m)
 {
-    os <<"sd ob=" << m.orderbookID() << " sym=" << m.symbol() << " fp=" << (uint16_t)m.financialProduct() << " ndp=" << m.numberOfDecimalsPrice() << " nl=" << m.numberOfLegs() << " sp=" << m.strikePrice() << " ed=" << m.expirationDate() << " pc=" << (uint16_t)m.putOrCall();
+    os <<"sd ob=" << m.orderbookID() << " sym=" << m.getSymbolAsString() << " fp=" << (uint16_t)m.financialProduct() << " ndp=" << m.numberOfDecimalsPrice() << " nl=" << (uint16_t)m.numberOfLegs() << " sp=" << m.strikePrice() << " ed=" << m.getExpirationDateAsString() << " pc=" << (uint16_t)m.putOrCall();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SeriesDefinitionExtended const& m)
