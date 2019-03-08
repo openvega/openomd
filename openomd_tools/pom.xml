@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.openvega</groupId>
+    <artifactId>openomd</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>openomd_tools</artifactId>
+  <name>openomd_tools</name>
+  <packaging>nar</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.maven-nar</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <configuration>
+          <cpp>
+            <systemIncludePaths>
+              <systemIncludePath>${project.parent.basedir}/thirdparty/target/nar/include</systemIncludePath>
+            </systemIncludePaths>
+          </cpp>
+          <linker>
+            <libs>
+              <lib><name>boost_system-${boost.version}</name><type>static</type><directory>../thirdparty/target/nar/lib/${nar.aol}/static</directory></lib>
+            </libs>
+            <sysLibs combine.children="append">
+              <sysLib><name>pcap</name></sysLib>
+              <sysLib><name>gomp</name></sysLib>
+            </sysLibs>
+          </linker>
+          <libraries>
+            <library>
+              <type>executable</type>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.openvega</groupId>
+      <artifactId>openomd_handler</artifactId>
+      <type>nar</type>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>

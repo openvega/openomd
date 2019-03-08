@@ -5,13 +5,16 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5BC88974-D306-4D04-89BA-B27F08122BE7}"
 	ProjectSection(SolutionItems) = preProject
+		copydll.bat = copydll.bat
 		pom.xml = pom.xml
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parser", "parser\parser.vcxproj", "{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openomd_handler", "openomd_handler\openomd_handler.vcxproj", "{80762ADA-B990-42F7-A902-C00DC00CC198}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parser-test", "parser\parser-test\parser-test.vcxproj", "{33275CA3-BF2D-4210-B6D2-619C94DED438}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openomd_test", "openomd_test\openomd_test.vcxproj", "{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openomd_tools", "openomd_tools\openomd_tools.vcxproj", "{1F506491-AFF4-4386-8AAB-FBA35E00B054}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +24,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Debug|x64.ActiveCfg = Debug|x64
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Debug|x64.Build.0 = Debug|x64
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Debug|x86.ActiveCfg = Debug|Win32
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Debug|x86.Build.0 = Debug|Win32
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Release|x64.ActiveCfg = Release|x64
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Release|x64.Build.0 = Release|x64
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Release|x86.ActiveCfg = Release|Win32
+		{80762ADA-B990-42F7-A902-C00DC00CC198}.Release|x86.Build.0 = Release|Win32
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Debug|x64.ActiveCfg = Debug|x64
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Debug|x64.Build.0 = Debug|x64
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Debug|x86.ActiveCfg = Debug|Win32
@@ -29,14 +40,14 @@ Global
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Release|x64.Build.0 = Release|x64
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Release|x86.ActiveCfg = Release|Win32
 		{1EBFD4E7-64AD-4E23-8288-A7775BEF2900}.Release|x86.Build.0 = Release|Win32
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Debug|x64.ActiveCfg = Debug|x64
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Debug|x64.Build.0 = Debug|x64
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Debug|x86.ActiveCfg = Debug|Win32
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Debug|x86.Build.0 = Debug|Win32
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Release|x64.ActiveCfg = Release|x64
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Release|x64.Build.0 = Release|x64
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Release|x86.ActiveCfg = Release|Win32
-		{33275CA3-BF2D-4210-B6D2-619C94DED438}.Release|x86.Build.0 = Release|Win32
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Debug|x64.ActiveCfg = Debug|x64
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Debug|x64.Build.0 = Debug|x64
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Debug|x86.ActiveCfg = Debug|Win32
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Debug|x86.Build.0 = Debug|Win32
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Release|x64.ActiveCfg = Release|x64
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Release|x64.Build.0 = Release|x64
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Release|x86.ActiveCfg = Release|Win32
+		{1F506491-AFF4-4386-8AAB-FBA35E00B054}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,984 @@
+
+# This is an example of what can be done with Generic Dissector.
+# This is not a real example (ie used in real life).
+# I just put here many possible syntax.
+
+# If you want to understand how to build a .fdesc and .wsgd from zero,
+#  please refer to :
+# http://wsgd.free.fr/first_proto.html
+#  and :
+# http://wsgd.free.fr/fdesc_format.html
+# http://wsgd.free.fr/wsgd_format.html
+
+# NB: the declaration order is important,
+#      i.e. you must declare a type before using it.
+
+
+###############################################################################
+# Message identifier
+###############################################################################
+
+enum16 T_omdc_msg_id
+{
+    seq_reset       100
+    dr_signal       105
+    refresh_comp    203
+    market_def      10
+    security_def    11
+    liquidity_prov  13
+    currency_rate   14
+    trading_status  20
+    security_status 21
+    add_order       30
+    modify_order    31
+    delete_order    32
+    add_oddlot      33
+    delete_oddlot   34
+    aggregate_ob    53
+    broker_queue    54
+    order_imb       56
+    trade           50
+    trade_cancel    51
+    trade_ticker    52
+    closing_price   62
+    nominal_price   40
+    indicative_eqb_price    41
+    reference_price 43
+    vcm_trigger     23
+    statistics      60
+    market_turn     61
+    yield           44
+    news            22
+    index_def       70
+    index_data      71
+    stk_con_dqb     80
+    stk_con_mkt_turn 81
+}
+
+###############################################################################
+# Header
+###############################################################################
+struct T_omdc_msg_header_type
+{
+    byte_order      little_endian ;
+    uint16          pkt_size;
+    uint8           msg_count;
+    char            filler1;
+    uint32          seq_num;
+    #int64          send_time;
+    int64{de=ns_time_to_str(this)}       send_time;
+    uint16          msg_size;
+    T_omdc_msg_id   msg_id;
+}
+
+struct T_omdc_msg_seq_reset
+{
+    T_omdc_msg_header_type header;
+    uint32 new_seq_no;
+}
+
+struct T_omdc_msg_dr_signal
+{
+    T_omdc_msg_header_type header;
+    uint32 dr_status;
+}
+
+struct T_omdc_msg_refresh_comp
+{
+    T_omdc_msg_header_type header;
+    uint32 last_seq_num;
+}
+
+struct T_omdc_msg_market_def
+{
+    T_omdc_msg_header_type header;
+    string(4) market_code;
+    string(25) market_name;
+    string(3) currency_code;
+    uint32 num_of_securities;
+}
+
+struct T_omdc_msg_security_def
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    string(4) market_code;
+    string(12) isin;
+    string(4) instrument_type;
+    uint8 product_type;
+    char filler1;
+    string(2) spread_tbl;
+    string(40) sec_short_name;
+    string(3) currency_code;
+    string(60) sec_name_gccs;
+    string(60) sec_name_gb;
+    uint32 lot_size;
+    uint32 filler2;
+    int32 prev_close;
+    char vcm_flag;
+    char short_sell_flag;
+    char cas_flag;
+    char ccass_flag;
+    char dummy_sec_flag;
+    char filler3;
+    char stamp_duty_flag;
+    char filler4;
+    uint32 listing_date;
+    uint32 delisting_date;
+    string(38) free_text;
+    string(82) filler5;
+    char efn_flag;
+    uint32 accrued_interest;
+    uint32 coupon_rate;
+    string(42) filler6;
+    uint32 conversion_ratio;
+    int32 strike_price1;
+    int32 strike_price2;
+    uint32 maturity_date;
+    char call_put_flag;
+    char style;
+    uint16 filler7;
+    char warrant_type;
+    int32 call_price;
+    uint8 decimals_in_call;
+    int32 entitlement;
+    uint8 decimals_in_entitlement;
+    uint32 no_warrants_per_entitlement;
+    string(33) filler8;
+    uint16 no_underlying_securities;
+}
+
+struct T_omdc_msg_liquidity_prov
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    uint16 no_liquidity_providers;
+}
+
+struct T_omdc_msg_currency_rate
+{
+    T_omdc_msg_header_type header;
+    string(3) currency_code;
+    char filler1;
+    uint16 currency_factor;
+    uint16 filler2;
+    uint32 currency_rate;
+}
+
+struct T_omdc_msg_trading_status
+{
+    T_omdc_msg_header_type header;
+    string(4) market_code;
+    char filler1;
+    uint8 trading_session_subid;
+    uint8 trading_ses_status;
+    char trading_ses_control_flag;
+    uint32 filler2;
+    int64 start_date_time;
+    int64 end_date_time;
+}
+
+struct T_omdc_msg_security_status
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    uint8 suspension_indicator;
+    string(3) filler;
+}
+
+struct T_omdc_msg_add_order
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 order_id;
+    int32 price;
+    uint32 quantity;
+    uint16 side;
+    char order_type;
+    char filler;
+    int32 order_book_position;
+}
+
+struct T_omdc_msg_modify_order
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 order_id;
+    uint32 quantity;
+    uint16 side;
+    uint16 filler;
+    int32 order_book_position;
+}
+
+struct T_omdc_msg_delete_order
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 order_id;
+    uint16 side;
+    uint16 filler;
+}
+
+struct T_omdc_msg_add_oddlot
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 order_id;
+    int32 price;
+    uint32 quantity;
+    uint16 broker_id;
+    uint16 side;
+}
+
+struct T_omdc_msg_delete_oddlot
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 order_id;
+    uint16 broker_id;
+    uint16 side;
+}
+
+struct T_omdc_msg_aggregate_ob
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    string(3) filler;
+    uint8 no_entries;
+}
+
+struct T_omdc_msg_broker_queue
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    uint8 item_count;
+    uint16 side;
+    char bq_more_flag;
+}
+
+struct T_omdc_msg_order_imb
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    char order_imbalance_direction;
+    char filler;
+    int64 order_imbalance_quantity;
+    int16 filler2;
+}
+
+struct T_omdc_msg_trade
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    uint32 trade_id;
+    int32 price;
+    uint32 quantity;
+    int16 trd_type;
+    int16 filler;
+    int64 trade_time;
+}
+
+struct T_omdc_msg_trade_cancel
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    uint32 trade_id;
+}
+
+struct T_omdc_msg_trade_ticker
+{
+    T_omdc_msg_header_type header;
+  raw(*)                   end_of_msg;
+}
+
+struct T_omdc_msg_closing_price
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int32 closing_price;
+    uint32 number_of_trades;
+}
+
+struct T_omdc_msg_nominal_price
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int32 nominal_price;
+}
+
+struct T_omdc_msg_indicative_eqb_price
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int32 price;
+    int64 aggregate_quantity;
+}
+
+struct T_omdc_msg_reference_price
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int32 reference_price;
+    int32 lower_price;
+    int32 upper_price;
+}
+
+struct T_omdc_msg_vcm_trigger
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 cooling_off_start;
+    int64 cooling_off_end;
+    int32 vcm_reference_price;
+    int32 vcm_lower_price;
+    int32 vcm_upper_price;
+}
+
+struct T_omdc_msg_statistics
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int64 shares_traded;
+    int64 turnover;
+    int32 high_price;
+    int32 low_price;
+    int32 last_price;
+    int32 vwap;
+    uint32 shortsell_shares_traded;
+    int64 shortsell_turnover;
+}
+
+struct T_omdc_msg_market_turn
+{
+    T_omdc_msg_header_type header;
+    string(4) market_code;
+    string(3) currency_code;
+    int8 filler;
+    int64 turnover;
+}
+
+struct T_omdc_msg_yield
+{
+    T_omdc_msg_header_type header;
+    uint32 security_code;
+    int32 yield;
+}
+
+struct T_omdc_msg_news
+{
+    T_omdc_msg_header_type header;
+  raw(*)                   end_of_msg;
+}
+
+struct T_omdc_msg_index_def
+{
+    T_omdc_msg_header_type header;
+    string(11) index_code;
+    char index_source;
+    string(3) currency_code;
+    int8 filler;
+}
+
+struct T_omdc_msg_index_data
+{
+    T_omdc_msg_header_type header;
+    string(11) index_code;
+    int8 index_status;
+    int64 index_time;
+    int64 index_value;
+    int64 net_chg_prev_day;
+    int64 high_value;
+    int64 low_value;
+    int64 eas_value;
+    int64 index_turnover;
+    int64 opening_value;
+    int64 closing_value;
+    int64 previous_ses_close;
+    int64 index_volume;
+    int32 net_chg_prev_day_pct;
+    int8 exception;
+    string(3) filler;
+}
+
+struct T_omdc_msg_stk_con_dqb
+{
+  T_omdc_msg_header_type header;
+  string(2) stock_conn_market;
+  string(2) trading_direction;
+  int64 daily_quota_balance;
+  int64 daily_quota_balance_time;
+}
+
+struct T_omdc_msg_stk_con_mkt_turn
+{
+  T_omdc_msg_header_type header;
+  string(2) stock_conn_market;
+  string(2) trading_direction;
+  int64 buy_turnover;
+  int64 sell_turnover;
+  int64 buysell_turnover;
+}
+
+struct  T_omdc_msg_unknow
+{
+  T_omdc_msg_header_type header;
+  raw(*)                   end_of_msg;
+}
+
+###############################################################################
+# OMDD 
+###############################################################################
+enum16 T_omdd_msg_id
+{
+    seq_reset       100
+    dr_signal       105
+    refresh_comp    203
+    commodity_def   301
+    class_def       302
+    series_def_base 303
+    series_def_ext  304
+    combination_def 305
+    mkt_status      320
+    series_status   321
+    commodity_status 322
+    add_order       330
+    modify_order    331
+    delete_order    332
+    aggregate_ob    353
+    orderbook_clear 335
+    quote_request   336
+    trade           350
+    trade_amend     356
+    trade_stat      360
+    series_stat     363
+    calc_open_px    364
+    est_avg_settle_px 365
+    mkt_alert       323
+    open_interest   366
+    implied_vol     367
+}
+
+###############################################################################
+# OMDD Header
+###############################################################################
+struct T_omdd_msg_header_type
+{
+    byte_order      little_endian ;
+    uint16          pkt_size;
+    uint8           msg_count;
+    char            filler1;
+    uint32          seq_num;
+    #int64          send_time;
+    int64{de=ns_time_to_str(this)}       send_time;
+    uint16          msg_size;
+    T_omdd_msg_id   msg_id;
+}
+
+struct T_omdd_msg_seq_reset
+{
+    T_omdd_msg_header_type header;
+    uint32 new_seq_no;
+}
+
+struct T_omdd_msg_dr_signal
+{
+    T_omdd_msg_header_type header;
+    uint32 dr_status;
+}
+
+struct T_omdd_msg_refresh_comp
+{
+    T_omdd_msg_header_type header;
+    uint32 last_seq_num;
+}
+
+struct T_omdd_msg_commodity_def
+{
+    T_omdd_msg_header_type header;
+    uint16 commodity_code;
+    uint16 dec_in_undprice;
+    string(12) isin_code;
+    string(3) base_currency;
+    uint8 undprice_unit;
+    string(32) commodity_name;
+    int64 nominal_value;
+    string(20) underlying_code;
+    uint8 underlying_type;
+    uint8 effective_tmr;
+    string(6) commodity_id;
+    string(2) filler;
+}
+
+struct T_omdd_msg_class_def
+{
+    T_omdd_msg_header_type header;
+    uint8 country;
+    uint8 market;
+    uint8 instrument_group;
+    uint8 modifier;
+    uint16 commodity_code;
+    string(2) filler1;
+    int32 pirce_quotation_factor;
+    uint32 contract_size;
+    uint16 dec_in_strikeprice;
+    uint16 dec_in_contractsize;
+    uint16 dec_in_premium;
+    uint16 ranking_type;
+    uint8 tradable;
+    uint8 premium_unit4_price;
+    string(3) base_currency;
+    string(14)  instrument_class_id;
+    string(32) instrument_class_name;
+    char is_factions;
+    string(32) settlement_currency_id;
+    uint8 effective_tmr;
+    int32 tick_step_size;
+    char filler2;
+}
+
+struct T_omdd_msg_series_def_base
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    string(32) symbol;
+    uint8 financial_product;
+    uint16 num_of_decplace;
+    uint8 num_of_legs;
+    int32 strike_price;
+    string(8) expiration_date;
+    uint16 dec_in_strike_price;
+    uint8 put_or_call;
+    char filler2;
+}
+
+struct T_omdd_msg_series_def_ext
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    string(32) symbol;
+    uint8 country;
+    uint8 market;
+    uint8 instrument_group;
+    uint8 modifier;
+    uint16 commodity_code;
+    uint16 expiration_date;
+    int32 strike_price;
+    int64 contract_size;
+    string(12) isin_code;
+    uint8 series_status;
+    uint8 effective_tmr;
+    int32 price_quotation_factor;
+    uint8 price_method;
+    char filler1;
+    string(8) effective_exp_date;
+    int64 datetime_last_trading;
+    int64 datetime_first_trading;
+}
+
+struct T_omdd_msg_combination_def
+{
+    T_omdd_msg_header_type header;
+    uint32 combo_orderbook_id;
+    uint32 leg_orderbook_id;
+    string(3) filler;
+    char leg_side;
+    int32 leg_ratio;
+}
+
+struct T_omdd_msg_mkt_status
+{
+    T_omdd_msg_header_type header;
+    uint16 state_level;
+    uint8 market;
+    uint8 instrument;
+    uint32 orderbook_id;
+    uint16 commodity_code;
+    string(2) filler1;
+    string(8) actual_start_date;
+    string(6) actual_start_time;
+    string(8) planned_start_date;
+    string(6) planned_start_time;
+    uint16 seconds_to_state_chg;
+    uint16 state;
+    uint8 priority;
+    string(3) filler2;
+}
+
+struct T_omdd_msg_series_status
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    uint8 suspension_indicator;
+    uint8 series_status;
+    uint16 filler;
+}
+
+struct T_omdd_msg_commodity_status
+{
+    T_omdd_msg_header_type header;
+    uint16 commodity_code;
+    char suspended;
+    uint8 locked;
+}
+
+struct T_omdd_msg_add_order
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int64 order_id;
+    int32 price;
+    uint32 quantity;
+    uint8 side;
+    uint8 lot_type;
+    uint16 order_type;
+    uint32 order_book_position;
+}
+
+struct T_omdd_msg_modify_order
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int64 order_id;
+    int32 price;
+    uint32 quantity;
+    uint8 side;
+    uint8 filler;
+    uint16 order_type;
+    uint32 order_book_position;
+}
+
+struct T_omdd_msg_delete_order
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int64 order_id;
+    uint8 side;
+    uint8 filler;
+}
+
+struct T_omdd_msg_aggregate_ob
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    string(3) filler;
+    uint8 no_entries;
+}
+
+struct T_omdd_msg_orderbook_clear
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+}
+
+struct T_omdd_msg_quote_request
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int32 num_of_lots;
+    uint8 bid_ask_flag;
+    string(3) filler;
+}
+
+struct T_omdd_msg_trade
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int64 order_id;
+    int32 price;
+    int64 trade_id;
+    uint32 combo_group_id;
+    uint8 side;
+    uint8 deal_type;
+    uint16 trade_condition;
+    uint16 deal_info;
+    string(2) filler;
+    int64 quantity;
+    int64 trade_time;
+}
+
+struct T_omdd_msg_trade_amend
+{
+    T_omdd_msg_header_type header;
+    int64 trade_id;
+    uint32 combo_group_id;
+    int32 price;
+    int64 quantity;
+    int64 trade_time;
+    uint8 trade_state;
+    string(3) filler;
+}
+
+struct T_omdd_msg_trade_stat
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int32 price;
+    uint8 deal_source;
+    uint8 session;
+    uint16 filler1;
+    int64 aggregate_quantity;
+    int32 open;
+    int32 high;
+    int32 low;
+    uint32 filler2;
+    int64 trade_report_volume;
+    uint32 deal_count;
+    int64 turnover;
+}
+
+struct T_omdd_msg_series_stat
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    uint8 session;
+    string(3) filler1;
+    int32 open;
+    int32 high;
+    int32 low;
+    int64 trade_report_volume;
+    uint32 deal_count;
+    int32 price;
+    int64 turnover;
+}
+
+struct T_omdd_msg_calc_open_px
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    int32 calc_open_price;
+    uint32 filler;
+    int64 quantity;
+}
+
+struct T_omdd_msg_est_avg_settle_px
+{
+    T_omdd_msg_header_type header;
+    char eas_type;
+    string(20) instrument_code;
+    int64 eas;
+    string(3) filler;
+}
+
+struct T_omdd_msg_mkt_alert
+{
+    T_omdd_msg_header_type header;
+    uint16 alert_id;
+    char source;
+    uint8 filler1;
+    string(320) header;
+    char last_fragment;
+    uint8 info_type;
+    uint8 priority;
+    uint8 no_lines;
+}
+
+struct T_omdd_msg_open_interest
+{
+    T_omdd_msg_header_type header;
+    uint16 day_indicator;
+    string(6) filler;
+    uint32 orderbook_id;
+    int32 settlement;
+    uint32 deal_count;
+    uint32 gross_oi;
+    uint32 net_oi;
+    int64 turnover;
+}
+
+struct T_omdd_msg_implied_vol
+{
+    T_omdd_msg_header_type header;
+    uint32 orderbook_id;
+    uint32 implied_vol;
+}
+
+struct  T_omdd_msg_unknow
+{
+    T_omdd_msg_header_type header;
+    raw(*)                   end_of_msg;
+}
+
+###############################################################################
+# Functions
+###############################################################################
+
+# Just an example, look at date.get_string_from_seconds & date.get_string_from_days
+function string  unix_time_to_str (in int64{min=0}  value)
+{
+  hide var uint32   value_work = value;
+  hide var uint16   sec = value_work % 60;
+       set          value_work = (value_work - sec) / 60;
+  hide var uint16   min = value_work % 60;
+       set          value_work = (value_work - min) / 60;
+  hide var uint16   hour = value_work % 24;
+       set          value_work = (value_work - hour) / 24;
+
+  hide var int16    day_since_1970 = value_work;
+  
+  hide var int16    year = 1970;
+  hide var int16    month = 1;
+  while (1)
+  {
+    hide var int16  days_in_year = ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))) ? 365 : 366;
+    if (day_since_1970 <= days_in_year)
+    {
+      break;
+    }
+    set day_since_1970 = day_since_1970 - days_in_year;
+    set year           = year + 1;
+  }
+  while (1)
+  {
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)))
+    {
+      if (day_since_1970 <= 29)  { break; }
+      set day_since_1970 = day_since_1970 - 29;
+      set month          = month + 1;
+    }
+    else
+    {
+      if (day_since_1970 <= 28)  { break; }
+      set day_since_1970 = day_since_1970 - 28;
+      set month          = month + 1;
+    }
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if (day_since_1970 <= 30)  { break; }
+    set day_since_1970 = day_since_1970 - 30;
+    set month          = month + 1;
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if (day_since_1970 <= 30)  { break; }
+    set day_since_1970 = day_since_1970 - 30;
+    set month          = month + 1;
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if (day_since_1970 <= 30)  { break; }
+    set day_since_1970 = day_since_1970 - 30;
+    set month          = month + 1;
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;
+    if (day_since_1970 <= 30)  { break; }
+    set day_since_1970 = day_since_1970 - 30;
+    set month          = month + 1;
+    if (day_since_1970 <= 31)  { break; }
+    set day_since_1970 = day_since_1970 - 31;
+    set month          = month + 1;    
+  }
+
+  return  print("%s/%02d/%02d %02d:%02d:%02d", year, month, day_since_1970+1, hour, min, sec);
+}
+
+function string  unix_time_ms_to_str (in int64{min=0}  value, in string  debug_msg = "")
+{
+  hide var int64    value_work = value;
+  hide var uint16   ms = value_work % 1000;
+       set          value_work = (value_work - ms) / 1000;
+  hide var string   str = unix_time_to_str(value_work) + print(".%03d", ms);
+  return  str;
+}
+
+function string  ns_time_to_str (in int64{min=0}  value)
+{
+  hide var int64    value_work = value / 1000000;
+  hide var uint16   ms = value_work % 1000;
+       set          value_work = (value_work - ms) / 1000;
+  hide var uint16   sec = value_work % 60;
+       set          value_work = (value_work - sec) / 60;
+  hide var uint16   min = value_work % 60;
+       set          value_work = (value_work - min) / 60;
+  hide var uint16   hour = value_work % 24;
+       
+  return  print("%02d%02d%02d.%03d", hour, min, sec, ms);
+}
+
+###############################################################################
+# OMDC Main switch
+###############################################################################
+switch  T_omdc_msg_switch  T_omdc_msg_id
+{
+case  T_omdc_msg_id::seq_reset          : T_omdc_msg_seq_reset         "";  # "" permits to avoid a useless supplementary tree
+case  T_omdc_msg_id::dr_signal          : T_omdc_msg_dr_signal     "";
+case  T_omdc_msg_id::refresh_comp       : T_omdc_msg_refresh_comp     "";
+case  T_omdc_msg_id::market_def         : T_omdc_msg_market_def     "";
+case  T_omdc_msg_id::security_def       : T_omdc_msg_security_def     "";
+case  T_omdc_msg_id::liquidity_prov     : T_omdc_msg_liquidity_prov     "";
+case  T_omdc_msg_id::currency_rate      : T_omdc_msg_currency_rate     "";
+case  T_omdc_msg_id::trading_status     : T_omdc_msg_trading_status     "";
+case  T_omdc_msg_id::security_status    : T_omdc_msg_security_status     "";
+case  T_omdc_msg_id::add_order          : T_omdc_msg_add_order     "";
+case  T_omdc_msg_id::modify_order       : T_omdc_msg_modify_order     "";
+case  T_omdc_msg_id::delete_order       : T_omdc_msg_delete_order     "";
+case  T_omdc_msg_id::add_oddlot         : T_omdc_msg_add_oddlot     "";
+case  T_omdc_msg_id::delete_oddlot      : T_omdc_msg_delete_oddlot     "";
+case  T_omdc_msg_id::aggregate_ob       : T_omdc_msg_aggregate_ob     "";
+case  T_omdc_msg_id::broker_queue       : T_omdc_msg_broker_queue     "";
+case  T_omdc_msg_id::order_imb          : T_omdc_msg_order_imb     "";
+case  T_omdc_msg_id::trade              : T_omdc_msg_trade     "";
+case  T_omdc_msg_id::trade_cancel       : T_omdc_msg_trade_cancel     "";
+case  T_omdc_msg_id::trade_ticker       : T_omdc_msg_trade_ticker     "";
+case  T_omdc_msg_id::closing_price      : T_omdc_msg_closing_price     "";
+case  T_omdc_msg_id::nominal_price      : T_omdc_msg_nominal_price     "";
+case  T_omdc_msg_id::indicative_eqb_price   : T_omdc_msg_indicative_eqb_price     "";
+case  T_omdc_msg_id::reference_price    : T_omdc_msg_reference_price     "";
+case  T_omdc_msg_id::vcm_trigger        : T_omdc_msg_vcm_trigger     "";
+case  T_omdc_msg_id::statistics         : T_omdc_msg_statistics     "";
+case  T_omdc_msg_id::market_turn        : T_omdc_msg_market_turn     "";
+case  T_omdc_msg_id::yield              : T_omdc_msg_yield     "";
+case  T_omdc_msg_id::news               : T_omdc_msg_news     "";
+case  T_omdc_msg_id::index_def          : T_omdc_msg_index_def     "";
+case  T_omdc_msg_id::index_data         : T_omdc_msg_index_data     "";
+case  T_omdc_msg_id::stk_con_dqb        : T_omdc_msg_stk_con_dqb    "";
+case  T_omdc_msg_id::stk_con_mkt_turn   : T_omdc_msg_stk_con_mkt_turn    "";
+default        : 
+
+#  fatal ("Unknow msg identifier %d (%s)", msg_id, msg_id);
+  T_omdc_msg_unknow  "";
+}
+
+###############################################################################
+# OMDD Main switch
+###############################################################################
+switch  T_omdd_msg_switch  T_omdd_msg_id
+{
+case  T_omdd_msg_id::seq_reset          : T_omdd_msg_seq_reset         "";  # "" permits to avoid a useless supplementary tree
+case  T_omdd_msg_id::dr_signal          : T_omdd_msg_dr_signal     "";
+case  T_omdd_msg_id::refresh_comp       : T_omdd_msg_refresh_comp     "";
+case  T_omdd_msg_id::commodity_def      : T_omdd_msg_commodity_def     "";
+case  T_omdd_msg_id::class_def          : T_omdd_msg_class_def     "";
+case  T_omdd_msg_id::series_def_base    : T_omdd_msg_series_def_base     "";
+case  T_omdd_msg_id::series_def_ext     : T_omdd_msg_series_def_ext     "";
+case  T_omdd_msg_id::combination_def    : T_omdd_msg_combination_def     "";
+case  T_omdd_msg_id::mkt_status         : T_omdd_msg_mkt_status     "";
+case  T_omdd_msg_id::series_status      : T_omdd_msg_series_status     "";
+case  T_omdd_msg_id::commodity_status   : T_omdd_msg_commodity_status     "";
+case  T_omdd_msg_id::add_order          : T_omdd_msg_add_order     "";
+case  T_omdd_msg_id::modify_order       : T_omdd_msg_modify_order     "";
+case  T_omdd_msg_id::delete_order       : T_omdd_msg_delete_order     "";
+case  T_omdd_msg_id::aggregate_ob       : T_omdd_msg_aggregate_ob     "";
+case  T_omdd_msg_id::orderbook_clear    : T_omdd_msg_orderbook_clear     "";
+case  T_omdd_msg_id::quote_request      : T_omdd_msg_quote_request     "";
+case  T_omdd_msg_id::trade              : T_omdd_msg_trade     "";
+case  T_omdd_msg_id::trade_amend        : T_omdd_msg_trade_amend     "";
+case  T_omdd_msg_id::trade_stat         : T_omdd_msg_trade_stat     "";
+case  T_omdd_msg_id::series_stat        : T_omdd_msg_series_stat     "";
+case  T_omdd_msg_id::calc_open_px       : T_omdd_msg_calc_open_px     "";
+case  T_omdd_msg_id::est_avg_settle_px  : T_omdd_msg_est_avg_settle_px     "";
+case  T_omdd_msg_id::mkt_alert          : T_omdd_msg_mkt_alert     "";
+case  T_omdd_msg_id::open_interest      : T_omdd_msg_open_interest     "";
+case  T_omdd_msg_id::implied_vol        : T_omdd_msg_implied_vol     "";
+default        : 
+
+#  fatal ("Unknow msg identifier %d (%s)", msg_id, msg_id);
+  T_omdd_msg_unknow  "";
+}

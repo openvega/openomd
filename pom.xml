@@ -11,8 +11,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <dummyversion>1.0-dummy</dummyversion>
-    <gmock.version>1.8.0</gmock.version>
-    <boost.version>1.59.0</boost.version>
+    <gmock.version>1.8.1</gmock.version>
+    <boost.version>1.68.0</boost.version>
     <sbe.version>1.7.4</sbe.version>
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->
     <wpcap.win.version>4.1.2</wpcap.win.version>
@@ -120,6 +120,7 @@
               <cpp>
                 <options>
                   <option>/FS</option>
+                  <option>/Zc:__cplusplus</option>
                 </options>
                 <defines>
                   <define>_ENABLE_ATOMIC_ALIGNMENT_FIX</define>
@@ -127,6 +128,11 @@
                   <!--<define>${project.artifactId}_exports</define>-->
                 </defines>
               </cpp>
+              <linker>
+                <sysLibs>
+                  <sysLib><name>Ws2_32</name></sysLib>
+                </sysLibs>
+              </linker>
             </configuration>
           </plugin>
         </plugins>
@@ -159,13 +165,25 @@
       <dependency>
         <groupId>io.github.openvega</groupId>
         <artifactId>boost</artifactId>
-        <version>1.68.0</version>
+        <version>${boost.version}</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>boost_system</artifactId>
+        <version>${boost.version}</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>wpcap</artifactId>
+        <version>${wpcap.version}</version>
         <type>nar</type>
       </dependency>
       <dependency>
         <groupId>io.github.openvega</groupId>
         <artifactId>gmock</artifactId>
-        <version>1.8.1</version>
+        <version>${gmock.version}</version>
         <type>nar</type>
       </dependency>
       <dependency>
@@ -185,6 +203,8 @@
     </dependency>
   </dependencies>
   <modules>
-    <module>parser</module>
+    <module>openomd_handler</module>
+    <module>openomd_test</module>
+    <module>openomd_tools</module>
   </modules>
 </project>

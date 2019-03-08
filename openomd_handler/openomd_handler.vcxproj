@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{80762ADA-B990-42F7-A902-C00DC00CC198}</ProjectGuid>
+    <RootNamespace>openomd_handler</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>openomd_handler</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>..\copydll.bat $(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>..\copydll.bat $(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>..\copydll.bat $(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>..\copydll.bat $(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\main\include\omdc_sbe\AddOddLotOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\BrokerQueue.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\BrokerQueueItem.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\ClosingPrice.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\CurrencyRate.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\DeleteOddLotOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\DeleteOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\DisasterRecoverySignal.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize16.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize16Reverse.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize8.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Heartbeat.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\IndexData.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\IndexDefinition.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\IndicativeEquilibriumPrice.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\LiquidityProvider.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Logon.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\LogonResponse.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\MarketDefinition.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\MarketTurnover.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\News.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\NominalPrice.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\OrderImbalance.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\ReferencePrice.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\RefreshComplete.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\RetransmissionReq.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\RetransmissionResp.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\SecurityDefinition.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\SecurityStatus.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\SequenceReset.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Statistics.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectDailyQuotaBalance.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectMarketTurnover.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Trade.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\TradeCancel.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\TradeTicker.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\TradingSessionStatus.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\VCMTrigger.h" />
+    <ClInclude Include="src\main\include\omdc_sbe\Yield.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\AddOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\CalculatedOpeningPrice.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\ClassDefinition.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\CombinationDefinition.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\CommodityDefinition.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\CommodityStatus.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\DeleteOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\DisasterRecoverySignal.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\EstimatedAverageSettlementPrice.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize8.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize8Reverse.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\ImpliedVolatility.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\Logon.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\LogonResponse.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\MarketAlert.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\MarketStatus.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\MessageHeader.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\ModifyOrder.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\OpenInterest.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\OrderbookClear.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\QuoteRequest.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\RefreshComplete.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\RetransmissionRequest.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\RetransmissionResponse.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SequenceReset.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionBase.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionExtended.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesStatistics.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesStatus.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\Trade.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\TradeAmendment.h" />
+    <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h" />
+    <ClInclude Include="src\main\include\openomd\ethernet.h" />
+    <ClInclude Include="src\main\include\openomd\fulltick.h" />
+    <ClInclude Include="src\main\include\openomd\linearbitration.h" />
+    <ClInclude Include="src\main\include\openomd\multicastutil.h" />
+    <ClInclude Include="src\main\include\openomd\nooplinearbitration.h" />
+    <ClInclude Include="src\main\include\openomd\omdbaseparser.h" />
+    <ClInclude Include="src\main\include\openomd\omdcostream.h" />
+    <ClInclude Include="src\main\include\openomd\omdcparser.h" />
+    <ClInclude Include="src\main\include\openomd\omddef.h" />
+    <ClInclude Include="src\main\include\openomd\omddostream.h" />
+    <ClInclude Include="src\main\include\openomd\omddparser.h" />
+    <ClInclude Include="src\main\include\openomd\orderbookdef.h" />
+    <ClInclude Include="src\main\include\openomd\pcaputil.h" />
+    <ClInclude Include="src\main\include\openomd\recoverypolicy.h" />
+    <ClInclude Include="src\main\include\openomd\msgcache.h" />
+    <ClInclude Include="src\main\include\sbe\sbe.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="omdpatch.sh" />
+    <None Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h.sbeomdhack" />
+    <None Include="src\main\include\omdc_sbe\BrokerQueue.h.sbeomdhack" />
+    <None Include="src\main\include\omdc_sbe\GroupSize16.h.sbeomdhack" />
+    <None Include="src\main\include\omdc_sbe\LiquidityProvider.h.sbeomdhack" />
+    <None Include="src\main\include\omdc_sbe\News.h.sbeomdhack" />
+    <None Include="src\main\include\omdc_sbe\SecurityDefinition.h.sbeomdhack" />
+    <None Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h.sbeomdhack" />
+    <None Include="src\main\include\omdd_sbe\GroupSize8.h.sbeomdhack" />
+    <None Include="src\main\include\omdd_sbe\MarketAlert.h.sbeomdhack" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="pom-gen.xml" />
+    <Xml Include="pom.xml" />
+    <Xml Include="src\nar\resources\noarch\omdc-sbe.xml" />
+    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

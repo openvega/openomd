@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\parser">
+      <UniqueIdentifier>{8b0d217e-5eea-4f34-9271-d9eed66458d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\parser\omdc">
+      <UniqueIdentifier>{c567f4bc-df42-485f-b80f-076cb5e7b30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\parser\omdd">
+      <UniqueIdentifier>{17941339-d9be-4689-8302-fb2204676707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\net">
+      <UniqueIdentifier>{62766c9d-68bc-4204-b657-c42c108113f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\recovery">
+      <UniqueIdentifier>{d95f6c17-a3ad-4348-b7b6-756f8755fa13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\orderbook">
+      <UniqueIdentifier>{6c55533a-d4a7-494c-a751-729ec6c9057e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\main\include\openomd\omdbaseparser.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdcparser.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omddparser.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\sbe\sbe.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\AddOddLotOrder.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\BrokerQueue.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\BrokerQueueItem.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\ClosingPrice.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\CurrencyRate.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\DeleteOddLotOrder.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\DeleteOrder.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\DisasterRecoverySignal.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize8.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize16.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\GroupSize16Reverse.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\Heartbeat.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\IndexData.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\IndexDefinition.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\IndicativeEquilibriumPrice.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\LiquidityProvider.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\Logon.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\LogonResponse.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\MarketDefinition.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\MarketTurnover.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\MessageHeader.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\ModifyOrder.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\News.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\NominalPrice.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\OrderImbalance.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\ReferencePrice.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\RefreshComplete.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\RetransmissionReq.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\RetransmissionResp.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\SecurityDefinition.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\SecurityStatus.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\SequenceReset.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\Statistics.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectDailyQuotaBalance.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\StockConnectMarketTurnover.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\Trade.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\TradeCancel.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\TradeTicker.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\TradingSessionStatus.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\VCMTrigger.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdc_sbe\Yield.h">
+      <Filter>Header Files\parser\omdc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\AddOrder.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\CalculatedOpeningPrice.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\ClassDefinition.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\CombinationDefinition.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\CommodityDefinition.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\CommodityStatus.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\DeleteOrder.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\DisasterRecoverySignal.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\EstimatedAverageSettlementPrice.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize8.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\GroupSize8Reverse.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\ImpliedVolatility.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\Logon.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\LogonResponse.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\MarketAlert.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\MarketStatus.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\MessageHeader.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\ModifyOrder.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\OpenInterest.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\OrderbookClear.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\QuoteRequest.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\RefreshComplete.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\RetransmissionRequest.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\RetransmissionResponse.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SequenceReset.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionBase.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesDefinitionExtended.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesStatistics.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\SeriesStatus.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\Trade.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\TradeAmendment.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h">
+      <Filter>Header Files\parser\omdd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\multicastutil.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\pcaputil.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\ethernet.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdcostream.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\linearbitration.h">
+      <Filter>Header Files\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omddef.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\recoverypolicy.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\fulltick.h">
+      <Filter>Header Files\orderbook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\orderbookdef.h">
+      <Filter>Header Files\orderbook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omddostream.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\nooplinearbitration.h">
+      <Filter>Header Files\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\msgcache.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdc_sbe\BrokerQueue.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdc_sbe\GroupSize16.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdc_sbe\LiquidityProvider.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdc_sbe\News.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdc_sbe\SecurityDefinition.h.sbeomdhack">
+      <Filter>Header Files\parser\omdc</Filter>
+    </None>
+    <None Include="src\main\include\omdd_sbe\AggregateOrderBookUpdate.h.sbeomdhack">
+      <Filter>Header Files\parser\omdd</Filter>
+    </None>
+    <None Include="src\main\include\omdd_sbe\GroupSize8.h.sbeomdhack">
+      <Filter>Header Files\parser\omdd</Filter>
+    </None>
+    <None Include="src\main\include\omdd_sbe\MarketAlert.h.sbeomdhack">
+      <Filter>Header Files\parser\omdd</Filter>
+    </None>
+    <None Include="omdpatch.sh">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="src\nar\resources\noarch\omdc-sbe.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="pom.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="pom-gen.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

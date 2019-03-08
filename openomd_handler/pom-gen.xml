@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.openvega</groupId>
+    <artifactId>openomd</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>openomd_handlergen</artifactId>
+  <name>openomd_handler SBE generator</name>
+  <packaging>nar</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>omdc sbe</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-Dsbe.target.language=cpp</argument>
+                <argument>-Dsbe.output.dir=src/main/include</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>uk.co.real_logic.sbe.SbeTool</argument>
+                <argument>src/nar/resources/noarch/omdc-sbe.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>omdd sbe</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-Dsbe.target.language=cpp</argument>
+                <argument>-Dsbe.output.dir=src/main/include</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>uk.co.real_logic.sbe.SbeTool</argument>
+                <argument>src/nar/resources/noarch/omdd-sbe.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>uk.co.real-logic</groupId>
+      <artifactId>sbe-all</artifactId>
+    </dependency>
+  </dependencies>
+</project>
