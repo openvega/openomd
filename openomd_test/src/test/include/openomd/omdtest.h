@@ -89,6 +89,7 @@ public:
     ONMESSAGE(sbe::Trade)
     ONMESSAGE(sbe::TradeAmendment)
     ONMESSAGE(sbe::TradeStatistics)
+    ONMESSAGE(sbe::MarketStatus)
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }

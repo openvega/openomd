@@ -35,7 +35,7 @@ namespace sbe
 {
 inline std::ostream& operator<<(std::ostream& os, AddOrder const& m)
 {
-    os << "ao ob=" << m.orderbookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << m.side() << " t=" << m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    os << "ao ob=" << m.orderbookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << (int16_t)m.side() << " t=" << (int16_t)m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
@@ -46,7 +46,7 @@ inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const
     while (en.hasNext())
     {
         en.next();
-        os << " " << en.side() << " l=" << (int16_t)en.priceLevel() << " a=" << (int16_t)en.updateAction() << " " << en.aggregateQuantity() << "@" << en.price() << "(" << en.numberOfOrders() << ")" << std::endl;
+        os << " " << (int16_t)en.side() << " l=" << (int16_t)en.priceLevel() << " a=" << (int16_t)en.updateAction() << " " << en.aggregateQuantity() << "@" << en.price() << "(" << en.numberOfOrders() << ")" << std::endl;
     }
     return os;
 }
@@ -169,7 +169,7 @@ inline std::ostream& operator<<(std::ostream& os, SeriesStatus const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, Trade const& m)
 {
-    os << "trd ob=" << m.orderbookID() << " oid=" << m.orderID() << " p=" << m.price() << " tid=" << m.tradeID() << " cgid=" << m.comboGroupID() << " sd=" << m.side() << " dt=" << m.dealType() << " tc=" << m.tradeCondition() << " di=" << m.dealInfo() << " qty=" << m.quantity() << " tt=" << m.tradeTime();
+    os << "trd ob=" << m.orderbookID() << " oid=" << m.orderID() << " p=" << m.price() << " tid=" << m.tradeID() << " cgid=" << m.comboGroupID() << " sd=" << (int16_t)m.side() << " dt=" << (int16_t)m.dealType() << " tc=" << m.tradeCondition() << " di=" << m.dealInfo() << " qty=" << m.quantity() << " tt=" << m.tradeTime();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, TradeAmendment const& m)
