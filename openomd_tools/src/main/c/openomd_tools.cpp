@@ -3,9 +3,12 @@
 #include "cxxopts.hpp"
 #include "openomd/linearbitration.h"
 #include "openomd/nooplinearbitration.h"
+#include "openomd/recoverypolicy.h"
 #include "omdprintprocessor.h"
 #include "pcaprunner.h"
 #include "multicastrunner.h"
+
+using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>>;
 
 std::vector<openomd::ChannelConfig> getChannelConfig(std::string filename)
 {
@@ -17,7 +20,7 @@ std::vector<openomd::ChannelConfig> getChannelConfig(std::string filename)
         while (std::getline(istrm, line) && !line.empty())
         {
             channels.emplace_back(openomd::ChannelConfig::convert(line));
-        }   
+        }
         return channels;
     }
     throw std::runtime_error("Fail to open config file");
@@ -56,7 +59,6 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " pcap=" << pcapFile << " netconf=" << networkCfg << " sll=" << sll << endl;
             if (protocol == "omdc")
             {
-                
                 OmdPcapRunner<OmdcPrintProcessor<PcapLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg), pcapFile, sll };
                 runner.run();
             }
@@ -65,7 +67,6 @@ int main(int32_t argc, char* argv[])
                 OmdPcapRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg), pcapFile, sll };
                 runner.run();
             }
-
         }
         else if (function == "udpdump")
         {
@@ -79,7 +80,7 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                OmdMulticastRunner<OmdcPrintProcessor<NoopLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg) };
                 runner.init();
                 runner.start();
                 runner.run();
@@ -87,7 +88,7 @@ int main(int32_t argc, char* argv[])
             }
             else if (protocol == "omdd")
             {
-                OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg)};
+                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg)};
                 runner.init();
                 runner.start();
                 runner.run();

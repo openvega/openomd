@@ -9,11 +9,42 @@ template <typename _Processor, typename _Parser>
 class OmdMulticastRunner
 {
 public:
-    struct Callback
+    struct Runner
     {
+        MulticastReceiver& _receiver;
         _Processor _processor;
         _Parser _parser;
 
+        Runner(MulticastReceiver& receiver) : _receiver{receiver}, _processor{receiver}
+        {
+            std::cout << "Runner constructor with " << _receiver.name() <<std::endl;
+        }
+
+        void init()
+        {
+            //_receiver.init();
+            std::cout << "Receiver: " << _receiver.name() << std::endl;
+            _receiver.subscribeRefresh();
+            _receiver.registerAsyncReceive(&Runner::processData, this);
+        }
+
+        void stop()
+        {
+            _receiver.stop();
+        }
+
+        void processData(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
+        {
+            if (error)
+            {
+                //LOG_WARN(_log) << "Multicast receiver failed: " << error.message();
+            }
+            else
+            {
+                _parser.parse(data, bytesRecvd, _processor);
+                _receiver.registerAsyncReceive(&Runner::processData, this);
+            }
+        }
         void onReceive(int32_t byteRecvd, uint8_t* data, int32_t max)
         {
             _parser.parse((char*)data, byteRecvd, _processor);
@@ -23,47 +54,48 @@ public:
     OmdMulticastRunner(std::vector<ChannelConfig> const& channelConfig)
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-            _callbacks.emplace_back(Callback{});
-            Callback& callback = _callbacks.back();
-            _receivers.emplace_back(MulticastReceiver<Callback>{c.listenIpA, c.ipA, c.portA, c.channel, callback, _ioServiceLC});
-            _receivers.emplace_back(MulticastReceiver<Callback>{c.listenIpB, c.ipB, c.portB, c.channel, callback, _ioServiceLC});
+            std::cout << "Creating receiver" << std::endl;
+
+            _receivers.emplace_back(MulticastReceiver{c.channel, c.port, c.listenIpA, c.ipA, c.listenIpB, c.ipB, c.refreshListenIp, c.refreshIp, _ioServiceLC});
+            std::cout << "Creating runner with receiver " << _receivers.back().name() << std::endl;
+            _runner.emplace_back(Runner{_receivers.back()});
         });
     }
 
     void init()
     {
         _ioServiceLC.init();
-        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
-            r.init();
-        });
+        for_each(_receivers.begin(), _receivers.end(), [](auto& r) { r.init(); });
+        for_each(_runner.begin(), _runner.end(), [](auto& r) { r.init(); });
     }
 
     void start()
     {
         _ioServiceLC.start();
-        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
-            r.start();
-        });
+//        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
+//            r.start();
+//        });
     }
 
     void run()
     {
         _ioServiceLC.run();
-        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
-            r.run();
-        });
+//        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
+//            r.run();
+//        });
     }
 
     void stop()
     {
-        for_each(_receivers.begin(), _receivers.end(), [](auto& r) {
+        for_each(_runner.begin(), _runner.end(), [](auto& r) {
             r.stop();
         });
         _ioServiceLC.stop();
     }
 private:
     IOServiceLC _ioServiceLC;
-    std::vector<Callback> _callbacks;
-    std::vector<MulticastReceiver<Callback>> _receivers;
+    std::vector<MulticastReceiver> _receivers;
+    std::vector<Runner> _runner;
+
 };
 }

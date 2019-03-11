@@ -28,17 +28,24 @@ struct PcapRecoveryPolicy
     }
 };
 
+template <typename _MulticastHandler>
 struct RefreshChannelRecoveryPolicy
 {
 public:
+    RefreshChannelRecoveryPolicy(_MulticastHandler& multicastHandler) : _multicastHandler{multicastHandler}{
+        std::cout << "RefreshChannelRecoveryPolicy constructor" << std::endl;
+    }
+
     void recover(PktHdr const& pktHdr, uint32_t nextSeqNum)
     {
-        // initial refresh channel
-
+        _multicastHandler.subscribeRefresh();
     }
     void stopRecovery()
     {
-
+        _multicastHandler.stopSubscribeRefresh();
     }
+
+private:
+    _MulticastHandler& _multicastHandler;
 };
 }

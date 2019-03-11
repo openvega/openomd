@@ -9,6 +9,8 @@ template <typename _Cache, typename _RecoveryPolicy>
 class LineArbitration : public _RecoveryPolicy, protected _Cache
 {
 public:
+    using _RecoveryPolicy::_RecoveryPolicy;
+
     bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos);
     bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos);
     bool checkMsgSeq(uint32_t);
