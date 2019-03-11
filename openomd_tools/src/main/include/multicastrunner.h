@@ -17,13 +17,11 @@ public:
 
         Runner(MulticastReceiver& receiver) : _receiver{receiver}, _processor{receiver}
         {
-            std::cout << "Runner constructor with " << _receiver.name() <<std::endl;
         }
 
         void init()
         {
-            //_receiver.init();
-            std::cout << "Receiver: " << _receiver.name() << std::endl;
+            _receiver.init();
             _receiver.subscribeRefresh();
             _receiver.registerAsyncReceive(&Runner::processData, this);
         }
@@ -54,18 +52,20 @@ public:
     OmdMulticastRunner(std::vector<ChannelConfig> const& channelConfig)
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-            std::cout << "Creating receiver" << std::endl;
-
             _receivers.emplace_back(MulticastReceiver{c.channel, c.port, c.listenIpA, c.ipA, c.listenIpB, c.ipB, c.refreshListenIp, c.refreshIp, _ioServiceLC});
-            std::cout << "Creating runner with receiver " << _receivers.back().name() << std::endl;
-            _runner.emplace_back(Runner{_receivers.back()});
+            
+        });
+
+        int32_t count = 0;
+        for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
+            _runner.emplace_back(Runner{ _receivers[count] });
+            count++;
         });
     }
 
     void init()
     {
         _ioServiceLC.init();
-        for_each(_receivers.begin(), _receivers.end(), [](auto& r) { r.init(); });
         for_each(_runner.begin(), _runner.end(), [](auto& r) { r.init(); });
     }
 

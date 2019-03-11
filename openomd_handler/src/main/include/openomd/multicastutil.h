@@ -53,7 +53,6 @@ public:
         , _outboundIp{outboundIp}
     {
         _name.append("MulticastReceiver-").append(std::to_string(_port)).append("-").append(_multicastIpA).append("-").append(_multicastIpB).append("-").append(_refreshIp);
-        std::cout << _name << " created" << std::endl;
         //LOG_INFO(_log) << _name << " listening on " << listenIp;
     }
 
@@ -109,7 +108,6 @@ inline void MulticastReceiver::init()
 {
     try
     {
-        std::cout << _name << " start init" << std::endl;
         using namespace boost::asio;
         boost::asio::ip::udp::endpoint bindEp(_bindIp.empty() ? boost::asio::ip::address_v4::any() : boost::asio::ip::address_v4::from_string(_bindIp), _port);
 
@@ -122,11 +120,9 @@ inline void MulticastReceiver::init()
             _socket.set_option(boost::asio::ip::multicast::outbound_interface(boost::asio::ip::address_v4::from_string(_outboundIp)));
         }
         _socket.bind(bindEp);
-        std::cout << _name << " bind successfully on port=" << _port <<std::endl;
         boost::system::error_code ec;
         joinGroup(_listenIpA, _multicastIpA);
         joinGroup(_listenIpB, _multicastIpB);
-        std::cout << _name << " finished init" << std::endl;
         //LOG_INFO(_log) << "MulticastReceiver join multicast group successfully";
     }
     catch (std::exception const& e)
@@ -176,7 +172,6 @@ void MulticastReceiver::processData(const boost::system::error_code& error, size
 
 inline void MulticastReceiver::joinGroup(std::string const& listenIp, std::string const& multicastIp)
 {
-    std::cout << _name << " joining " << multicastIp << "@" << listenIp << " successfully" << std::endl;
     if (multicastIp.empty())
     {
         return;
@@ -189,7 +184,6 @@ inline void MulticastReceiver::joinGroup(std::string const& listenIp, std::strin
     {
         _socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
-    std::cout << _name << " joined " << multicastIp << "@" << listenIp << " successfully" << std::endl;
 }
 
 inline void MulticastReceiver::leaveGroup(std::string const& listenIp, std::string const& multicastIp)

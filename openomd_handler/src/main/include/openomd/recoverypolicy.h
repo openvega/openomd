@@ -32,9 +32,7 @@ template <typename _MulticastHandler>
 struct RefreshChannelRecoveryPolicy
 {
 public:
-    RefreshChannelRecoveryPolicy(_MulticastHandler& multicastHandler) : _multicastHandler{multicastHandler}{
-        std::cout << "RefreshChannelRecoveryPolicy constructor" << std::endl;
-    }
+    RefreshChannelRecoveryPolicy(_MulticastHandler& multicastHandler) : _multicastHandler{multicastHandler}{}
 
     void recover(PktHdr const& pktHdr, uint32_t nextSeqNum)
     {
