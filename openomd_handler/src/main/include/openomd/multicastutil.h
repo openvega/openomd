@@ -41,6 +41,7 @@ public:
         std::string const& outboundIp = "")
         : _ioService{ioServiceLC.ioService()}
         , _socket{ioServiceLC.ioService()}
+        , _refreshSocket{ ioServiceLC.ioService() }
         , _channel{channel}
         , _port{port}
         , _listenIpA{listenIpA}
@@ -77,14 +78,23 @@ public:
             boost::bind(f, o, placeholders::error, placeholders::bytes_transferred, _data, maxLength));
     }
 
+    template <typename _F, typename _O>
+    void registerRefreshAsyncReceive(_F&& f, _O&& o)
+    {
+        using namespace boost::asio;
+        _refreshSocket.async_receive_from(buffer(_refreshData, maxLength), _senderEp,
+            boost::bind(f, o, placeholders::error, placeholders::bytes_transferred, _refreshData, maxLength));
+    }
+
 private:
-    void joinGroup(std::string const& listenIp, std::string const& multicastIp);
-    void leaveGroup(std::string const& listenIp, std::string const& multicastIp);
+    void joinGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp);
+    void leaveGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp);
 
     void do_close();
 
     boost::asio::io_service& _ioService;
     boost::asio::ip::udp::socket _socket;
+    boost::asio::ip::udp::socket _refreshSocket;
     int32_t _channel;
     uint16_t _port;
     std::string _listenIpA;
@@ -102,6 +112,7 @@ private:
         maxLength = 65536
     };
     char _data[maxLength];
+    char _refreshData[maxLength];
 };
 
 inline void MulticastReceiver::init()
@@ -120,9 +131,16 @@ inline void MulticastReceiver::init()
             _socket.set_option(boost::asio::ip::multicast::outbound_interface(boost::asio::ip::address_v4::from_string(_outboundIp)));
         }
         _socket.bind(bindEp);
-        boost::system::error_code ec;
-        joinGroup(_listenIpA, _multicastIpA);
-        joinGroup(_listenIpB, _multicastIpB);
+
+        _refreshSocket.open(bindEp.protocol());
+        _refreshSocket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
+        _refreshSocket.set_option(boost::asio::ip::multicast::enable_loopback(true));
+        _refreshSocket.set_option(boost::asio::ip::multicast::hops(255));
+        if (!_outboundIp.empty())
+        {
+            _refreshSocket.set_option(boost::asio::ip::multicast::outbound_interface(boost::asio::ip::address_v4::from_string(_outboundIp)));
+        }
+        _refreshSocket.bind(bindEp);
         //LOG_INFO(_log) << "MulticastReceiver join multicast group successfully";
     }
     catch (std::exception const& e)
@@ -134,6 +152,8 @@ inline void MulticastReceiver::init()
 
 inline void MulticastReceiver::start()
 {
+    joinGroup(_socket, _listenIpA, _multicastIpA);
+    joinGroup(_socket, _listenIpB, _multicastIpB);
 }
 
 inline void MulticastReceiver::run()
@@ -142,17 +162,20 @@ inline void MulticastReceiver::run()
 
 inline void MulticastReceiver::stop()
 {
+
+    leaveGroup(_socket, _listenIpA, _multicastIpA);
+    leaveGroup(_socket, _listenIpB, _multicastIpB);
     _ioService.post(boost::bind(&MulticastReceiver::do_close, this));
 }
 
 inline void MulticastReceiver::subscribeRefresh()
 {
-    joinGroup(_refreshListenIp, _refreshIp);
+    joinGroup(_refreshSocket, _refreshListenIp, _refreshIp);
 }
 
 inline void MulticastReceiver::stopSubscribeRefresh()
 {
-    leaveGroup(_refreshListenIp, _refreshIp);
+    leaveGroup(_refreshSocket, _refreshListenIp, _refreshIp);
 }
 
 /*
@@ -170,7 +193,7 @@ void MulticastReceiver::processData(const boost::system::error_code& error, size
 }
 */
 
-inline void MulticastReceiver::joinGroup(std::string const& listenIp, std::string const& multicastIp)
+inline void MulticastReceiver::joinGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp)
 {
     if (multicastIp.empty())
     {
@@ -178,33 +201,34 @@ inline void MulticastReceiver::joinGroup(std::string const& listenIp, std::strin
     }
     if (listenIp.empty())
     {
-        _socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp)));
+        socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp)));
     }
     else
     {
-        _socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
+        socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
 }
 
-inline void MulticastReceiver::leaveGroup(std::string const& listenIp, std::string const& multicastIp)
+inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp)
 {
     if (multicastIp.empty())
-        {
-            return;
-        }
+    {
+        return;
+    }
     if (listenIp.empty())
     {
-        _socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp)));
+        socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp)));
     }
     else
     {
-        _socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
+        socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
 }
 
 void MulticastReceiver::do_close()
 {
     _socket.close();
+    _refreshSocket.close();
 }
 
 }

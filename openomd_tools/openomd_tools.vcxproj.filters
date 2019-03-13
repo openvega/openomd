@@ -40,5 +40,11 @@
     <ClInclude Include="src\main\include\channelconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\main\include\omdprintprocessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\refreshprocessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,9 +27,6 @@
   <ItemGroup>
     <Xml Include="pom.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\test\include\openomd\omdtest.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1ebfd4e7-64ad-4e23-8288-a7775bef2900}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

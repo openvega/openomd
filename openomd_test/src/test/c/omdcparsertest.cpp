@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "openomd/omdtest.h"
+#include "openomd/omdcprocessor.h"
+#include "openomd/nooplinearbitration.h"
 
 namespace omdc
 {
@@ -11,11 +12,13 @@ void processMsg(char* msg, size_t size)
     parser.parse(msg, size, processor);
 }
 
+using OMDCP = openomd::OMDCProcessor<openomd::NoopLineArbitration>;
+
 TEST(OMDC_TEST, SequenceReset)
 {
     char msg[] = "\x18\x00\x01\x02\x01\x00\x00\x00\x80\x73\x01\x12\xc8\xf4\x12\x15" \
         "\x08\x00\x64\x00\x01\x00\x00\x00";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::SequenceReset const& sr, uint32_t)
         {
@@ -37,7 +40,7 @@ TEST(OMDC_TEST, DisasterRecoverySignal)
     char msg[] = "\x18\x00\x01\x00\xe4\x01\x00\x00\x40\x1c\xe4\x8e\xff\xfd\x3c\x14" \
         "\x08\x00\x69\x00\x02\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::DisasterRecoverySignal const& dr, uint32_t)
         {
@@ -59,7 +62,7 @@ TEST(OMDC_TEST, RefreshComplete)
 {
     char msg[] = "\x18\x00\x01\x5d\x01\x00\x00\x00\x40\x87\x44\xa5\xa2\x10\x45\x15" \
         "\x08\x00\xcb\x00\x00\x00\x00\x00";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::RefreshComplete const& rc, uint32_t)
         {
@@ -76,7 +79,7 @@ TEST(OMDC_TEST, MarketDefinition)
         "\x4d\x45\x58\x20\x42\x4f\x41\x52\x44\x20\x20\x20\x20\x20\x20\x20" \
         "\x20\x48\x4b\x44\x1f\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::MarketDefinition const& md, uint32_t)
         {
@@ -124,7 +127,7 @@ TEST(OMDC_TEST, SecurityDefinition)
         "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00" \
         "\x76\x05\x00\x00\xe8\x03\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::SecurityDefinition& sd, uint32_t)
         {
@@ -204,7 +207,7 @@ TEST(OMDC_TEST, SecurityDefinition)
         "\x20\x20\x20\x20\x20\x20\x20\x20\x00\x00\x00\x00\x00\x00\x00\x00" \
         "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
 
-    struct CbbcProcessor : public OMDCProcessor<>
+    struct CbbcProcessor : public OMDCP
     {
         void onMessage(sbe::SecurityDefinition& sd, uint32_t)
         {
@@ -255,7 +258,7 @@ TEST(OMDC_TEST, LiquidityProvider)
     char msg[] = "\xbc\x05\x79\x02\x46\x37\x00\x00\x40\xaa\xe1\x57\x0f\xf5\x12\x15" \
         "\x0c\x00\x0d\x00\x28\x2d\x00\x00\x01\x00\xeb\x25";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::LiquidityProvider& lp, uint32_t)
         {
@@ -275,7 +278,7 @@ TEST(OMDC_TEST, CurrencyRate)
     char msg[] = "\xc0\x05\x06\x2f\x78\x86\x15\x00\xc0\x95\x39\x59\xc8\xf9\x12\x15" \
         "\x10\x00\x0e\x00\x47\x42\x50\x00\x00\x00\x00\x00\xec\xa3\x01\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::CurrencyRate const& cr, uint32_t)
         {
@@ -292,7 +295,7 @@ TEST(OMDC_TEST, TradingSessionStatus)
         "\x20\x00\x14\x00\x4d\x41\x49\x4e\x01\x69\x05\x30\x20\x20\x20\x20" \
         "\x00\x00\x9d\xdd\x49\x22\x13\x15\x00\x8e\x49\x9a\x57\x22\x13\x15";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::TradingSessionStatus const& ts, uint32_t)
         {
@@ -312,7 +315,7 @@ TEST(OMDC_TEST, SecurityStatus)
     char msg[] = "\x30\x01\x18\xdd\x31\x00\x00\x00\x00\x99\x00\x43\x06\xf5\x12\x15" \
         "\x0c\x00\x15\x00\x46\x62\x00\x00\x02\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::SecurityStatus const& ss, uint32_t)
         {
@@ -329,7 +332,7 @@ TEST(OMDC_TEST, AddOrder)
         "\x20\x00\x1e\x00\x1d\x01\x00\x00\x02\xc8\x15\x01\x00\x00\x00\x00" \
         "\x34\x44\x00\x00\xe8\x03\x00\x00\x01\x00\x32\x00\x00\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::AddOrder const& ao, uint32_t)
         {
@@ -352,7 +355,7 @@ TEST(OMDC_TEST, ModifyOrder)
         "\x1c\x00\x1f\x00\xb3\x4e\x00\x00\x01\xdc\x1d\x03\x00\x00\x00\x00" \
         "\x20\x53\x14\x00\x01\x00\x00\x00\x00\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::ModifyOrder const& mo, uint32_t)
         {
@@ -372,7 +375,7 @@ TEST(OMDC_TEST, DeleteOrder)
         "\x14\x00\x20\x00\xbd\x4a\x00\x00\x03\x28\x9e\x04\x00\x00\x00\x00" \
         "\x01\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::DeleteOrder const& d, uint32_t)
         {
@@ -390,7 +393,7 @@ TEST(OMDC_TEST, AddOddLotOrder)
         "\x1c\x00\x21\x00\x23\x00\x00\x00\x01\x05\x07\x01\x00\x00\x00\x00" \
         "\x5c\x12\x00\x00\x1c\x01\x00\x00\xec\x11\x01\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::AddOddLotOrder const& oo, uint32_t)
         {
@@ -411,7 +414,7 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
         "\x14\x00\x22\x00\xbc\x02\x00\x00\x01\x0c\x36\x56\x00\x00\x00\x00" \
         "\x30\x03\x01\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::DeleteOddLotOrder const& dol, uint32_t)
         {
@@ -436,7 +439,7 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
         "\xe0\x93\x04\x00\x00\x00\x00\x00\xe1\x00\x00\x00\x01\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00" \
         "\xe0\x93\x04\x00\x00\x00\x00\x00\xe0\x00\x00\x00\x01\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00" ;
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::AggregateOrderBookUpdate& aob, uint32_t)
         {
@@ -529,7 +532,7 @@ TEST(OMDC_TEST, BrokerQueue)
         "\x42\x00\xab\x05\x42\x00\xd5\x10\x42\x00\x04\x00\x53\x00\x3c\x21" \
         "\x42\x00\x3f\x23\x42\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::BrokerQueue& bq, uint32_t)
         {
@@ -587,7 +590,7 @@ TEST(OMDC_TEST, OrderImbalance)
         "\x14\x00\x38\x00\x4e\x05\x00\x00\x42\x01\x50\x46\x00\x00\x00\x00" \
         "\x00\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::OrderImbalance const& oib, uint32_t)
         {
@@ -605,7 +608,7 @@ TEST(OMDC_TEST, Trade)
         "\x20\x00\x32\x00\x44\x0a\x00\x00\x6b\x01\x00\x00\x42\x59\x00\x00" \
         "\xb8\x0b\x00\x00\x00\x00\x00\x00\x00\x22\x16\xd9\x45\x0d\x13\x15";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::Trade const& t, uint32_t)
         {
@@ -625,7 +628,7 @@ TEST(OMDC_TEST, TradeCancel)
     // handcraft data
     char msg[] = "\x54\x01\x0a\xc6\xb3\x8d\x09\x00\xc0\xca\xd0\xec\x45\x0d\x13\x15" \
         "\x0c\x00\x33\x00\x44\x0a\x00\x00\x6b\x01\x00\x00";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::TradeCancel const& tc, uint32_t)
         {
@@ -642,7 +645,7 @@ TEST(OMDC_TEST, TradeTicker)
         "\x24\x00\x34\x00\x84\x01\x00\x00\x2c\x00\x00\x00\x50\x15\x04\x00\xc8\x00\x00\x00" \
         "\x00\x00\x00\x00\x00\x4c\x3a\xc0\x06\x0d\x13\x15\x00\x00\x4e\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::TradeTicker const& tt, uint32_t)
         {
@@ -662,7 +665,7 @@ TEST(OMDC_TEST, ClosingPrice)
     char msg[] = "\x20\x00\x01\x00\x52\xef\x08\x00\x80\xbb\xfa\xbf\xbe\x22\x13\x15" \
         "\x10\x00\x3e\x00\x76\x05\x00\x00\x7c\x1a\x00\x00\x04\x49\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::ClosingPrice const& cp, uint32_t)
         {
@@ -679,7 +682,7 @@ TEST(OMDC_TEST, NominalPrice)
     char msg[] = "\x44\x01\x06\xc6\xcd\x92\x04\x00\xc0\x8a\x46\xec\x06\x0d\x13\x15" \
         "\x0c\x00\x28\x00\x91\xfe\x00\x00\x6e\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::NominalPrice const& np, uint32_t)
         {
@@ -696,7 +699,7 @@ TEST(OMDC_TEST, IndicativeEquilibriumPrice)
         "\x14\x00\x29\x00\xbc\x02\x00\x00\xb0\x8f\x06\x00\x3c\x28\x00\x00" \
         "\x00\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::IndicativeEquilibriumPrice const& iep, uint32_t)
         {
@@ -714,7 +717,7 @@ TEST(OMDC_TEST, ReferencePrice)
         "\x14\x00\x2b\x00\x26\x0c\x00\x00\xda\x7a\x00\x00\xcc\x74\x00\x00" \
         "\xe8\x80\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::ReferencePrice const& rp, uint32_t)
         {
@@ -734,7 +737,7 @@ TEST(OMDC_TEST, VCMTrigger)
         "\x00\xe6\x75\x8a\x4d\x2c\x63\x14\x82\x00\x00\x00\x75\x00\x00\x00" \
         "\x8f\x00\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::VCMTrigger const& vcm, uint32_t)
         {
@@ -757,7 +760,7 @@ TEST(OMDC_TEST, Statistics)
         "\xc0\xc1\x00\x00\x10\xc1\x00\x00\x38\x9a\x14\x00\x90\x49\x48\x79" \
         "\x0f\x00\x00\x00";
     
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::Statistics const& s, uint32_t)
         {
@@ -780,7 +783,7 @@ TEST(OMDC_TEST, MarketTurnover)
     char msg[] = "\xb0\x00\x08\x00\x31\x87\x01\x00\x00\x48\x34\xba\x47\x22\x13\x15" 
         "\x14\x00\x3d\x00\x4d\x41\x49\x4e\x48\x4b\x44\x20\x59\x0d\x5b\xb9\x26\x5e\x00\x00";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::MarketTurnover const& mt, uint32_t)
         {
@@ -796,7 +799,7 @@ TEST(OMDC_TEST, Yield)
 {
     char msg[] = "\xbc\x05\x4d\x2f\x93\x51\x02\x00\x80\x8a\x54\xcc\x26\x0d\x13\x15" \
         "\x0c\x00\x2c\x00\x77\x52\x01\x00\xaa\x0d\x00\x00";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::Yield const& y, uint32_t)
         {
@@ -896,7 +899,7 @@ TEST(OMDC_TEST, News)
         "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" \
         "\x20\x20\x20\x20";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::News& news, uint32_t)
         {
@@ -931,7 +934,7 @@ TEST(OMDC_TEST, IndexDefinition)
     char msg[] = "\x24\x00\x01\x00\x01\x00\x00\x00\xc0\xb8\x9f\xd5\x03\xf5\x12\x15" \
         "\x14\x00\x46\x00\x30\x30\x30\x30\x30\x31\x20\x20\x20\x20\x20\x43" \
         "\x43\x4e\x59\x20";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::IndexDefinition const& id, uint32_t)
         {
@@ -954,7 +957,7 @@ TEST(OMDC_TEST, IndexData)
         "\x7d\x24\x14\x01\x00\x00\x00\x00\xde\x82\x10\x01\x00\x00\x00\x00" \
         "\x28\xa1\x73\x6b\x02\x00\x00\x00\xf4\x33\x00\x00\x20\x20\x20\x20";
 
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::IndexData const& id, uint32_t)
         {
@@ -983,7 +986,7 @@ TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
     char msg[] = "\x28\x00\x01\x0c\x23\x0f\x00\x00\xc0\x8e\x48\x94\x29\x37\xb9\x14" \
         "\x18\x00\x50\x00\x53\x48\x4e\x42\xba\x6d\xba\xe7\x02\x00\x00\x00" \
         "\x00\x1c\xa0\x54\xfb\xc7\xad\x14";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::StockConnectDailyQuotaBalance const& scDQB, uint32_t)
         {
@@ -1001,7 +1004,7 @@ TEST(OMDC_TEST, StockConnectMarketTurnover)
     char msg[] = "\x30\x00\x01\x0c\x2c\x01\x00\x00\x80\x55\x76\x94\x29\x37\xb9\x14" \
         "\x20\x00\x51\x00\x53\x5a\x53\x42\x28\x2a\xdf\x32\x00\x00\x00\x00" \
         "\x87\x9e\xcf\x16\x00\x00\x00\x00\xaf\xc8\xae\x49\x00\x00\x00\x00";
-    struct Processor : public OMDCProcessor<>
+    struct Processor : public OMDCP
     {
         void onMessage(sbe::StockConnectMarketTurnover const& scMT, uint32_t)
         {

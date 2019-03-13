@@ -22,6 +22,10 @@ protected:
             {
                 return processor.checkPktSeq(pktHdr, fData);
             }, 
+            [&](uint16_t msgSeq)
+            {
+                return processor.checkMsgSeq(msgSeq);
+            },
             [&]()
             {
                 processor.processCache([&](char* data, size_t bytesRecvd) {
@@ -29,20 +33,51 @@ protected:
                     [&](PktHdr const& pktHdr, char* fData)
                     {
                         return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
+                    },
+                    [&](uint16_t msgSeq)
+                    {
+                        return processor.checkMsgSeq(msgSeq);
                     }, []() {});
                 });
-                
+            });
+    }
+
+    template <typename _Processor, typename _Func>
+    static void parseRefreshHelper(char* data, size_t bytesRecvd, _Processor& processor, _Func func)
+    {
+        parseHelperInternal(data, bytesRecvd, processor, func,
+            [&](PktHdr const& pktHdr, char* fData)
+            {
+                return processor.checkPktSeq(pktHdr, fData);
+            },
+            [&](uint16_t msgSeq)
+            {
+                return processor.checkRefreshMsgSeq(msgSeq);
+            },
+            [&]()
+            {
+                processor.processCache([&](char* data, size_t bytesRecvd) {
+                    parseHelperInternal(data, bytesRecvd, processor, func,
+                        [&](PktHdr const& pktHdr, char* fData)
+                    {
+                        return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
+                    },
+                    [&](uint16_t msgSeq)
+                    {
+                        return processor.checkMsgSeq(msgSeq);
+                    }, []() {});
+                });
             });
     }
 private:
-    template <typename _Processor, typename _Func, typename _CheckSeqFunc, typename _ProcessCacheFunc>
-    static void parseHelperInternal(char* data, size_t bytesRecvd, _Processor& processor, _Func func, _CheckSeqFunc checkSeqFunc, _ProcessCacheFunc _processCacheFunc)
+    template <typename _Processor, typename _Func, typename _CheckPktSeqFunc, typename _CheckMsgSeqFunc, typename _ProcessCacheFunc>
+    static void parseHelperInternal(char* data, size_t bytesRecvd, _Processor& processor, _Func func, _CheckPktSeqFunc checkPktSeq, _CheckMsgSeqFunc checkMsgSeq, _ProcessCacheFunc processCache)
     {
         static const auto MSG_HDR_SIZE = static_cast<int16_t>(sizeof(MsgHdr));
         if (bytesRecvd >= sizeof(PktHdr))
         {
             PktHdr* pktHdr = (PktHdr*)data;
-            if (checkSeqFunc(*pktHdr, data))
+            if (checkPktSeq(*pktHdr, data))
             {
                 auto byteProcess = sizeof(PktHdr);
                 int64_t byteLeft = 0;
@@ -59,7 +94,7 @@ private:
                     try
                     {
                         auto msgSeq = pktHdr->seqNum + msgCnt;
-                        if (processor.checkMsgSeq(msgSeq))
+                        if (checkMsgSeq(msgSeq))
                         {
                             func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
                         }
@@ -72,7 +107,7 @@ private:
                     ++msgCnt;
                 }
                 // Try consume cached packet
-                _processCacheFunc();
+                processCache();
             }
         }
     }

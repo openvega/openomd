@@ -7,6 +7,7 @@
 #include "omdprintprocessor.h"
 #include "pcaprunner.h"
 #include "multicastrunner.h"
+#include "refreshprocessor.h"
 
 using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>>;
 
@@ -80,7 +81,7 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg) };
                 runner.init();
                 runner.start();
                 runner.run();
@@ -88,7 +89,7 @@ int main(int32_t argc, char* argv[])
             }
             else if (protocol == "omdd")
             {
-                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddParser> runner{ getChannelConfig(networkCfg)};
+                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg)};
                 runner.init();
                 runner.start();
                 runner.run();

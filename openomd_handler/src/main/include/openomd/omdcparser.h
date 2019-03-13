@@ -43,6 +43,47 @@ namespace openomd
 {
 class OmdcParser : public OmdBaseParser
 {
+#ifndef _OMDC_MSG_SWITCH_
+#define _OMDC_MSG_SWITCH_ OMD_SWITCH_CASE(AddOddLotOrder); \
+    OMD_SWITCH_CASE(AddOrder); \
+    OMD_SWITCH_CASE(AggregateOrderBookUpdate); \
+    OMD_SWITCH_CASE(BrokerQueue); \
+    OMD_SWITCH_CASE(ClosingPrice); \
+    OMD_SWITCH_CASE(CurrencyRate); \
+    OMD_SWITCH_CASE(DeleteOddLotOrder); \
+    OMD_SWITCH_CASE(DeleteOrder); \
+    OMD_SWITCH_CASE(DisasterRecoverySignal); \
+    OMD_SWITCH_CASE(IndexData); \
+    OMD_SWITCH_CASE(IndexDefinition); \
+    OMD_SWITCH_CASE(IndicativeEquilibriumPrice); \
+    OMD_SWITCH_CASE(LiquidityProvider); \
+    OMD_SWITCH_CASE(LogonResponse); \
+    OMD_SWITCH_CASE(MarketDefinition); \
+    OMD_SWITCH_CASE(MarketTurnover); \
+    OMD_SWITCH_CASE(ModifyOrder); \
+    OMD_SWITCH_CASE(News); \
+    OMD_SWITCH_CASE(NominalPrice); \
+    OMD_SWITCH_CASE(OrderImbalance); \
+    OMD_SWITCH_CASE(ReferencePrice); \
+    OMD_SWITCH_CASE(RefreshComplete); \
+    OMD_SWITCH_CASE(RetransmissionResp); \
+    OMD_SWITCH_CASE(SecurityDefinition); \
+    OMD_SWITCH_CASE(SecurityStatus); \
+    OMD_SWITCH_CASE(SequenceReset); \
+    OMD_SWITCH_CASE(Statistics); \
+    OMD_SWITCH_CASE(StockConnectDailyQuotaBalance); \
+    OMD_SWITCH_CASE(StockConnectMarketTurnover); \
+    OMD_SWITCH_CASE(Trade); \
+    OMD_SWITCH_CASE(TradeCancel); \
+    OMD_SWITCH_CASE(TradeTicker); \
+    OMD_SWITCH_CASE(TradingSessionStatus); \
+    OMD_SWITCH_CASE(VCMTrigger); \
+    OMD_SWITCH_CASE(Yield); \
+default: \
+    processor.onUnknownMessage(type, msgSize); \
+    break;
+#endif
+
 public:
     template <typename _Processor>
     static void parse(char* data, size_t bytesRecvd, _Processor& processor)
@@ -52,44 +93,20 @@ public:
             [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
             switch (type)
             {
-                OMD_SWITCH_CASE(AddOddLotOrder);
-                OMD_SWITCH_CASE(AddOrder);
-                OMD_SWITCH_CASE(AggregateOrderBookUpdate);
-                OMD_SWITCH_CASE(BrokerQueue);
-                OMD_SWITCH_CASE(ClosingPrice);
-                OMD_SWITCH_CASE(CurrencyRate);
-                OMD_SWITCH_CASE(DeleteOddLotOrder);
-                OMD_SWITCH_CASE(DeleteOrder);
-                OMD_SWITCH_CASE(DisasterRecoverySignal);
-                OMD_SWITCH_CASE(IndexData);
-                OMD_SWITCH_CASE(IndexDefinition);
-                OMD_SWITCH_CASE(IndicativeEquilibriumPrice);
-                OMD_SWITCH_CASE(LiquidityProvider);
-                OMD_SWITCH_CASE(LogonResponse);
-                OMD_SWITCH_CASE(MarketDefinition);
-                OMD_SWITCH_CASE(MarketTurnover);
-                OMD_SWITCH_CASE(ModifyOrder);
-                OMD_SWITCH_CASE(News);
-                OMD_SWITCH_CASE(NominalPrice);
-                OMD_SWITCH_CASE(OrderImbalance);
-                OMD_SWITCH_CASE(ReferencePrice);
-                OMD_SWITCH_CASE(RefreshComplete);
-                OMD_SWITCH_CASE(RetransmissionResp);
-                OMD_SWITCH_CASE(SecurityDefinition);
-                OMD_SWITCH_CASE(SecurityStatus);
-                OMD_SWITCH_CASE(SequenceReset);
-                OMD_SWITCH_CASE(Statistics);
-                OMD_SWITCH_CASE(StockConnectDailyQuotaBalance);
-                OMD_SWITCH_CASE(StockConnectMarketTurnover);
-                OMD_SWITCH_CASE(Trade);
-                OMD_SWITCH_CASE(TradeCancel);
-                OMD_SWITCH_CASE(TradeTicker);
-                OMD_SWITCH_CASE(TradingSessionStatus);
-                OMD_SWITCH_CASE(VCMTrigger);
-                OMD_SWITCH_CASE(Yield);
-            default:
-                processor.onUnknownMessage(type, msgSize);
-                break;
+                _OMDC_MSG_SWITCH_
+            }
+        });
+    }
+
+    template <typename _Processor>
+    static void parseRefresh(char* data, size_t bytesRecvd, _Processor& processor)
+    {
+        using namespace omdc::sbe;
+        parseRefreshHelper(data, bytesRecvd, processor,
+            [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
+            switch (type)
+            {
+                _OMDC_MSG_SWITCH_
             }
         });
     }
