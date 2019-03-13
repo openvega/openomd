@@ -106,6 +106,7 @@ private:
     std::string _bindIp;
     std::string _outboundIp;
     std::string _name;
+    bool _subscribingRefresh = false;
 
     boost::asio::ip::udp::endpoint _senderEp;
     enum {
@@ -170,12 +171,20 @@ inline void MulticastReceiver::stop()
 
 inline void MulticastReceiver::subscribeRefresh()
 {
-    joinGroup(_refreshSocket, _refreshListenIp, _refreshIp);
+    if (!_subscribingRefresh)
+    {
+        joinGroup(_refreshSocket, _refreshListenIp, _refreshIp);
+        _subscribingRefresh = true;
+    }
 }
 
 inline void MulticastReceiver::stopSubscribeRefresh()
 {
-    leaveGroup(_refreshSocket, _refreshListenIp, _refreshIp);
+    if (_subscribingRefresh)
+    {
+        leaveGroup(_refreshSocket, _refreshListenIp, _refreshIp);
+        _subscribingRefresh = false;
+    }
 }
 
 /*
