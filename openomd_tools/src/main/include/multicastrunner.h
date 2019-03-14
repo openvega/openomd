@@ -11,36 +11,48 @@ class OmdMulticastRunner
 public:
     struct Runner
     {
-        MulticastReceiver& _receiver;
+        MulticastReceiver _receiverA;
+        MulticastReceiver _receiverB;
+        MulticastReceiver _refreshReceiver;
         _Processor _processor;
         _RefreshProcessor _refreshProcessor;
         _Parser _parser;
         bool _refresh = false;
 
-        Runner(MulticastReceiver& receiver) : _receiver{receiver}, _processor{receiver}
+        Runner(IOServiceLC& ioService, ChannelConfig const& c)
+            : _receiverA{ c.channel, c.port, c.listenIpA, c.ipA, ioService }, 
+              _receiverB{ c.channel, c.port, c.listenIpB, c.ipB, ioService },
+              _refreshReceiver{ c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService },
+              _processor{ _refreshReceiver }
         {
         }
 
         void init()
         {
             // Subscribe to realtime data
-            _receiver.init();
-            _receiver.registerAsyncReceive(&Runner::processData, this);
+            _receiverA.init();
+            _receiverB.init();
+            _refreshReceiver.init();
+            _receiverA.registerAsyncReceive(&Runner::processDataA, this);
+            _receiverB.registerAsyncReceive(&Runner::processDataB, this);
             // Subscribe to refresh
-            _receiver.registerRefreshAsyncReceive(&Runner::processRefresh, this);
+            _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
         }
         void start()
         {
-            _receiver.start();
-            _receiver.subscribeRefresh();
+            _receiverA.start();
+            _receiverB.start();
+            _refreshReceiver.start();
         }
 
         void stop()
         {
-            _receiver.stop();
+            _receiverA.stop();
+            _receiverB.stop();
+            _refreshReceiver.stop();
         }
 
-        void processData(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
+        void processDataA(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
         {
             if (error)
             {
@@ -49,7 +61,19 @@ public:
             else
             {
                 _parser.parse(data, bytesRecvd, _processor);
-                _receiver.registerAsyncReceive(&Runner::processData, this);
+                _receiverA.registerAsyncReceive(&Runner::processDataA, this);
+            }
+        }
+        void processDataB(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
+        {
+            if (error)
+            {
+                //LOG_WARN(_log) << "Multicast receiver failed: " << error.message();
+            }
+            else
+            {
+                _parser.parse(data, bytesRecvd, _processor);
+                _receiverB.registerAsyncReceive(&Runner::processDataB, this);
             }
         }
         void processRefresh(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
@@ -67,10 +91,10 @@ public:
                 }
                 if (_refreshProcessor.refreshCompleted())
                 {
-                    std::cout << _receiver.name() << " Refresh Completed seq=" << _processor.nextSeqNum() << std::endl;
-                    _receiver.stopSubscribeRefresh();
+                    std::cout << _refreshReceiver.name() << " Refresh Completed seq=" << _processor.nextSeqNum() << std::endl;
+                    _refreshReceiver.stop();
                 }
-                _receiver.registerAsyncReceive(&Runner::processData, this);
+                _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
             }
         }
 
@@ -83,28 +107,21 @@ public:
     OmdMulticastRunner(std::vector<ChannelConfig> const& channelConfig)
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-            _receivers.emplace_back(MulticastReceiver{c.channel, c.port, c.listenIpA, c.ipA, c.listenIpB, c.ipB, c.refreshListenIp, c.refreshIp, _ioServiceLC});
-            
-        });
-
-        int32_t count = 0;
-        for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-            _runner.emplace_back(Runner{ _receivers[count] });
-            count++;
+            _runner.emplace_back(std::make_unique<Runner>( _ioServiceLC , c));
         });
     }
 
     void init()
     {
         _ioServiceLC.init();
-        for_each(_runner.begin(), _runner.end(), [](auto& r) { r.init(); });
+        for_each(_runner.begin(), _runner.end(), [](auto& r) { r->init(); });
     }
 
     void start()
     {
         _ioServiceLC.start();
         for_each(_runner.begin(), _runner.end(), [](auto& r) {
-            r.start();
+            r->start();
         });
     }
 
@@ -119,14 +136,13 @@ public:
     void stop()
     {
         for_each(_runner.begin(), _runner.end(), [](auto& r) {
-            r.stop();
+            r->stop();
         });
         _ioServiceLC.stop();
     }
 private:
     IOServiceLC _ioServiceLC;
-    std::vector<MulticastReceiver> _receivers;
-    std::vector<Runner> _runner;
+    std::vector<std::unique_ptr<Runner>> _runner;
 
 };
 }
