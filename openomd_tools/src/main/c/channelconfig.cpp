@@ -14,16 +14,13 @@ ChannelConfig ChannelConfig::convert(std::string const & s)
     int32_t i= 0;
     ChannelConfig config{
         atol(vs[i++].c_str()),  // channel id
-        vs[i++],                // ipA
-        atol(vs[i++].c_str()),  // portA
-        vs[i++],                // refresh ipA
-        atol(vs[i++].c_str()),  // refresh portA
+        atol(vs[i++].c_str()),  // port
         vs[i++],                // listen ipA
+        vs[i++],                // ipA
+        vs[i++],                // listen ipB
         vs[i++],                // ipB
-        atol(vs[i++].c_str()),  // portB
-        vs[i++],                // refresh ipB
-        atol(vs[i++].c_str()),  // refresh portB
-        vs[i++]                 // listen ipB
+        vs[i++],                // refresh listen ip
+        vs[i++]                 // refresh ip
     };
     return config;
 }

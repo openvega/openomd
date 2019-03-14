@@ -33,9 +33,4 @@
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\test\include\openomd\omdtest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
 </Project>

@@ -7,21 +7,16 @@ namespace openomd
 struct ChannelConfig
 {
     int32_t channel;
-    std::string ipA;
-    uint16_t portA;
-
-    std::string refreshIpA;
-    uint16_t refreshPortA;
+    uint16_t port;
 
     std::string listenIpA;
-
-    std::string ipB;
-    uint16_t portB;
-
-    std::string refreshIpB;
-    uint16_t refreshPortB;
+    std::string ipA;
 
     std::string listenIpB;
+    std::string ipB;
+
+    std::string refreshListenIp;
+    std::string refreshIp;
 
     static ChannelConfig convert(std::string const& line);
 };

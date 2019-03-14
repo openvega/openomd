@@ -197,7 +197,9 @@
     <ClInclude Include="src\main\c\cxxopts.hpp" />
     <ClInclude Include="src\main\include\channelconfig.h" />
     <ClInclude Include="src\main\include\multicastrunner.h" />
+    <ClInclude Include="src\main\include\omdprintprocessor.h" />
     <ClInclude Include="src\main\include\pcaprunner.h" />
+    <ClInclude Include="src\main\include\refreshprocessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

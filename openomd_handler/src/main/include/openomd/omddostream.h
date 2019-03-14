@@ -174,7 +174,7 @@ inline std::ostream& operator<<(std::ostream& os, Trade const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, TradeAmendment const& m)
 {
-    os <<"tam tid=" << m.tradeID() << " cgid=" << m.comboGroupID() << " p=" << m.price() << " qty=" << m.quantity() << " tt=" << m.tradeTime() << " ts=" << m.tradeState();
+    os <<"tam tid=" << m.tradeID() << " cgid=" << m.comboGroupID() << " p=" << m.price() << " qty=" << m.quantity() << " tt=" << m.tradeTime() << " ts=" << (int16_t)m.tradeState();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, TradeStatistics const& m)

@@ -16,4 +16,9 @@ struct MsgHdr
     uint16_t size;
     uint16_t type;
 };
+
+#ifndef ONMESSAGE
+#define ONMESSAGE(_MSG) virtual void onMessage(_MSG const&, uint32_t){}
+#endif
+
 }
