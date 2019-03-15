@@ -85,6 +85,7 @@ private:
     std::string _bindIp;
     std::string _outboundIp;
     std::string _name;
+    bool _started = false;
 
     boost::asio::ip::udp::endpoint _senderEp;
     enum {
@@ -125,7 +126,11 @@ inline MulticastReceiver::~MulticastReceiver()
 
 inline void MulticastReceiver::start()
 {
-    joinGroup(_socket, _listenIp, _multicastIp);
+    if (!_started)
+    {
+        joinGroup(_socket, _listenIp, _multicastIp);
+        _started = true;
+    }
 }
 
 inline void MulticastReceiver::run()
@@ -134,8 +139,11 @@ inline void MulticastReceiver::run()
 
 inline void MulticastReceiver::stop()
 {
-
-    leaveGroup(_socket, _listenIp, _multicastIp);
+    if (_started)
+    {
+        leaveGroup(_socket, _listenIp, _multicastIp);
+        _started = false;
+    }
 }
 
 inline void MulticastReceiver::joinGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp)
