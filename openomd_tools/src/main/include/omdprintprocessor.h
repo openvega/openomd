@@ -14,6 +14,9 @@ public:
     using _LineArbitration::_LineArbitration;
 
     //BasePrintProcessor(std::set<int32_t> const& msgIds);
+    void onHeartbeat()
+    {
+    }
 
     void onUnknownMessage(uint16_t type, uint16_t msgSize)
     {

@@ -48,26 +48,31 @@ protected:
         parseHelperInternal(data, bytesRecvd, processor, func,
             [&](PktHdr const& pktHdr, char* fData)
             {
-                return processor.checkPktSeq(pktHdr, fData);
+                return true;
             },
             [&](uint16_t msgSeq)
             {
-                return processor.checkRefreshMsgSeq(msgSeq);
+                return true;
             },
             [&]()
             {
-                processor.processCache([&](char* data, size_t bytesRecvd) {
-                    parseHelperInternal(data, bytesRecvd, processor, func,
-                        [&](PktHdr const& pktHdr, char* fData)
-                    {
-                        return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
-                    },
-                    [&](uint16_t msgSeq)
-                    {
-                        return processor.checkMsgSeq(msgSeq);
-                    }, []() {});
-                });
             });
+    }
+
+    template <typename _Processor, typename _Func>
+    static void processCachedMsgHelper(_Processor& processor, _Func func)
+    {
+        processor.processCache([&](char* data, size_t bytesRecvd) {
+            parseHelperInternal(data, bytesRecvd, processor, func,
+                [&](PktHdr const& pktHdr, char* fData)
+            {
+                return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
+            },
+                [&](uint16_t msgSeq)
+            {
+                return processor.checkMsgSeq(msgSeq);
+            }, []() {});
+        });
     }
 private:
     template <typename _Processor, typename _Func, typename _CheckPktSeqFunc, typename _CheckMsgSeqFunc, typename _ProcessCacheFunc>
@@ -77,37 +82,45 @@ private:
         if (bytesRecvd >= sizeof(PktHdr))
         {
             PktHdr* pktHdr = (PktHdr*)data;
-            if (checkPktSeq(*pktHdr, data))
+            if (pktHdr->msgCnt == 0)
             {
-                auto byteProcess = sizeof(PktHdr);
-                int64_t byteLeft = 0;
-                uint16_t msgCnt = 0;
-                while ((byteLeft = bytesRecvd - byteProcess) > MSG_HDR_SIZE)
+                // heartbeat
+                processor.onHeartbeat();
+            }
+            else
+            {
+                if (checkPktSeq(*pktHdr, data))
                 {
-                    auto* pos = data + byteProcess;
-                    MsgHdr* msgHdr = (MsgHdr*)(pos);
-                    if (msgHdr->size == 0 || msgHdr->size > byteLeft)
+                    auto byteProcess = sizeof(PktHdr);
+                    int64_t byteLeft = 0;
+                    uint16_t msgCnt = 0;
+                    while ((byteLeft = bytesRecvd - byteProcess) > MSG_HDR_SIZE)
                     {
-                        processor.onError(std::runtime_error("Invalid message size"));
-                        break;
-                    }
-                    try
-                    {
-                        auto msgSeq = pktHdr->seqNum + msgCnt;
-                        if (checkMsgSeq(msgSeq))
+                        auto* pos = data + byteProcess;
+                        MsgHdr* msgHdr = (MsgHdr*)(pos);
+                        if (msgHdr->size == 0 || msgHdr->size > byteLeft)
                         {
-                            func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
+                            processor.onError(std::runtime_error("Invalid message size"));
+                            break;
                         }
+                        try
+                        {
+                            auto msgSeq = pktHdr->seqNum + msgCnt;
+                            if (checkMsgSeq(msgSeq))
+                            {
+                                func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
+                            }
+                        }
+                        catch (std::exception const& ex)
+                        {
+                            processor.onError(ex);
+                        }
+                        byteProcess += msgHdr->size;
+                        ++msgCnt;
                     }
-                    catch (std::exception const& ex)
-                    {
-                        processor.onError(ex);
-                    }
-                    byteProcess += msgHdr->size;
-                    ++msgCnt;
+                    // Try consume cached packet
+                    processCache();
                 }
-                // Try consume cached packet
-                processCache();
             }
         }
     }

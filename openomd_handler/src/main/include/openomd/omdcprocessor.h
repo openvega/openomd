@@ -45,6 +45,9 @@ public:
     ONMESSAGE(omdc::sbe::TradingSessionStatus)
     ONMESSAGE(omdc::sbe::VCMTrigger)
     ONMESSAGE(omdc::sbe::Yield)
+    void onHeartbeat()
+    {
+    }
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }

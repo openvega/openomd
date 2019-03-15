@@ -110,5 +110,18 @@ public:
             }
         });
     }
+
+    template <typename _Processor>
+    static void processCachedMsg(_Processor& processor)
+    {
+        using namespace omdc::sbe;
+        processCachedMsgHelper(processor,
+            [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
+            switch (type)
+            {
+                _OMDC_MSG_SWITCH_
+            }
+        });
+    }
 };
 }

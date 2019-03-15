@@ -160,6 +160,7 @@ inline void MulticastReceiver::joinGroup(boost::asio::ip::udp::socket& socket, s
     {
         socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
+    std::cout << _name << " joined " << multicastIp << "@" << listenIp << std::endl;
 }
 
 inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp)
@@ -176,6 +177,7 @@ inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, 
     {
         socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
+    std::cout << _name << " left " << multicastIp << "@" << listenIp << std::endl;
 }
 
 void MulticastReceiver::do_close()

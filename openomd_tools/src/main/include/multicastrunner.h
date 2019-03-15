@@ -17,7 +17,6 @@ public:
         _Processor _processor;
         _RefreshProcessor _refreshProcessor;
         _Parser _parser;
-        bool _refresh = false;
 
         Runner(IOServiceLC& ioService, ChannelConfig const& c)
             : _receiverA{ c.channel, c.port, c.listenIpA, c.ipA, ioService }, 
@@ -85,13 +84,17 @@ public:
             else
             {
                 _parser.parse(data, bytesRecvd, _refreshProcessor);
-                if (_refreshProcessor.refreshing())
-                {
-                    _parser.parseRefresh(data, bytesRecvd, _processor);
-                }
                 if (_refreshProcessor.refreshCompleted())
                 {
+                    // process all refresh msg
+                    _refreshProcessor.consumeAll([&](char* d, size_t s) {
+                        _parser.parseRefresh(d, s, _processor);
+                    });
+                    _processor.resetSeqNum(_refreshProcessor.lastSeqNum()+1);
+                    // process stored realtime msg
+                    _parser.processCachedMsg(_processor);
                     std::cout << _refreshReceiver.name() << " Refresh Completed seq=" << _processor.nextSeqNum() << std::endl;
+                    _refreshProcessor.reset();
                     _refreshReceiver.stop();
                 }
                 _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
@@ -120,9 +123,7 @@ public:
     void start()
     {
         _ioServiceLC.start();
-        for_each(_runner.begin(), _runner.end(), [](auto& r) {
-            r->start();
-        });
+        for_each(_runner.begin(), _runner.end(), [](auto& r) { r->start(); });
     }
 
     void run()

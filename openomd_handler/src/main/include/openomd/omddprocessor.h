@@ -36,6 +36,9 @@ public:
     ONMESSAGE(omdd::sbe::TradeAmendment)
     ONMESSAGE(omdd::sbe::TradeStatistics)
     ONMESSAGE(omdd::sbe::MarketStatus)
+    void onHeartbeat()
+    {
+    }
     void onUnknownMessage(uint16_t, uint16_t)
     {
     }
