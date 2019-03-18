@@ -63,9 +63,10 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktH
 template <typename _Cache, typename _RecoveryPolicy>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
 {
+    std::cout << "checkMsgSeq nextSeq=" << _nextSeqNum << " seq=" << seqNum <<std::endl;
     if (seqNum == _nextSeqNum)
     {
-        _nextSeqNum = seqNum+1;
+        _nextSeqNum++;
         return true;
     }
     else
@@ -111,9 +112,8 @@ void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
         {
             break;
         }
-        PktHdr* pktHdr = (PktHdr*)&pos->second[0];
         func(&pos->second[0], pos->second.size());
-        printf("process cache %d\n", pos->first);
+        std::cout << "process cache " << pos->first << std::endl;
         auto removePos = pos;
         pos++;
         _Cache::_buffer.erase(removePos);

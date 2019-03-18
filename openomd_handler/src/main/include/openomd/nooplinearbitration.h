@@ -26,5 +26,9 @@ public:
     inline void processCache(_Func func)
     {
     }
+    inline uint32_t nextSeqNum() const
+    {
+        return 0;
+    }
 };
 }

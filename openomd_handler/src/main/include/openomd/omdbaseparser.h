@@ -105,9 +105,10 @@ private:
                         }
                         try
                         {
-                            auto msgSeq = pktHdr->seqNum + msgCnt;
+                            uint32_t msgSeq = pktHdr->seqNum + msgCnt;
                             if (checkMsgSeq(msgSeq))
                             {
+                                std::cout << "pkt=" << pktHdr->seqNum << " msg=" << msgSeq << " nextSeq=" << processor.nextSeqNum() << std::endl;
                                 func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
                             }
                         }

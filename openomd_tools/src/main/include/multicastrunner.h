@@ -28,6 +28,7 @@ public:
 
         void init()
         {
+            std::cout << "Runner::init" << std::endl;
             // Subscribe to realtime data
             _receiverA.init();
             _receiverB.init();
@@ -36,6 +37,8 @@ public:
             _receiverB.registerAsyncReceive(&Runner::processDataB, this);
             // Subscribe to refresh
             _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
+
+            std::cout << "Runner::init finished" << std::endl;
         }
         void start()
         {
@@ -59,6 +62,7 @@ public:
             }
             else
             {
+                //std::cout << _receiverA.name() << " receive data" << std::endl;
                 _parser.parse(data, bytesRecvd, _processor);
                 _receiverA.registerAsyncReceive(&Runner::processDataA, this);
             }
@@ -71,6 +75,7 @@ public:
             }
             else
             {
+                std::cout << _receiverB.name() << " receive data" << std::endl;
                 _parser.parse(data, bytesRecvd, _processor);
                 _receiverB.registerAsyncReceive(&Runner::processDataB, this);
             }
@@ -83,6 +88,7 @@ public:
             }
             else
             {
+                //std::cout << _refreshReceiver.name() << " receive data" << std::endl;
                 _parser.parse(data, bytesRecvd, _refreshProcessor);
                 if (_refreshProcessor.refreshCompleted())
                 {
@@ -90,7 +96,7 @@ public:
                     _refreshProcessor.consumeAll([&](char* d, size_t s) {
                         _parser.parseRefresh(d, s, _processor);
                     });
-                    _processor.resetSeqNum(_refreshProcessor.lastSeqNum()+1);
+                    _processor.resetSeqNum(_refreshProcessor.nextSeqNum());
                     // process stored realtime msg
                     _parser.processCachedMsg(_processor);
                     std::cout << _refreshReceiver.name() << " Refresh Completed seq=" << _processor.nextSeqNum() << std::endl;

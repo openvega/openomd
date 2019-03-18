@@ -34,6 +34,7 @@ public:
         {
             _state = State::RefreshCompleted;
             _lastSeqNum = lastSeqNum;
+            std::cout << "Refresh completed " << _lastSeqNum << std::endl;
         }
     }
     void reset()
@@ -41,10 +42,6 @@ public:
         _state = State::Init;
         _lastSeqNum = 0;
         MapBasedCache::_buffer.clear();
-    }
-    uint32_t lastSeqNum() const
-    {
-        return _lastSeqNum;
     }
     bool refreshCompleted() const
     {
@@ -81,6 +78,10 @@ public:
     inline void processCache(_Func func)
     {
     }
+    inline uint32_t nextSeqNum() const
+    {
+        return _lastSeqNum+1;
+    }
 protected:
     State _state = State::Init;
     uint32_t _lastSeqNum = 0;
@@ -88,30 +89,30 @@ protected:
 class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor>
 {
 public:
-    using OMDCProcessor::onMessage;
     void onHeartbeat()
     {
-        OMDCProcessor::onHeartbeat();
+        BaseRefreshProcessor::onHeartbeat();
     }
 
     void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
     {
         onRefreshComplete(m.lastSeqNum());
     }
+    using OMDCProcessor::onMessage;
 };
 
 class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor>
 {
 public:
-    using OMDDProcessor::onMessage;
     void onHeartbeat()
     {
-        OMDDProcessor::onHeartbeat();
+        BaseRefreshProcessor::onHeartbeat();
     }
 
-    void onMessage(omdd::sbe::RefreshComplete const& m, int32_t s)
+    void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
     {
         onRefreshComplete(m.lastSeqNum());
     }
+    using OMDDProcessor::onMessage;
 };
 }
