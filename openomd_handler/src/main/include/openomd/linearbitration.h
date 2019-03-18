@@ -54,6 +54,7 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktH
     }
     if (pktHdr.seqNum > _nextSeqNum)   // gap
     {
+        std::cout << "checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum <<std::endl;
         func();
         return false;
     }
@@ -63,7 +64,6 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktH
 template <typename _Cache, typename _RecoveryPolicy>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
 {
-    std::cout << "checkMsgSeq nextSeq=" << _nextSeqNum << " seq=" << seqNum <<std::endl;
     if (seqNum == _nextSeqNum)
     {
         _nextSeqNum++;

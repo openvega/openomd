@@ -36,12 +36,10 @@ public:
 
     void recover(PktHdr const& pktHdr, uint32_t nextSeqNum)
     {
-        //std::cout << "Start receovey by refresh channel" << std::endl;
         _multicastHandler.start();
     }
     void stopRecovery()
     {
-        std::cout << "Stop receovey by refresh channel" << std::endl;
         _multicastHandler.stop();
     }
 
