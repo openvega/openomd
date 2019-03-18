@@ -310,7 +310,7 @@ public:
             m_bufferLength = bufferLength;
             m_dimensions.wrap(m_buffer, *pos, actingVersion, bufferLength);
             m_dimensions.blockLength((std::uint8_t)24);
-            m_dimensions.numInGroup((std::uint16_t)count);
+            m_dimensions.numInGroup((std::uint8_t)count);
             m_index = -1;
             m_count = count;
             m_blockLength = 24;

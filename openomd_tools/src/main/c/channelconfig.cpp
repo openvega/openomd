@@ -14,7 +14,7 @@ ChannelConfig ChannelConfig::convert(std::string const & s)
     int32_t i= 0;
     ChannelConfig config{
         atol(vs[i++].c_str()),  // channel id
-        atol(vs[i++].c_str()),  // port
+        (uint16_t)atol(vs[i++].c_str()),  // port
         vs[i++],                // listen ipA
         vs[i++],                // ipA
         vs[i++],                // listen ipB

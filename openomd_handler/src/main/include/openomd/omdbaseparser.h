@@ -22,7 +22,7 @@ protected:
             {
                 return processor.checkPktSeq(pktHdr, fData);
             }, 
-            [&](uint16_t msgSeq)
+            [&](uint32_t msgSeq)
             {
                 return processor.checkMsgSeq(msgSeq);
             },
@@ -34,7 +34,7 @@ protected:
                     {
                         return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
                     },
-                    [&](uint16_t msgSeq)
+                    [&](uint32_t msgSeq)
                     {
                         return processor.checkMsgSeq(msgSeq);
                     }, []() {});
@@ -50,7 +50,7 @@ protected:
             {
                 return true;
             },
-            [&](uint16_t msgSeq)
+            [&](uint32_t msgSeq)
             {
                 return true;
             },
@@ -65,13 +65,13 @@ protected:
         processor.processCache([&](char* data, size_t bytesRecvd) {
             parseHelperInternal(data, bytesRecvd, processor, func,
                 [&](PktHdr const& pktHdr, char* fData)
-            {
-                return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
-            },
-                [&](uint16_t msgSeq)
-            {
-                return processor.checkMsgSeq(msgSeq);
-            }, []() {});
+                {
+                    return processor.checkPktSeqWithtouRecovery(pktHdr, fData);
+                },
+                [&](uint32_t msgSeq)
+                {
+                    return processor.checkMsgSeq(msgSeq);
+                }, []() {});
         });
     }
 private:
