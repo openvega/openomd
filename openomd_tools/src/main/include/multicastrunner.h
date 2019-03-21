@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "openomd/multicastutil.h"
-#include "channelconfig.h"
+#include "openomd/channelconfig.h"
 
 namespace openomd
 {
@@ -28,13 +28,11 @@ public:
 
         void init()
         {
-            // Subscribe to realtime data
             _receiverA.init();
             _receiverB.init();
             _refreshReceiver.init();
             _receiverA.registerAsyncReceive(&Runner::processDataA, this);
             _receiverB.registerAsyncReceive(&Runner::processDataB, this);
-            // Subscribe to refresh
             _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
         }
         void start()
@@ -55,7 +53,7 @@ public:
         {
             if (error)
             {
-                //LOG_WARN(_log) << "Multicast receiver failed: " << error.message();
+                std::cout << "processDataA error: " << error.message();
             }
             else
             {
@@ -67,7 +65,7 @@ public:
         {
             if (error)
             {
-                //LOG_WARN(_log) << "Multicast receiver failed: " << error.message();
+                std::cout << "processDataB error: " << error.message();
             }
             else
             {
@@ -79,7 +77,7 @@ public:
         {
             if (error)
             {
-                //LOG_WARN(_log) << "Multicast receiver failed: " << error.message();
+                std::cout << "processRefresh error: " << error.message();
             }
             else
             {

@@ -1,19 +1,18 @@
 #pragma once
-#if defined(__linux__)
-#include <arpa/inet.h>
-#endif
 #include <map>
+#include <boost/asio.hpp>
 #include "openomd/pcaputil.h"
-#include "channelconfig.h"
+#include "openomd/channelconfig.h"
 
 namespace openomd
 {
 uint32_t convertIp(std::string const& ip)
 {
-    struct in_addr addr;
-    if (inet_pton(AF_INET, ip.c_str(), &addr))
+    boost::system::error_code ec;
+    auto address = boost::asio::ip::make_address_v4(ip.c_str(), ec);
+    if (!ec)
     {
-        return addr.s_addr;
+        return address.to_uint();
     }
     throw std::runtime_error("wrong ip");
 }
@@ -48,22 +47,32 @@ public:
     };
 
     OmdPcapRunner(std::vector<ChannelConfig> const& channelConfig, std::string const& pcapFile, bool sll)
-        : _callback{ channelConfig }, _pcapFile{ pcapFile }, _sll{sll}
+        : _callback{ channelConfig }, _pcapUtil{pcapFile, _callback, sll}
     {
+    }
+
+    void init()
+    {
+        _pcapUtil.init();
+    }
+
+    void start()
+    {
+        _pcapUtil.start();
     }
 
     void run()
     {
-        openomd::PcapUtil<Callback> pcapUtil{ _pcapFile, _callback , _sll};
-        pcapUtil.init();
-        pcapUtil.start();
-        pcapUtil.run();
-        pcapUtil.stop();
+        _pcapUtil.run();
+    }
+
+    void stop()
+    {
+        _pcapUtil.stop();
     }
 
 private:
     Callback _callback;
-    std::string _pcapFile;
-    bool _sll;
+    openomd::PcapUtil<Callback> _pcapUtil;
 };
 }
