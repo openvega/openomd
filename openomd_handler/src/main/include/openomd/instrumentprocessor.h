@@ -21,7 +21,7 @@ public:
     void onMessage(omdc::sbe::LiquidityProvider const& lp, uint32_t seqNum)
     {
     }
-    using OMDCProcessor::onMessage;
+    using OMDCProcessor<_LineArbitration>::onMessage;
 };
 
 template <typename CodePolicy, typename _LineArbitration = NoopLineArbitration>
@@ -151,7 +151,7 @@ public:
     void onMessage(omdd::sbe::CombinationDefinition& combDef, uint32_t seqNum)
     {
     }
-    using OMDDProcessor::onMessage;
+    using OMDDProcessor<_LineArbitration>::onMessage;
 
     void dump() const
     {

@@ -15,7 +15,7 @@ public:
         Refreshing,
         RefreshCompleted
     };
-    void onHeartbeat()
+    inline void onHeartbeat()
     {
         if (_state == State::Init)
         {
@@ -23,7 +23,7 @@ public:
             std::cout << "Start refresh" << std::endl;
         }
     }
-    void onRefreshComplete(uint32_t lastSeqNum)
+    inline void onRefreshComplete(uint32_t lastSeqNum)
     {
         if (_state == State::Init)
         {
@@ -37,23 +37,19 @@ public:
             std::cout << "Refresh completed " << _lastSeqNum << std::endl;
         }
     }
-    void reset()
+    inline void reset()
     {
         _state = State::Init;
         _lastSeqNum = 0;
         MapBasedCache::_buffer.clear();
     }
-    bool refreshCompleted() const
+    inline bool refreshCompleted() const
     {
         return _state == State::RefreshCompleted;
     }
+
     template <typename _F>
-    void consumeAll(_F f)
-    {
-        for_each(MapBasedCache::_buffer.begin(), MapBasedCache::_buffer.end(), [&](auto& pos) {
-            f(&pos.second[0], pos.second.size());
-        });
-    }
+    void consumeAll(_F f);
 
     inline bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos)
     {
@@ -74,6 +70,7 @@ public:
     inline void resetSeqNum(uint32_t newSeqNum)
     {
     }
+
     template <typename _Func>
     inline void processCache(_Func func)
     {
@@ -86,33 +83,42 @@ protected:
     State _state = State::Init;
     uint32_t _lastSeqNum = 0;
 };
+
+template <typename _F>
+void BaseRefreshProcessor::consumeAll(_F f)
+{
+    for_each(MapBasedCache::_buffer.begin(), MapBasedCache::_buffer.end(), [&](auto& pos) {
+        f(&pos.second[0], pos.second.size());
+    });
+}
+
 class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor>
 {
 public:
-    void onHeartbeat()
+    inline void onHeartbeat()
     {
         BaseRefreshProcessor::onHeartbeat();
     }
 
-    void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
+    inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
     {
         onRefreshComplete(m.lastSeqNum());
     }
-    using OMDCProcessor::onMessage;
+    using OMDCProcessor<BaseRefreshProcessor>::onMessage;
 };
 
 class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor>
 {
 public:
-    void onHeartbeat()
+    inline void onHeartbeat()
     {
         BaseRefreshProcessor::onHeartbeat();
     }
 
-    void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
+    inline void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
     {
         onRefreshComplete(m.lastSeqNum());
     }
-    using OMDDProcessor::onMessage;
+    using OMDDProcessor<BaseRefreshProcessor>::onMessage;
 };
 }

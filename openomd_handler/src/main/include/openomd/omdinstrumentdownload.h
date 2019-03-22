@@ -10,13 +10,15 @@ class OmdInstrumentDownload
 public:
     struct Runner
     {
+        _Processor& _processor;
         MulticastReceiver _refreshReceiver;
         _RefreshProcessor _refreshProcessor;
         _Parser _parser;
         bool _completed = false;
 
-        Runner(IOServiceLC& ioService, ChannelConfig const& c)
-            : _refreshReceiver{c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService }
+        Runner(IOServiceLC& ioService, _Processor& processor, ChannelConfig const& c)
+            : _processor{processor},
+              _refreshReceiver{c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService }
         {
         }
 
@@ -48,7 +50,7 @@ public:
                 if (_refreshProcessor.refreshCompleted())
                 {
                     _refreshProcessor.consumeAll([&](char* d, size_t s) {
-                        _parser.parseRefresh(d, s, OmdInstrumentDownload::_processor);
+                        _parser.parseRefresh(d, s, _processor);
                     });
                     _refreshReceiver.stop();
                     _completed = true;
@@ -62,7 +64,7 @@ public:
     OmdInstrumentDownload(std::vector<ChannelConfig> const& channelConfig)
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-            _runner.emplace_back(std::make_unique<Runner>(_ioServiceLC, c));
+            _runner.emplace_back(std::make_unique<Runner>(_ioServiceLC, _processor, c));
         });
     }
 
