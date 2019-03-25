@@ -33,6 +33,7 @@ public:
     }
     void onMessage(omdc::sbe::MarketDefinition const& mktDef, uint32_t seqNum)
     {
+        std::cout << "market " << mktDef.getMarketCodeAsString() << " " << mktDef.numberOfSecurities() << std::endl;
     }
     void onMessage(omdc::sbe::SecurityDefinition& s, uint32_t seqNum)
     {
@@ -83,20 +84,50 @@ public:
             {
                 exerciseStyle=TranslatePolicy::European;
             }
-            if (s.entitlement() > 0)
+            if (s.conversionRatio() > 0)
             {
-                mNum = s.entitlement();
-                mDenom = pow(10, s.decimalsInEntitlement());
+                mNum = s.conversionRatio();
+                mDenom = 1000;
             }
+            if (s.noWarrantsPerEntitlement() != s.conversionRatio()/1000 || s.conversionRatio() == 0)
+            {
+                if (s.entitlement() > 0)
+                {
+                    cout << s.securityCode() << " " << shortname << " use entitlement instead of cr=" << ((double)s.conversionRatio()/1000) << " noWarrantsPerEntitlement=" << s.noWarrantsPerEntitlement()<< " entitlement=" << ((double)s.entitlement()/pow(10, s.decimalsInEntitlement())) << endl;
+                    mNum = pow(10, s.decimalsInEntitlement());
+                    mDenom = s.entitlement();
+                }
+            }
+
             auto& underlyings = s.noUnderlyingSecurities();
             if (underlyings.hasNext())
             {
+                underlyings.next();
                 if (underlyings.underlyingSecurityCode() > 0)
                 {
                     std::stringstream ss;
                     ss << underlyings.underlyingSecurityCode();
                     underlying = ss.str();
                 }
+            } else
+            {
+                // HSI/HSCEI ?
+                if (pos->second == TranslatePolicy::Warrant)
+                {
+                    underlying = shortname.substr(2, 5);
+                    if (!underlying.empty() && underlying[0]=='-')
+                    {
+                        underlying = underlying.substr(1,4);
+                    }
+                } else if (pos->second == TranslatePolicy::Cbbc)
+                {
+                    auto cbbcPos = shortname.find('#');
+                    if (cbbcPos != std::string::npos)
+                    {
+                        underlying = shortname.substr(shortname.find('#')+1, 5);
+                    }
+                }
+                trim(underlying);
             }
             maturity = s.maturityDate();
         }
@@ -122,7 +153,8 @@ public:
                 << mDenom << ","
                 << "1" << ","
                 << "1" << ","
-                << callPrice << "," << strike2 << "," << s.noWarrantsPerEntitlement() << "," << s.previousClosingPrice()
+                << (double)s.previousClosingPrice() /1000 << ","
+                << callPrice << "," << strike2 << "," << s.noWarrantsPerEntitlement()
                 << endl;
     }
     void onMessage(omdc::sbe::LiquidityProvider const& lp, uint32_t seqNum)
