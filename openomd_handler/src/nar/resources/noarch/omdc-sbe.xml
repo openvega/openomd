@@ -120,7 +120,7 @@
     <field name="conversionRatio" id="125" type="uint32"/>
     <field name="strikePrice1" id="126" type="int32"/>
     <field name="strikePrice2" id="127" type="int32"/>
-    <field name="maturityDate" id="128" type="int32"/>
+    <field name="maturityDate" id="128" type="uint32"/>
     <field name="callPutFlag" id="129" type="char" semanticType="char"/>
     <field name="style" id="130" type="char" semanticType="char"/>
     <field name="filler7" id="207" type="uint16"/>

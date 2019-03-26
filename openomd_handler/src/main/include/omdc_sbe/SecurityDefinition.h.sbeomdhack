@@ -3149,19 +3149,19 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::int32_t maturityDateNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t maturityDateNullValue() SBE_NOEXCEPT
     {
-        return SBE_NULLVALUE_INT32;
+        return SBE_NULLVALUE_UINT32;
     }
 
-    static SBE_CONSTEXPR std::int32_t maturityDateMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t maturityDateMinValue() SBE_NOEXCEPT
     {
-        return -2147483647;
+        return 0;
     }
 
-    static SBE_CONSTEXPR std::int32_t maturityDateMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::uint32_t maturityDateMaxValue() SBE_NOEXCEPT
     {
-        return 2147483647;
+        return 4294967294;
     }
 
     static SBE_CONSTEXPR std::size_t maturityDateEncodingLength() SBE_NOEXCEPT
@@ -3169,14 +3169,14 @@ public:
         return 4;
     }
 
-    std::int32_t maturityDate() const
+    std::uint32_t maturityDate() const
     {
-        return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::int32_t *)(m_buffer + m_offset + 402)));
+        return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::uint32_t *)(m_buffer + m_offset + 402)));
     }
 
-    SecurityDefinition &maturityDate(const std::int32_t value)
+    SecurityDefinition &maturityDate(const std::uint32_t value)
     {
-        *((std::int32_t *)(m_buffer + m_offset + 402)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
+        *((std::uint32_t *)(m_buffer + m_offset + 402)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
         return *this;
     }
 
