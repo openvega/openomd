@@ -31,7 +31,9 @@
 #include <sbe/sbe.h>
 
 #include "MessageHeader.h"
+#include "GroupSize16Reverse.h"
 #include "GroupSize8.h"
+#include "BrokerQueueItem.h"
 #include "GroupSize16.h"
 
 using namespace sbe;
@@ -115,7 +117,7 @@ public:
 
     static SBE_CONSTEXPR std::uint16_t sbeBlockLength() SBE_NOEXCEPT
     {
-        return (std::uint16_t)458;
+        return (std::uint16_t)456;
     }
 
     static SBE_CONSTEXPR std::uint16_t sbeTemplateId() SBE_NOEXCEPT
@@ -3889,7 +3891,7 @@ public:
 
     static SBE_CONSTEXPR std::uint64_t filler8Length() SBE_NOEXCEPT
     {
-        return 33;
+        return 31;
     }
 
     const char *filler8() const
@@ -3899,7 +3901,7 @@ public:
 
     char filler8(const std::uint64_t index) const
     {
-        if (index >= 33)
+        if (index >= 31)
         {
             throw std::runtime_error("index out of range for filler8 [E104]");
         }
@@ -3909,7 +3911,7 @@ public:
 
     void filler8(const std::uint64_t index, const char value)
     {
-        if (index >= 33)
+        if (index >= 31)
         {
             throw std::runtime_error("index out of range for filler8 [E105]");
         }
@@ -3919,7 +3921,7 @@ public:
 
     std::uint64_t getFiller8(char *dst, const std::uint64_t length) const
     {
-        if (length > 33)
+        if (length > 31)
         {
              throw std::runtime_error("length too large for getFiller8 [E106]");
         }
@@ -3930,19 +3932,19 @@ public:
 
     SecurityDefinition &putFiller8(const char *src)
     {
-        std::memcpy(m_buffer + m_offset + 425, src, sizeof(char) * 33);
+        std::memcpy(m_buffer + m_offset + 425, src, sizeof(char) * 31);
         return *this;
     }
 
     std::string getFiller8AsString() const
     {
-        std::string result(m_buffer + m_offset + 425, 33);
+        std::string result(m_buffer + m_offset + 425, 31);
         return result;
     }
 
     SecurityDefinition &putFiller8(const std::string& str)
     {
-        std::memcpy(m_buffer + m_offset + 425, str.c_str(), 33);
+        std::memcpy(m_buffer + m_offset + 425, str.c_str(), 31);
         return *this;
     }
 
@@ -3958,7 +3960,7 @@ public:
         std::uint64_t m_index;
         std::uint64_t m_offset;
         std::uint64_t m_actingVersion;
-        GroupSize16 m_dimensions;
+        GroupSize16Reverse m_dimensions;
 
     public:
 
@@ -3973,8 +3975,7 @@ public:
             m_index = -1;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
         inline void wrapForEncode(char *buffer, const std::uint16_t count, std::uint64_t *pos, const std::uint64_t actingVersion, const std::uint64_t bufferLength)
@@ -4000,8 +4001,7 @@ public:
             m_blockLength = 8;
             m_actingVersion = actingVersion;
             m_positionPtr = pos;
-            // SBE_OMD_HACK
-            *m_positionPtr = *m_positionPtr + m_dimensions.numInGroupEncodingLength();
+            *m_positionPtr = *m_positionPtr + 4;
         }
 
         static SBE_CONSTEXPR std::uint64_t sbeHeaderSize() SBE_NOEXCEPT
