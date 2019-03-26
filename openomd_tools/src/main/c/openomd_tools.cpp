@@ -38,14 +38,48 @@ void run(_Runner& runner)
     runner.stop();
 }
 
-struct OMDDCodePolicy
+struct OMDDTranslatePolicy
 {
     static std::string code(uint8_t country, uint8_t market, uint8_t instrumentGroup, uint8_t modifier, uint16_t commodityCode, uint16_t expiration, uint32_t strikePrice)
     {
-        return 0;
+        return "";
     }
+    static const std::string Option;
+    static const std::string Future;
+    static const std::string FX;
+    static const std::string Call;
+    static const std::string Put;
+    static const std::string American;
+    static const std::string European;
 };
 
+const std::string OMDDTranslatePolicy::Option{"Option"};
+const std::string OMDDTranslatePolicy::Future{"Future"};
+const std::string OMDDTranslatePolicy::FX{"FX"};
+const std::string OMDDTranslatePolicy::Call{"C"};
+const std::string OMDDTranslatePolicy::Put{"P"};
+const std::string OMDDTranslatePolicy::American{"A"};
+const std::string OMDDTranslatePolicy::European{"E"};
+
+struct OMDCTranslatePolicy
+{
+    static const std::string Equity;
+    static const std::string Warrant;
+    static const std::string Cbbc;
+    static const std::string ETF;
+    static const std::string Call;
+    static const std::string Put;
+    static const std::string American;
+    static const std::string European;
+};
+const std::string OMDCTranslatePolicy::Equity{"Equity"};
+const std::string OMDCTranslatePolicy::Warrant{"Warrant"};
+const std::string OMDCTranslatePolicy::Cbbc{"CBBC"};
+const std::string OMDCTranslatePolicy::ETF{"ETF"};
+const std::string OMDCTranslatePolicy::Call{"C"};
+const std::string OMDCTranslatePolicy::Put{"P"};
+const std::string OMDCTranslatePolicy::American{"A"};
+const std::string OMDCTranslatePolicy::European{"E"};
 int main(int32_t argc, char* argv[])
 {
     using namespace std;
@@ -121,12 +155,12 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                //OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg) };
-                //run(runner);
+                OmdInstrumentDownload<OMDCInstrumentProcessor<OMDCTranslatePolicy>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                run(runner);
             }
             else if (protocol == "omdd")
             {
-                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDCodePolicy>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg) };
+                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg) };
                 run(runner);
             }
         }

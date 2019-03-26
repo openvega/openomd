@@ -82,20 +82,26 @@ public:
 
     void run()
     {
-        _ioServiceLC.run();
-        bool allCompleted = true;
-        for_each(_runner.begin(), _runner.end(), [&](auto& r) { allCompleted &= r->_completed; });
-        if (allCompleted)
+        std::cout << "start run "<< std::endl;
+        for (;;)
         {
-            stop();
-            _processor.dump();
+            _ioServiceLC.ioService().poll();
+            bool allCompleted = true;
+            for_each(_runner.begin(), _runner.end(), [&](auto& r) { allCompleted &= r->_completed; });
+            if (allCompleted)
+            {
+                break;
+            }
         }
+        std::cout << "finished run "<< std::endl;
     }
 
     void stop()
     {
         for_each(_runner.begin(), _runner.end(), [](auto& r) { r->stop(); });
         _ioServiceLC.stop();
+
+        _processor.dump();
     }
 
 private:
