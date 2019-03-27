@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <cctype>
+#include <string>
+#include <algorithm>
 
 namespace openomd
 {

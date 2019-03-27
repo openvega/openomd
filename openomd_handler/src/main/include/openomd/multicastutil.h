@@ -107,7 +107,6 @@ inline void MulticastReceiver::init()
         boost::asio::ip::udp::endpoint bindEp(boost::asio::ip::address_v4::from_string(_multicastIp), _port);
 
         _socket.open(bindEp.protocol());
-        std::cout << _name << " _socket.open" << std::endl;
         _socket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         _socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
         _socket.set_option(boost::asio::ip::multicast::hops(255));
@@ -116,12 +115,10 @@ inline void MulticastReceiver::init()
             _socket.set_option(boost::asio::ip::multicast::outbound_interface(boost::asio::ip::address_v4::from_string(_outboundIp)));
         }
         _socket.bind(bindEp);
-        std::cout << _name << " init success" <<std::endl;
         //LOG_INFO(_log) << "MulticastReceiver join multicast group successfully";
     }
     catch (std::exception const& e)
     {
-        std::cout << _name << " failed to init " << e.what() << std::endl;
         //LOG_ERROR(_log) << "fail to join multicast " << _multicastIp << " error:" << e.what();
         throw e;
     }
@@ -168,7 +165,6 @@ inline void MulticastReceiver::joinGroup(boost::asio::ip::udp::socket& socket, s
     {
         socket.set_option(boost::asio::ip::multicast::join_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
-    std::cout << _name << " joined " << multicastIp << "@" << listenIp << std::endl;
 }
 
 inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp)
@@ -185,7 +181,6 @@ inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, 
     {
         socket.set_option(boost::asio::ip::multicast::leave_group(boost::asio::ip::address_v4::from_string(multicastIp), boost::asio::ip::address_v4::from_string(listenIp)));
     }
-    std::cout << _name << " left " << multicastIp << "@" << listenIp << std::endl;
 }
 
 void MulticastReceiver::do_close()
