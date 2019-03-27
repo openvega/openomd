@@ -91,7 +91,6 @@ public:
                     _processor.resetSeqNum(_refreshProcessor.nextSeqNum());
                     // process stored realtime msg
                     _parser.processCachedMsg(_processor);
-                    std::cout << _refreshReceiver.name() << " Refresh Completed seq=" << _processor.nextSeqNum() << std::endl;
                     _refreshProcessor.reset();
                     _refreshReceiver.stop();
                 }

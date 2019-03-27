@@ -327,6 +327,12 @@
     <ClInclude Include="src\main\include\openomd\instrumentprocessor.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
+    <ClInclude Include="src\main\include\openomd\multicastrunner.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\pcaprunner.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h.sbeomdhack">

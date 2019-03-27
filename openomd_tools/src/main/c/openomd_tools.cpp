@@ -7,9 +7,9 @@
 #include "openomd/refreshprocessor.h"
 #include "openomd/instrumentprocessor.h"
 #include "openomd/omdinstrumentdownload.h"
+#include "openomd/pcaprunner.h"
+#include "openomd/multicastrunner.h"
 #include "omdprintprocessor.h"
-#include "pcaprunner.h"
-#include "multicastrunner.h"
 
 using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>>;
 
