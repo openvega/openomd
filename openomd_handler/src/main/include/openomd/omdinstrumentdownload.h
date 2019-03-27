@@ -61,7 +61,8 @@ public:
         }
     };
 
-    OmdInstrumentDownload(std::vector<ChannelConfig> const& channelConfig)
+    OmdInstrumentDownload(std::vector<ChannelConfig> const& channelConfig, std::ostream& ostream)
+        : _processor{ostream}
     {
         for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
             _runner.emplace_back(std::make_unique<Runner>(_ioServiceLC, _processor, c));

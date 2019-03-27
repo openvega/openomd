@@ -38,7 +38,71 @@ void run(_Runner& runner)
     runner.stop();
 }
 
-struct OMDDTranslatePolicy
+struct BaseTranslatePolicy
+{
+    static const std::string Call;
+    static const std::string Put;
+    static const std::string American;
+    static const std::string European;
+
+    static const std::string HSI;
+    static const std::string HSCEI;
+
+    template <typename _Symbol, typename _Date>
+    void write(std::ostream& os, _Symbol const& symbol, std::string const& code, std::string const& name, std::string const& secType, std::string const& currency,
+            std::string const& exchange, uint32_t lotSize, std::string const& tickRule, int32_t unitValue, int32_t priceDenom, uint32_t mdid, std::string const& underlying, std::string const& underlyingExchange,
+            _Date const& listing, _Date const& expiry, std::string const& optionClass, double strike, std::string const& optionType, std::string const& exerciseStyle,
+            int64_t mNum, int64_t mDenom, int64_t contractSize, int64_t decimalInContractSize, double callPrice, double strike2) const
+    {
+        os << symbol << ","
+            << code << ","
+            << name << ","
+            << secType << ","
+            << currency << ","
+            << exchange << ","
+            << lotSize << ","
+            << tickRule << ","
+            << unitValue << ","
+            << priceDenom << ","
+            << mdid << ","
+            << underlying << ","
+            << underlyingExchange << ","
+            << listing << ","
+            << expiry << ","
+            << optionClass << ","
+            << strike << ","
+            << optionType << ","
+            << exerciseStyle << ","
+            << mNum << ","
+            << mDenom << ","
+            << contractSize << ","
+            << decimalInContractSize << ","
+            << callPrice << ","
+            << strike2;
+    }
+};
+const std::string BaseTranslatePolicy::Call{"C"};
+const std::string BaseTranslatePolicy::Put{"P"};
+const std::string BaseTranslatePolicy::American{"A"};
+const std::string BaseTranslatePolicy::European{"E"};
+const std::string BaseTranslatePolicy::HSI{"HSI"};
+const std::string BaseTranslatePolicy::HSCEI{"HSCEI"};
+
+struct OMDCTranslatePolicy : public BaseTranslatePolicy
+{
+    static const std::pair<std::string, int32_t> Index;
+    static const std::pair<std::string, int32_t> Equity;
+    static const std::pair<std::string, int32_t> ETF;
+    static const std::pair<std::string, int32_t> Warrant;
+    static const std::pair<std::string, int32_t> Cbbc;
+};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Index{"Index", 0};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Equity{"Equity", 1};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::ETF{"Equity", 2};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Warrant{"Equity", 3};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Cbbc{"Equity", 4};
+
+struct OMDDTranslatePolicy : public BaseTranslatePolicy
 {
     static std::string code(uint8_t country, uint8_t market, uint8_t instrumentGroup, uint8_t modifier, uint16_t commodityCode, uint16_t expiration, uint32_t strikePrice)
     {
@@ -47,39 +111,12 @@ struct OMDDTranslatePolicy
     static const std::string Option;
     static const std::string Future;
     static const std::string FX;
-    static const std::string Call;
-    static const std::string Put;
-    static const std::string American;
-    static const std::string European;
 };
 
 const std::string OMDDTranslatePolicy::Option{"Option"};
 const std::string OMDDTranslatePolicy::Future{"Future"};
 const std::string OMDDTranslatePolicy::FX{"FX"};
-const std::string OMDDTranslatePolicy::Call{"C"};
-const std::string OMDDTranslatePolicy::Put{"P"};
-const std::string OMDDTranslatePolicy::American{"A"};
-const std::string OMDDTranslatePolicy::European{"E"};
 
-struct OMDCTranslatePolicy
-{
-    static const std::string Equity;
-    static const std::string Warrant;
-    static const std::string Cbbc;
-    static const std::string ETF;
-    static const std::string Call;
-    static const std::string Put;
-    static const std::string American;
-    static const std::string European;
-};
-const std::string OMDCTranslatePolicy::Equity{"Equity"};
-const std::string OMDCTranslatePolicy::Warrant{"Warrant"};
-const std::string OMDCTranslatePolicy::Cbbc{"CBBC"};
-const std::string OMDCTranslatePolicy::ETF{"ETF"};
-const std::string OMDCTranslatePolicy::Call{"C"};
-const std::string OMDCTranslatePolicy::Put{"P"};
-const std::string OMDCTranslatePolicy::American{"A"};
-const std::string OMDCTranslatePolicy::European{"E"};
 int main(int32_t argc, char* argv[])
 {
     using namespace std;
@@ -155,12 +192,12 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                OmdInstrumentDownload<OMDCInstrumentProcessor<OMDCTranslatePolicy>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                OmdInstrumentDownload<OMDCInstrumentProcessor<OMDCTranslatePolicy>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg), std::cout };
                 run(runner);
             }
             else if (protocol == "omdd")
             {
-                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg) };
+                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg), std::cout };
                 run(runner);
             }
         }

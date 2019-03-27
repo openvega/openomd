@@ -6,11 +6,12 @@
 namespace openomd
 {
 template <typename TranslatePolicy, typename _LineArbitration = NoopLineArbitration>
-class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration>
+class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration>, protected TranslatePolicy
 {
 public:
-    OMDCInstrumentProcessor()
-        : _instrumentTypes{
+    OMDCInstrumentProcessor(std::ostream& ostream)
+        : _ostream{ostream}
+        , _instrumentTypes{
             {1, TranslatePolicy::Equity},
             {2, TranslatePolicy::Equity},
             {6, TranslatePolicy::Equity},
@@ -26,14 +27,32 @@ public:
             {9, TranslatePolicy::Equity},
             {10, TranslatePolicy::Equity},
             {99, TranslatePolicy::Equity}}
+        , _indexMap{ {"0000100",TranslatePolicy::HSI}, {"0001400", TranslatePolicy::HSCEI}}
     {
     }
     void onMessage(omdc::sbe::IndexDefinition const& indexDef, uint32_t seqNum)
     {
+        std::string indexCode = indexDef.getIndexCodeAsString();
+        trim(indexCode);
+        auto pos = _indexMap.find(indexCode);
+        if (pos != _indexMap.end())
+        {
+            std::string currency = indexDef.getCurrencyCodeAsString();
+            uint32_t mdid = 0;
+            try
+            {
+                mdid = stol(indexCode);
+            } catch (std::invalid_argument const& e)
+            {
+            }
+            std::stringstream ss;
+            TranslatePolicy::write(ss, pos->second, "", pos->second, TranslatePolicy::Index.first, "HKD", "XHKG", 1, "XHKG",
+                    1, 1, mdid, "", "", "", "", "", 0, "", "", 0, 0, 0, 0, 0, 0);
+            _secDefs.emplace(TranslatePolicy::Index.second, ss.str());
+        }
     }
     void onMessage(omdc::sbe::MarketDefinition const& mktDef, uint32_t seqNum)
     {
-        std::cout << "market " << mktDef.getMarketCodeAsString() << " " << mktDef.numberOfSecurities() << std::endl;
     }
     void onMessage(omdc::sbe::SecurityDefinition& s, uint32_t seqNum)
     {
@@ -45,11 +64,14 @@ public:
             return;
         }
 
+        std::string& secType = pos->second.first;
+        int32_t ordering = pos->second.second;
         std::string shortname = s.getSecurityShortNameAsString();
         trim(shortname);
         std::string currency = s.getCurrencyCodeAsString();
         trim(currency);
         std::string underlying;
+        std::string underlyingExchange;
         std::string optionClass;
         double strike = 0;
         double strike2 = 0;
@@ -58,13 +80,13 @@ public:
         std::string exerciseStyle;
         int64_t mNum = 0;
         int64_t mDenom = 0;
-        int32_t maturity = 0;
+        uint32_t maturity = 0;
 
-        if (pos->second == TranslatePolicy::Warrant || pos->second == TranslatePolicy::Cbbc)
+        if (secType == TranslatePolicy::Warrant.first || secType == TranslatePolicy::Cbbc.first)
         {
             strike = (double)s.strikePrice1() / 1000;
             strike2 = (double)s.strikePrice2() / 1000;
-            if (pos->second == TranslatePolicy::Cbbc)
+            if (secType == TranslatePolicy::Cbbc.first)
             {
                 callPrice  = (double)s.callPrice() / pow(10, s.decimalsInCallPrice());
             }
@@ -93,7 +115,6 @@ public:
             {
                 if (s.entitlement() > 0)
                 {
-                    cout << s.securityCode() << " " << shortname << " use entitlement instead of cr=" << ((double)s.conversionRatio()/1000) << " noWarrantsPerEntitlement=" << s.noWarrantsPerEntitlement()<< " entitlement=" << ((double)s.entitlement()/pow(10, s.decimalsInEntitlement())) << endl;
                     mNum = pow(10, s.decimalsInEntitlement());
                     mDenom = s.entitlement();
                 }
@@ -108,18 +129,19 @@ public:
                     std::stringstream ss;
                     ss << underlyings.underlyingSecurityCode();
                     underlying = ss.str();
+                    underlyingExchange = "XHKG";
                 }
             } else
             {
                 // HSI/HSCEI ?
-                if (pos->second == TranslatePolicy::Warrant)
+                if (secType == TranslatePolicy::Warrant.first)
                 {
                     underlying = shortname.substr(2, 5);
                     if (!underlying.empty() && underlying[0]=='-')
                     {
                         underlying = underlying.substr(1,4);
                     }
-                } else if (pos->second == TranslatePolicy::Cbbc)
+                } else if (secType == TranslatePolicy::Cbbc.first)
                 {
                     auto cbbcPos = shortname.find('#');
                     if (cbbcPos != std::string::npos)
@@ -128,34 +150,15 @@ public:
                     }
                 }
                 trim(underlying);
+                underlyingExchange = "XHKG";
             }
             maturity = s.maturityDate();
         }
-        cout << s.securityCode() << ","
-                << ","
-                << shortname << ","
-                << pos->second << ","
-                << currency << ","
-                << "XHKG" << ","
-                << s.lotSize() << ","
-                << "XHKG" << ","
-                << "1" << ","
-                << "1" << ","
-                << underlying << ","
-                << "XHKG" << ","
-                << ","
-                << maturity << ","
-                << ","
-                << strike << ","
-                << optionType << ","
-                << exerciseStyle << ","
-                << mNum << ","
-                << mDenom << ","
-                << "1" << ","
-                << "1" << ","
-                << (double)s.previousClosingPrice() /1000 << ","
-                << callPrice << "," << strike2 << "," << s.noWarrantsPerEntitlement()
-                << endl;
+
+        std::stringstream ss;
+        TranslatePolicy::write(ss, s.securityCode(), "", shortname, secType, currency, "XHKG", s.lotSize(), "XHKG", 1, 1, s.securityCode(),
+                underlying, underlyingExchange, s.listingDate(), maturity, "", strike, optionType, exerciseStyle, mNum, mDenom, 1, 1, callPrice, strike2);
+        _secDefs.emplace(ordering, ss.str());
     }
     void onMessage(omdc::sbe::LiquidityProvider const& lp, uint32_t seqNum)
     {
@@ -163,14 +166,21 @@ public:
     using OMDCProcessor<_LineArbitration>::onMessage;
     void dump()
     {
+        for (auto &pos : _secDefs)
+        {
+            _ostream << pos.second << std::endl;
+        }
     }
 
 private:
-    std::map<uint8_t, std::string> _instrumentTypes;
+    std::ostream& _ostream;
+    std::map<uint8_t, std::pair<std::string, int32_t>> _instrumentTypes; // product type to secType and order
+    std::map<std::string, std::string> _indexMap;
+    std::multimap<int32_t, std::string> _secDefs;
 };
 
 template <typename TranslatePolicy, typename _LineArbitration = NoopLineArbitration>
-class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>
+class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected TranslatePolicy
 {
 public:
     static const uint8_t OMDD_STOCK_INDEX = 7;
@@ -224,10 +234,13 @@ public:
         int32_t strikePrice;
         int64_t contractSize;
         uint8_t effectiveTomorrow;
+        int32_t priceQuotationFactor;
         std::string effectiveExpDate;
     };
 
-    OMDDInstrumentProcessor() : _instrumentGroupMap{ {4, TranslatePolicy::Future}, {6, TranslatePolicy::Option}, {7, TranslatePolicy::Option}, {22, TranslatePolicy::Option}, {23, TranslatePolicy::Option}, {254, TranslatePolicy::FX} }
+    OMDDInstrumentProcessor(std::ostream& ostream)
+        : _ostream{ostream}
+        , _instrumentGroupMap{ {4, TranslatePolicy::Future}, {6, TranslatePolicy::Option}, {7, TranslatePolicy::Option}, {22, TranslatePolicy::Option}, {23, TranslatePolicy::Option}, {254, TranslatePolicy::FX} }
     {
         for (int32_t i = 201; i <= 223; ++i)
         {
@@ -320,6 +333,7 @@ public:
         series.strikePrice = sde.strikePrice();
         series.contractSize = sde.contractSize();
         series.effectiveTomorrow = sde.effectiveTomorrow();
+        series.priceQuotationFactor = sde.priceQuotationFactor();
         series.effectiveExpDate = expStr;
     }
     void onMessage(omdd::sbe::CombinationDefinition& combDef, uint32_t seqNum)
@@ -352,12 +366,6 @@ public:
                 continue;
             }
             auto const& clsDef = clsPos->second;
-            // consistence check
-            if (s.numOfDecimalsInPrice != clsDef.decimalInPremium || s.baseStrike != s.strikePrice || s.expirationDate != s.effectiveExpDate)
-            {
-                cout << s.symbol << " " << s.orderbookID << " inconsistence: dp=" << s.numOfDecimalsInPrice << " vs " << clsDef.decimalInPremium << " strike=" << s.baseStrike << " vs " << s.strikePrice << " exp=" << s.expirationDate << " vs " << s.effectiveExpDate << endl;
-            }
-
             auto groupPos = _instrumentGroupMap.find(s.ck.instrumentGroup);
             if (groupPos == _instrumentGroupMap.end())
             {
@@ -368,7 +376,14 @@ public:
             int32_t unitValue = 1;
             if (comm.underlyingType == OMDD_STOCK_INDEX)
             {
-                unitValue = clsDef.priceQuotationFactor;
+                if (s.priceQuotationFactor > 0)
+                {
+                    unitValue = ((double)s.priceQuotationFactor) / pow(10, clsDef.decimalInContractSize);
+                }
+                else
+                {
+                    unitValue = ((double)clsDef.priceQuotationFactor) / pow(10, clsDef.decimalInContractSize);
+                }
             }
 
             std::string underlyingStr = comm.underlyingCode;
@@ -382,6 +397,11 @@ public:
                     underlyingStr = ss.str();
                 } catch (std::invalid_argument const& e)
                 {
+                    // try replace HSE with HSCEI
+                    if (underlyingStr == "HSE")
+                    {
+                        underlyingStr =TranslatePolicy::HSCEI;
+                    }
                 }
             }
 
@@ -391,6 +411,10 @@ public:
             std::string exerciseStyle;
             int64_t csNum = 0;
             int64_t csDenom = 0;
+            std::stringstream tickRule;
+            double tickStep = (double)clsDef.tickSize / pow(10, clsDef.decimalInPremium);
+            tickRule << "XHKF-" << tickStep;
+            std::string listingDate;
 
             if (isOption(s.ck.instrumentGroup))
             {
@@ -414,33 +438,15 @@ public:
                 csNum = s.contractSize > 0 ? s.contractSize : clsDef.contractSize;
                 csDenom = pow(10, clsDef.decimalInContractSize);
             }
-
-            cout << s.symbol << ","
-                << TranslatePolicy::code(s.ck.country, s.ck.market, s.ck.instrumentGroup, s.modifier, s.ck.commodityCode, s.expirationDateN, s.strikePrice) << ","
-                << s.symbol << ","
-                << groupPos->second << ","
-                << clsDef.baseCurrency << ","
-                << "XHKF" << ","
-                << 1 << ","
-                << "XHKF-" << clsDef.tickSize << ","
-                << unitValue << ","
-                << pow(10, clsDef.decimalInPremium) << ","
-                << underlyingStr << ","
-                << "XHKG" << ","
-                << ","
-                << s.expirationDate << ","
-                << optionClass << ","
-                << strike << ","
-                << optionType << ","
-                << exerciseStyle << ","
-                << "1" << ","
-                << "1" << ","
-                << csNum << ","
-                << csDenom << endl;
+            TranslatePolicy::write(_ostream, s.symbol, TranslatePolicy::code(s.ck.country, s.ck.market, s.ck.instrumentGroup, s.modifier, s.ck.commodityCode, s.expirationDateN, s.strikePrice),
+                    s.symbol, groupPos->second, clsDef.baseCurrency, "XHKF", 1, tickRule.str(), unitValue, pow(10, clsDef.decimalInPremium), s.orderbookID,
+                    underlyingStr, "XHKG", listingDate, (s.effectiveExpDate.empty() ? s.expirationDate : s.effectiveExpDate), optionClass, strike, optionType, exerciseStyle, 1, 1, csNum, csDenom, 0, 0);
+            _ostream << endl;
         }
     }
 
 private:
+    std::ostream& _ostream;
     std::map<uint32_t, std::string> _instrumentGroupMap;
     std::map<uint16_t, CommodityDef> _commodityDefs;
     std::map<ClassKey, ClassDef> _classDefs;
