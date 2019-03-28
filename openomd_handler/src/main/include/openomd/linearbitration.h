@@ -5,8 +5,8 @@
 
 namespace openomd
 {
-template <typename _Cache, typename _RecoveryPolicy>
-class LineArbitration : public _RecoveryPolicy, protected _Cache
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+class LineArbitration : public _RecoveryPolicy, protected _Cache, protected _Logger
 {
 public:
     using _RecoveryPolicy::_RecoveryPolicy;
@@ -27,8 +27,8 @@ private:
     uint32_t _nextSeqNum = 1;
 };
 
-template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+bool LineArbitration<_Cache, _RecoveryPolicy, _Logger>::checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
 {
     return checkPktSeqInternal(channel, pktHdr, pos, [&]()
     {
@@ -37,15 +37,15 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(int32_t channel, open
     });
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+bool LineArbitration<_Cache, _RecoveryPolicy, _Logger>::checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
 {
     return checkPktSeqInternal(channel, pktHdr, pos, []() {});
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
 template <typename _RecoveryFunc>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(int32_t channel, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
+bool LineArbitration<_Cache, _RecoveryPolicy, _Logger>::checkPktSeqInternal(int32_t channel, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
 {
     if ((pktHdr.seqNum + pktHdr.msgCnt - 1) < _nextSeqNum)  // duplicated
     {
@@ -53,15 +53,17 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(int32_t chann
     }
     if (pktHdr.seqNum > _nextSeqNum)   // gap
     {
-        std::cout << "channel " << channel << " checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum <<std::endl;
+        std::stringstream ss;
+        ss << "channel " << channel << " checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum;
+        _Logger::warn(ss.str());
         func();
         return false;
     }
     return true;
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+bool LineArbitration<_Cache, _RecoveryPolicy, _Logger>::checkMsgSeq(uint32_t seqNum)
 {
     if (seqNum == _nextSeqNum)
     {
@@ -74,15 +76,15 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
     }
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
-void LineArbitration<_Cache, _RecoveryPolicy>::resetSeqNum(uint32_t newSeqNum)
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+void LineArbitration<_Cache, _RecoveryPolicy, _Logger>::resetSeqNum(uint32_t newSeqNum)
 {
     _nextSeqNum = newSeqNum;
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
 template <typename _Func>
-void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
+void LineArbitration<_Cache, _RecoveryPolicy, _Logger>::processCache(_Func func)
 {
     if (_Cache::_buffer.empty())
     {
@@ -98,18 +100,17 @@ void LineArbitration<_Cache, _RecoveryPolicy>::processCache(_Func func)
             break;
         }
         func(&pos->second[0], pos->second.size());
-        std::cout << "process cache " << pos->first << std::endl;
         auto removePos = pos;
         pos++;
         _Cache::_buffer.erase(removePos);
     }
 }
 
-template <typename _Cache, typename _RecoveryPolicy>
-uint32_t LineArbitration<_Cache, _RecoveryPolicy>::nextSeqNum() const
+template <typename _Cache, typename _RecoveryPolicy, typename _Logger>
+uint32_t LineArbitration<_Cache, _RecoveryPolicy, _Logger>::nextSeqNum() const
 {
     return _nextSeqNum;
 }
 
-using PcapLineArbitration = LineArbitration<MapBasedCache, PcapRecoveryPolicy>;
+using PcapLineArbitration = LineArbitration<MapBasedCache, PcapRecoveryPolicy, NoopLogger>;
 }

@@ -53,7 +53,7 @@ public:
     }
     void onError(std::exception const& ex)
     {
-        printf("OMDCProcessor error %s\n", ex.what());
+        _LineArbitration::error(ex.what());
     }
 };
 }

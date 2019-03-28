@@ -5,8 +5,8 @@
 
 namespace openomd
 {
-template <typename TranslatePolicy, typename _LineArbitration = NoopLineArbitration>
-class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration>, protected TranslatePolicy
+template <typename TranslatePolicy, typename _Logger, typename _LineArbitration = NoopLineArbitration>
+class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration>, protected _Logger, protected TranslatePolicy
 {
 public:
     OMDCInstrumentProcessor(std::ostream& ostream)
@@ -60,7 +60,9 @@ public:
         auto pos = _instrumentTypes.find(s.productType());
         if (pos == _instrumentTypes.end())
         {
-            cout << s.securityCode() << " unsupported instrumentType " << (int32_t)s.productType() << endl;
+            std::stringstream ss;
+            ss << s.securityCode() << " unsupported instrumentType " << (int32_t)s.productType();
+            _Logger::warn(ss.str());
             return;
         }
 
@@ -179,8 +181,8 @@ private:
     std::multimap<int32_t, std::string> _secDefs;
 };
 
-template <typename TranslatePolicy, typename _LineArbitration = NoopLineArbitration>
-class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected TranslatePolicy
+template <typename TranslatePolicy, typename _Logger, typename _LineArbitration = NoopLineArbitration>
+class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected TranslatePolicy, protected _Logger
 {
 public:
     static const uint8_t OMDD_STOCK_INDEX = 7;
@@ -355,21 +357,27 @@ public:
             auto commPos = _commodityDefs.find(s.ck.commodityCode);
             if (commPos == _commodityDefs.end())
             {
-                cout << s.symbol << " commodity not found " << (int32_t)s.ck.market << " " << (int32_t)s.ck.instrumentGroup << " " << s.ck.commodityCode << endl;
+                std::stringstream ss;
+                ss << s.symbol << " commodity not found " << (int32_t)s.ck.market << " " << (int32_t)s.ck.instrumentGroup << " " << s.ck.commodityCode;
+                _Logger::warn(ss.str());
                 continue;
             }
             auto const& comm = commPos->second;
             auto clsPos = _classDefs.find(s.ck);
             if (clsPos == _classDefs.end())
             {
-                cout << s.symbol << " class not found " << s.ck.market << " " << s.ck.instrumentGroup << " " << s.ck.commodityCode << endl;
+                std::stringstream ss;
+                ss << s.symbol << " class not found " << s.ck.market << " " << s.ck.instrumentGroup << " " << s.ck.commodityCode;
+                _Logger::warn(ss.str());
                 continue;
             }
             auto const& clsDef = clsPos->second;
             auto groupPos = _instrumentGroupMap.find(s.ck.instrumentGroup);
             if (groupPos == _instrumentGroupMap.end())
             {
-                cout << s.symbol << " unsupported instrumentGroup " << (int32_t)s.ck.instrumentGroup << endl;
+                std::stringstream ss;
+                ss << s.symbol << " unsupported instrumentGroup " << (int32_t)s.ck.instrumentGroup;
+                _Logger::warn(ss.str());
                 continue;
             }
 

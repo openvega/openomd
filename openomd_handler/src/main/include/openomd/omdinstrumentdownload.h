@@ -42,7 +42,9 @@ public:
         {
             if (error)
             {
-                std::cout << "processRefresh error: " << error.message();
+                std::stringstream ss;
+                ss << _processor.channel() << " processRefresh error: " << error.message();
+                _processor.onError(std::runtime_error(ss.str()));
             }
             else
             {
@@ -83,7 +85,6 @@ public:
 
     void run()
     {
-        std::cout << "start run "<< std::endl;
         for (;;)
         {
             _ioServiceLC.ioService().poll();
@@ -94,7 +95,6 @@ public:
                 break;
             }
         }
-        std::cout << "finished run "<< std::endl;
     }
 
     void stop()

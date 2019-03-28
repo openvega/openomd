@@ -6,7 +6,8 @@
 
 namespace openomd
 {
-class BaseRefreshProcessor : public MapBasedCache
+template <typename _Logger>
+class BaseRefreshProcessor : public MapBasedCache, protected _Logger
 {
 public:
     enum class State
@@ -21,7 +22,9 @@ public:
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << channel << " Start refresh" << std::endl;
+            std::stringstream ss;
+            ss << channel << " Start refresh";
+            _Logger::info(ss.str());
         }
     }
     inline void onRefreshComplete(int32_t channel, uint32_t lastSeqNum)
@@ -29,13 +32,17 @@ public:
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << channel << " Start refresh" << std::endl;
+            std::stringstream ss;
+            ss << channel << " Start refresh";
+            _Logger::info(ss.str());
         }
         else if (_state == State::Refreshing)
         {
             _state = State::RefreshCompleted;
             _lastSeqNum = lastSeqNum;
-            std::cout << channel << " Refresh completed " << _lastSeqNum << std::endl;
+            std::stringstream ss;
+            ss << channel << " Refresh completed " << _lastSeqNum;
+            _Logger::info(ss.str());
         }
     }
     inline void end()
@@ -89,15 +96,16 @@ protected:
     uint32_t _lastSeqNum = 0;
 };
 
+template <typename _Logger>
 template <typename _F>
-void BaseRefreshProcessor::consumeAll(_F f)
+void BaseRefreshProcessor<_Logger>::consumeAll(_F f)
 {
     for_each(MapBasedCache::_buffer.begin(), MapBasedCache::_buffer.end(), [&](auto& pos) {
         f(&pos.second[0], pos.second.size());
     });
 }
-
-class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor>
+template <typename _Logger>
+class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor<_Logger>>
 {
 public:
     inline void onHeartbeat()
@@ -109,10 +117,11 @@ public:
     {
         onRefreshComplete(channel(), m.lastSeqNum());
     }
-    using OMDCProcessor<BaseRefreshProcessor>::onMessage;
+    using OMDCProcessor<BaseRefreshProcessor<_Logger>>::onMessage;
 };
 
-class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor>
+template <typename _Logger>
+class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor<_Logger>>
 {
 public:
     inline void onHeartbeat()
@@ -124,6 +133,6 @@ public:
     {
         onRefreshComplete(channel(), m.lastSeqNum());
     }
-    using OMDDProcessor<BaseRefreshProcessor>::onMessage;
+    using OMDDProcessor<BaseRefreshProcessor<_Logger>>::onMessage;
 };
 }

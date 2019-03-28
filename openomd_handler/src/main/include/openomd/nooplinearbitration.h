@@ -1,10 +1,11 @@
 #pragma once
+#include "openomd/omddef.h"
 #include "openomd/recoverypolicy.h"
 #include "openomd/msgcache.h"
 
 namespace openomd
 {
-class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache
+class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache, protected NoopLogger
 {
 public:
     inline bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)

@@ -44,13 +44,26 @@ static inline void trim(std::string& s)
 class BaseProcessor
 {
 public:
-    int32_t channel() const {
+    inline int32_t channel() const {
         return _channel;
     }
-    void channel(int32_t channel) {
+    inline void channel(int32_t channel) {
         _channel = channel;
     }
 private:
     int32_t _channel;
+};
+
+struct NoopLogger
+{
+    inline void info(std::string const& str) const
+    {
+    }
+    inline void warn(std::string const& str) const
+    {
+    }
+    inline void error(std::string const& str) const
+    {
+    }
 };
 }

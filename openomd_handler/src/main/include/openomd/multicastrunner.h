@@ -55,7 +55,9 @@ public:
         {
             if (error)
             {
-                std::cout << "processDataA error: " << error.message();
+                std::stringstream ss;
+                ss << _processor.channel() << " processDataA error: " << error.message();
+                _processor.onError(std::runtime_error(ss.str()));
             }
             else
             {
@@ -67,7 +69,9 @@ public:
         {
             if (error)
             {
-                std::cout << "processDataB error: " << error.message();
+                std::stringstream ss;
+                ss << _processor.channel() << " processDataB error: " << error.message();
+                _processor.onError(std::runtime_error(ss.str()));
             }
             else
             {
@@ -83,7 +87,9 @@ public:
             }
             if (error)
             {
-                std::cout << "processRefresh error: " << error.message();
+                std::stringstream ss;
+                ss << _processor.channel() << " processRefresh error: " << error.message();
+                _processor.onError(std::runtime_error(ss.str()));
             }
             else
             {

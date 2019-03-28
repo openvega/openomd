@@ -11,8 +11,6 @@
 #include "openomd/multicastrunner.h"
 #include "omdprintprocessor.h"
 
-using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>>;
-
 std::vector<openomd::ChannelConfig> getChannelConfig(std::string filename)
 {
     std::ifstream istrm(filename);
@@ -117,6 +115,24 @@ const std::string OMDDTranslatePolicy::Option{"Option"};
 const std::string OMDDTranslatePolicy::Future{"Future"};
 const std::string OMDDTranslatePolicy::FX{"FX"};
 
+struct Logger
+{
+    void info(std::string const& log) const
+    {
+        std::cout << log;
+    }
+    void warn(std::string const& log) const
+    {
+        std::cout << log;
+    }
+    void error(std::string const& log) const
+    {
+        std::cerr << log;
+    }
+};
+
+using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>, Logger>;
+
 int main(int32_t argc, char* argv[])
 {
     using namespace std;
@@ -171,12 +187,12 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg) };
+                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor<Logger>, OmdcParser> runner{ getChannelConfig(networkCfg) };
                 run(runner);
             }
             else if (protocol == "omdd")
             {
-                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg)};
+                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor<Logger>, OmddParser> runner{ getChannelConfig(networkCfg)};
                 run(runner);
             }
         }
@@ -192,12 +208,12 @@ int main(int32_t argc, char* argv[])
             cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
             if (protocol == "omdc")
             {
-                OmdInstrumentDownload<OMDCInstrumentProcessor<OMDCTranslatePolicy>, OmdcRefreshProcessor, OmdcParser> runner{ getChannelConfig(networkCfg), std::cout };
+                OmdInstrumentDownload<OMDCInstrumentProcessor<OMDCTranslatePolicy, Logger>, OmdcRefreshProcessor<Logger>, OmdcParser> runner{ getChannelConfig(networkCfg), std::cout };
                 run(runner);
             }
             else if (protocol == "omdd")
             {
-                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy>, OmddRefreshProcessor, OmddParser> runner{ getChannelConfig(networkCfg), std::cout };
+                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy, Logger>, OmddRefreshProcessor<Logger>, OmddParser> runner{ getChannelConfig(networkCfg), std::cout };
                 run(runner);
             }
         }
