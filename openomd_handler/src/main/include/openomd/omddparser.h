@@ -35,34 +35,34 @@ namespace openomd
 class OmddParser : public OmdBaseParser
 {
 #ifndef _OMDD_MSG_SWITCH_
-#define _OMDD_MSG_SWITCH_ OMD_SWITCH_CASE(AddOrder); \
-    OMD_SWITCH_CASE(AggregateOrderBookUpdate); \
-    OMD_SWITCH_CASE(CalculatedOpeningPrice); \
-    OMD_SWITCH_CASE(ClassDefinition); \
-    OMD_SWITCH_CASE(CombinationDefinition); \
-    OMD_SWITCH_CASE(CommodityDefinition); \
-    OMD_SWITCH_CASE(CommodityStatus); \
-    OMD_SWITCH_CASE(DeleteOrder); \
-    OMD_SWITCH_CASE(DisasterRecoverySignal); \
-    OMD_SWITCH_CASE(EstimatedAverageSettlementPrice); \
-    OMD_SWITCH_CASE(ImpliedVolatility); \
-    OMD_SWITCH_CASE(LogonResponse); \
-    OMD_SWITCH_CASE(MarketAlert); \
-    OMD_SWITCH_CASE(ModifyOrder); \
-    OMD_SWITCH_CASE(OpenInterest); \
-    OMD_SWITCH_CASE(OrderbookClear); \
-    OMD_SWITCH_CASE(QuoteRequest); \
-    OMD_SWITCH_CASE(RefreshComplete); \
-    OMD_SWITCH_CASE(RetransmissionResponse); \
-    OMD_SWITCH_CASE(SequenceReset); \
-    OMD_SWITCH_CASE(SeriesDefinitionBase); \
-    OMD_SWITCH_CASE(SeriesDefinitionExtended); \
-    OMD_SWITCH_CASE(SeriesStatistics); \
-    OMD_SWITCH_CASE(SeriesStatus); \
-    OMD_SWITCH_CASE(Trade); \
-    OMD_SWITCH_CASE(TradeAmendment); \
-    OMD_SWITCH_CASE(TradeStatistics); \
-    OMD_SWITCH_CASE(MarketStatus); \
+#define _OMDD_MSG_SWITCH_ OMD_SWITCH_CASE(AddOrder, 330); \
+    OMD_SWITCH_CASE(AggregateOrderBookUpdate, 353); \
+    OMD_SWITCH_CASE(CalculatedOpeningPrice, 364); \
+    OMD_SWITCH_CASE(ClassDefinition, 302); \
+    OMD_SWITCH_CASE(CombinationDefinition, 305); \
+    OMD_SWITCH_CASE(CommodityDefinition, 301); \
+    OMD_SWITCH_CASE(CommodityStatus, 322); \
+    OMD_SWITCH_CASE(DeleteOrder, 332); \
+    OMD_SWITCH_CASE(DisasterRecoverySignal, 105); \
+    OMD_SWITCH_CASE(EstimatedAverageSettlementPrice, 365); \
+    OMD_SWITCH_CASE(ImpliedVolatility, 367); \
+    OMD_SWITCH_CASE(LogonResponse, 102); \
+    OMD_SWITCH_CASE(MarketAlert, 323); \
+    OMD_SWITCH_CASE(ModifyOrder, 331); \
+    OMD_SWITCH_CASE(OpenInterest, 366); \
+    OMD_SWITCH_CASE(OrderbookClear, 335); \
+    OMD_SWITCH_CASE(QuoteRequest, 336); \
+    OMD_SWITCH_CASE(RefreshComplete, 203); \
+    OMD_SWITCH_CASE(RetransmissionResponse, 202); \
+    OMD_SWITCH_CASE(SequenceReset, 100); \
+    OMD_SWITCH_CASE(SeriesDefinitionBase, 303); \
+    OMD_SWITCH_CASE(SeriesDefinitionExtended, 304); \
+    OMD_SWITCH_CASE(SeriesStatistics, 363); \
+    OMD_SWITCH_CASE(SeriesStatus, 321); \
+    OMD_SWITCH_CASE(Trade, 350); \
+    OMD_SWITCH_CASE(TradeAmendment, 356); \
+    OMD_SWITCH_CASE(TradeStatistics, 360); \
+    OMD_SWITCH_CASE(MarketStatus, 320); \
 default: \
     processor.onUnknownMessage(type, msgSize); \
     break;

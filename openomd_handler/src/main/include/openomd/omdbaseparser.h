@@ -3,7 +3,7 @@
 
 namespace openomd
 {
-#define OMD_SWITCH_CASE(MESSAGE) case MESSAGE::sbeTemplateId(): process<MESSAGE>(pos, msgSize, processor, seqNum); break;
+#define OMD_SWITCH_CASE(MESSAGE, ID) case ID: process<MESSAGE>(pos, msgSize, processor, seqNum); break;
 class OmdBaseParser
 {
 protected:

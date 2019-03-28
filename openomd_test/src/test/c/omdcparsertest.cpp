@@ -7,12 +7,20 @@ namespace omdc
 template <typename _Processor>
 void processMsg(char* msg, size_t size)
 {
-    _Processor processor;
+    bool tc=false;
+    _Processor processor{tc};
     openomd::OmdcParser parser;
     parser.parse(msg, size, processor);
+    EXPECT_EQ(true, tc);
 }
 
-using OMDCP = openomd::OMDCProcessor<openomd::NoopLineArbitration>;
+class OMDCP : public openomd::OMDCProcessor<openomd::NoopLineArbitration>
+{
+public:
+    OMDCP(bool& tc) : _tc{tc}{}
+protected:
+    bool& _tc;
+};
 
 TEST(OMDC_TEST, SequenceReset)
 {
@@ -20,9 +28,11 @@ TEST(OMDC_TEST, SequenceReset)
         "\x08\x00\x64\x00\x01\x00\x00\x00";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::SequenceReset const& sr, uint32_t)
         {
             EXPECT_EQ(1, sr.newSeqNo());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -42,9 +52,11 @@ TEST(OMDC_TEST, DisasterRecoverySignal)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::DisasterRecoverySignal const& dr, uint32_t)
         {
             EXPECT_EQ(2, dr.drStatus());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -64,9 +76,11 @@ TEST(OMDC_TEST, RefreshComplete)
         "\x08\x00\xcb\x00\x00\x00\x00\x00";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::RefreshComplete const& rc, uint32_t)
         {
             EXPECT_EQ(0, rc.lastSeqNum());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -81,12 +95,14 @@ TEST(OMDC_TEST, MarketDefinition)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::MarketDefinition const& md, uint32_t)
         {
             EXPECT_EQ("NASD", md.getMarketCodeAsString());
             EXPECT_EQ("NASDAQ-AMEX BOARD        ", md.getMarketNameAsString());
             EXPECT_EQ("HKD", md.getCurrencyCodeAsString());
             EXPECT_EQ(31, md.numberOfSecurities());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -129,6 +145,7 @@ TEST(OMDC_TEST, SecurityDefinition)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::SecurityDefinition& sd, uint32_t)
         {
             EXPECT_EQ(11407, sd.securityCode());
@@ -170,6 +187,7 @@ TEST(OMDC_TEST, SecurityDefinition)
             EXPECT_EQ(true, underlyings.hasNext());
             underlyings.next();
             EXPECT_EQ(1398, underlyings.underlyingSecurityCode());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -209,6 +227,7 @@ TEST(OMDC_TEST, SecurityDefinition)
 
     struct CbbcProcessor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::SecurityDefinition& sd, uint32_t)
         {
             EXPECT_EQ(60678, sd.securityCode());
@@ -248,6 +267,7 @@ TEST(OMDC_TEST, SecurityDefinition)
             auto& underlyings = sd.noUnderlyingSecurities();
             EXPECT_EQ(0, underlyings.count());
             EXPECT_EQ(false, underlyings.hasNext());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -260,6 +280,7 @@ TEST(OMDC_TEST, LiquidityProvider)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::LiquidityProvider& lp, uint32_t)
         {
             EXPECT_EQ(11560, lp.securityCode());
@@ -268,6 +289,7 @@ TEST(OMDC_TEST, LiquidityProvider)
             EXPECT_EQ(true, lps.hasNext());
             lps.next();
             EXPECT_EQ(9707, lps.lpBrokerNumber());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -280,10 +302,12 @@ TEST(OMDC_TEST, CurrencyRate)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::CurrencyRate const& cr, uint32_t)
         {
             EXPECT_EQ("GBP", cr.getCurrencyCodeAsString());
             EXPECT_EQ(107500, cr.currencyRate());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -297,6 +321,7 @@ TEST(OMDC_TEST, TradingSessionStatus)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::TradingSessionStatus const& ts, uint32_t)
         {
             EXPECT_EQ("MAIN", ts.getMarketCodeAsString());
@@ -305,6 +330,7 @@ TEST(OMDC_TEST, TradingSessionStatus)
             EXPECT_EQ(48, ts.tradingSesControlFlag());
             EXPECT_EQ(1518595200000000000, ts.startDateTime());
             EXPECT_EQ(1518595259000000000, ts.endDateTime());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -317,10 +343,12 @@ TEST(OMDC_TEST, SecurityStatus)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::SecurityStatus const& ss, uint32_t)
         {
             EXPECT_EQ(25158, ss.securityCode());
             EXPECT_EQ(2, ss.suspensionIndicator());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -334,6 +362,7 @@ TEST(OMDC_TEST, AddOrder)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::AddOrder const& ao, uint32_t)
         {
             EXPECT_EQ(285, ao.securityCode());
@@ -343,6 +372,7 @@ TEST(OMDC_TEST, AddOrder)
             EXPECT_EQ(1, ao.side());
             EXPECT_EQ(50, ao.orderType());
             EXPECT_EQ(0, ao.orderBookPosition());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -357,6 +387,7 @@ TEST(OMDC_TEST, ModifyOrder)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::ModifyOrder const& mo, uint32_t)
         {
             EXPECT_EQ(20147, mo.securityCode());
@@ -364,6 +395,7 @@ TEST(OMDC_TEST, ModifyOrder)
             EXPECT_EQ(1332000, mo.quantity());
             EXPECT_EQ(1, mo.side());
             EXPECT_EQ(0, mo.orderBookPosition());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -377,11 +409,13 @@ TEST(OMDC_TEST, DeleteOrder)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::DeleteOrder const& d, uint32_t)
         {
             EXPECT_EQ(19133, d.securityCode());
             EXPECT_EQ(77473795, d.orderID());
-            EXPECT_EQ(1, d.side());            
+            EXPECT_EQ(1, d.side());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -395,6 +429,7 @@ TEST(OMDC_TEST, AddOddLotOrder)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::AddOddLotOrder const& oo, uint32_t)
         {
             EXPECT_EQ(35, oo.securityCode());
@@ -403,6 +438,7 @@ TEST(OMDC_TEST, AddOddLotOrder)
             EXPECT_EQ(284, oo.quantity());
             EXPECT_EQ(4588, oo.brokerID());
             EXPECT_EQ(1, oo.side());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -416,12 +452,14 @@ TEST(OMDC_TEST, DeleteOddLotOrder)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::DeleteOddLotOrder const& dol, uint32_t)
         {
             EXPECT_EQ(700, dol.securityCode());
             EXPECT_EQ(1446382593, dol.orderID());
             EXPECT_EQ(816, dol.brokerID());
             EXPECT_EQ(1, dol.side());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -441,6 +479,7 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::AggregateOrderBookUpdate& aob, uint32_t)
         {
             EXPECT_EQ(18901, aob.securityCode());
@@ -510,6 +549,7 @@ TEST(OMDC_TEST, AggregateOrderBookUpdate)
             EXPECT_EQ(0, en.side());
             EXPECT_EQ(3, en.priceLevel());
             EXPECT_EQ(0, en.updateAction());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -534,6 +574,7 @@ TEST(OMDC_TEST, BrokerQueue)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::BrokerQueue& bq, uint32_t)
         {
             EXPECT_EQ(3188, bq.securityCode());
@@ -577,6 +618,7 @@ TEST(OMDC_TEST, BrokerQueue)
             }
             EXPECT_EQ(9023, items.item());
             EXPECT_EQ(66, items.itemType());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -592,11 +634,13 @@ TEST(OMDC_TEST, OrderImbalance)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::OrderImbalance const& oib, uint32_t)
         {
             EXPECT_EQ(1358, oib.securityCode());
             EXPECT_EQ(66, oib.orderImbalanceDirection());
             EXPECT_EQ(18000, oib.orderImbalanceQuantity());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -610,6 +654,7 @@ TEST(OMDC_TEST, Trade)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::Trade const& t, uint32_t)
         {
             EXPECT_EQ(2628, t.securityCode());
@@ -618,6 +663,7 @@ TEST(OMDC_TEST, Trade)
             EXPECT_EQ(3000, t.quantity());
             EXPECT_EQ(0, t.trdType());
             EXPECT_EQ(1518572093000000000, t.tradeTime());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -630,10 +676,12 @@ TEST(OMDC_TEST, TradeCancel)
         "\x0c\x00\x33\x00\x44\x0a\x00\x00\x6b\x01\x00\x00";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::TradeCancel const& tc, uint32_t)
         {
             EXPECT_EQ(2628, tc.securityCode());
             EXPECT_EQ(363, tc.tradeID());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -647,6 +695,7 @@ TEST(OMDC_TEST, TradeTicker)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::TradeTicker const& tt, uint32_t)
         {
             EXPECT_EQ(388, tt.securityCode());
@@ -655,6 +704,7 @@ TEST(OMDC_TEST, TradeTicker)
             EXPECT_EQ(200, tt.aggregateQuantity());
             EXPECT_EQ(0, tt.trdType());
             EXPECT_EQ('N', tt.trdCancelFlag());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -667,11 +717,13 @@ TEST(OMDC_TEST, ClosingPrice)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::ClosingPrice const& cp, uint32_t)
         {
             EXPECT_EQ(1398, cp.securityCode());
             EXPECT_EQ(6780, cp.closingPrice());
             EXPECT_EQ(18692, cp.numberOfTrades());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -684,10 +736,12 @@ TEST(OMDC_TEST, NominalPrice)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::NominalPrice const& np, uint32_t)
         {
             EXPECT_EQ(65169, np.securityCode());
             EXPECT_EQ(110, np.nominalPrice());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -701,11 +755,13 @@ TEST(OMDC_TEST, IndicativeEquilibriumPrice)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::IndicativeEquilibriumPrice const& iep, uint32_t)
         {
             EXPECT_EQ(700, iep.securityCode());
             EXPECT_EQ(430000, iep.price());
             EXPECT_EQ(10300, iep.aggregateQuantity());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -719,12 +775,14 @@ TEST(OMDC_TEST, ReferencePrice)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::ReferencePrice const& rp, uint32_t)
         {
             EXPECT_EQ(3110, rp.securityCode());
             EXPECT_EQ(31450, rp.referencePrice());
             EXPECT_EQ(29900, rp.lowerPrice());
             EXPECT_EQ(33000, rp.upperPrice());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -739,6 +797,7 @@ TEST(OMDC_TEST, VCMTrigger)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::VCMTrigger const& vcm, uint32_t)
         {
             EXPECT_EQ(2403, vcm.securityCode());
@@ -747,6 +806,7 @@ TEST(OMDC_TEST, VCMTrigger)
             EXPECT_EQ(130, vcm.vcmReferencePrice());
             EXPECT_EQ(117, vcm.vcmLowerPrice());
             EXPECT_EQ(143, vcm.vcmUpperPrice());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -762,6 +822,7 @@ TEST(OMDC_TEST, Statistics)
     
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::Statistics const& s, uint32_t)
         {
             EXPECT_EQ(3188, s.securityCode());
@@ -773,6 +834,7 @@ TEST(OMDC_TEST, Statistics)
             EXPECT_EQ(49424, s.vwap());
             EXPECT_EQ(1350200, s.shortSellSharesTraded());
             EXPECT_EQ(66459290000, s.shortSellTurnover());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -785,11 +847,13 @@ TEST(OMDC_TEST, MarketTurnover)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::MarketTurnover const& mt, uint32_t)
         {
             EXPECT_EQ("MAIN", mt.getMarketCodeAsString());
             EXPECT_EQ("HKD", mt.getCurrencyCodeAsString());
             EXPECT_EQ(103520411520345, mt.turnover());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -801,10 +865,12 @@ TEST(OMDC_TEST, Yield)
         "\x0c\x00\x2c\x00\x77\x52\x01\x00\xaa\x0d\x00\x00";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::Yield const& y, uint32_t)
         {
             EXPECT_EQ(86647, y.securityCode());
             EXPECT_EQ(3498, y.yield());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -901,6 +967,7 @@ TEST(OMDC_TEST, News)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::News& news, uint32_t)
         {
             EXPECT_EQ("EXN", news.getNewsTypeAsString());
@@ -924,6 +991,7 @@ TEST(OMDC_TEST, News)
             EXPECT_EQ(1, newsLines.count());
             newsLines.next();
             EXPECT_EQ(160, newsLines.getNewsLineAsString().size());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -936,11 +1004,13 @@ TEST(OMDC_TEST, IndexDefinition)
         "\x43\x4e\x59\x20";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::IndexDefinition const& id, uint32_t)
         {
             EXPECT_EQ("000001     ", id.getIndexCodeAsString());
             EXPECT_EQ(67, id.indexSource());
             EXPECT_EQ("CNY", id.getCurrencyCodeAsString());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -959,6 +1029,7 @@ TEST(OMDC_TEST, IndexData)
 
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::IndexData const& id, uint32_t)
         {
             EXPECT_EQ("H11108     ", id.getIndexCodeAsString());
@@ -976,6 +1047,7 @@ TEST(OMDC_TEST, IndexData)
             EXPECT_EQ(10392674600, id.indexVolume());
             EXPECT_EQ(13300, id.netChgPrevDayPct());
             EXPECT_EQ(' ', id.exception());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -988,12 +1060,14 @@ TEST(OMDC_TEST, StockConnectDailyQuotaBalance)
         "\x00\x1c\xa0\x54\xfb\xc7\xad\x14";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::StockConnectDailyQuotaBalance const& scDQB, uint32_t)
         {
             EXPECT_EQ("SH", scDQB.getStockConnectMarketAsString());
             EXPECT_EQ("NB", scDQB.getTradingDirectionAsString());
             EXPECT_EQ(12477689274, scDQB.dailyQuotaBalance());
             EXPECT_EQ(1490066934000000000, scDQB.dailyQuotaBalanceTime());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };
@@ -1006,6 +1080,7 @@ TEST(OMDC_TEST, StockConnectMarketTurnover)
         "\x87\x9e\xcf\x16\x00\x00\x00\x00\xaf\xc8\xae\x49\x00\x00\x00\x00";
     struct Processor : public OMDCP
     {
+        using OMDCP::OMDCP;
         void onMessage(sbe::StockConnectMarketTurnover const& scMT, uint32_t)
         {
             EXPECT_EQ("SZ", scMT.getStockConnectMarketAsString());
@@ -1013,6 +1088,7 @@ TEST(OMDC_TEST, StockConnectMarketTurnover)
             EXPECT_EQ(853486120, scMT.buyTurnover());
             EXPECT_EQ(382705287, scMT.sellTurnover());
             EXPECT_EQ(1236191407, scMT.buySellTurnover());
+            _tc = true;
         }
         using OMDCProcessor::onMessage;
     };

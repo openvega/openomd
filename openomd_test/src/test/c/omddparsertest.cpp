@@ -10,12 +10,20 @@ namespace omdd
 template <typename _Processor>
 void processMsg(char* msg, size_t size)
 {
-    _Processor processor;
+    bool tc=false;
+    _Processor processor{tc};
     openomd::OmddParser parser;
     parser.parse(msg, size, processor);
+    EXPECT_EQ(true, tc);
 }
 
-using OMDDP = openomd::OMDDProcessor<openomd::NoopLineArbitration>;
+class OMDDP : public openomd::OMDDProcessor<openomd::NoopLineArbitration>
+{
+public:
+    OMDDP(bool& tc) :_tc{tc}{}
+protected:
+    bool& _tc;
+};
 
 TEST(OMDD_TEST, SequenceReset)
 {
@@ -24,9 +32,11 @@ TEST(OMDD_TEST, SequenceReset)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::SequenceReset const& sr, uint32_t)
         {
             EXPECT_EQ(1, sr.newSeqNo());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -38,9 +48,11 @@ TEST(OMDD_TEST, DisasterRecoverySignal)
         "\x08\x00\x69\x00\x02\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::DisasterRecoverySignal const& dr, uint32_t)
         {
             EXPECT_EQ(2, dr.drStatus());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -52,9 +64,11 @@ TEST(OMDD_TEST, RefreshComplete)
         "\x08\x00\xcb\x00\x00\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::RefreshComplete const& rc, uint32_t)
         {
             EXPECT_EQ(0, rc.lastSeqNum());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -72,6 +86,7 @@ TEST(OMDD_TEST, CommodityDefinition)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::CommodityDefinition const& comm, uint32_t)
         {
             EXPECT_EQ(2006, comm.commodityCode());
@@ -85,6 +100,7 @@ TEST(OMDD_TEST, CommodityDefinition)
             EXPECT_EQ(1, comm.underlyingType());
             EXPECT_EQ(0, comm.effectiveTomorrow());
             EXPECT_EQ("HEH   ", comm.getCommodityIDAsString());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -104,6 +120,7 @@ TEST(OMDD_TEST, ClassDefinition)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::ClassDefinition const& cdef, uint32_t)
         {
             EXPECT_EQ(12, cdef.country());
@@ -125,6 +142,7 @@ TEST(OMDD_TEST, ClassDefinition)
             EXPECT_EQ("HKD                             ", cdef.getSettlementCurrencyIDAsString());
             EXPECT_EQ(0, cdef.effectiveTomorrow());
             EXPECT_EQ(1, cdef.tickStepSize());
+            _tc =true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -140,6 +158,7 @@ TEST(OMDD_TEST, SeriesDefinitionBase)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::SeriesDefinitionBase const& sdb, uint32_t)
         {
             EXPECT_EQ(199007, sdb.orderbookID());
@@ -150,6 +169,7 @@ TEST(OMDD_TEST, SeriesDefinitionBase)
             EXPECT_EQ(250, sdb.strikePrice());
             EXPECT_EQ("20170629", sdb.getExpirationDateAsString());
             EXPECT_EQ(1, sdb.putOrCall());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -168,6 +188,7 @@ TEST(OMDD_TEST, SeriesDefinitionExtended)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::SeriesDefinitionExtended const& sde, uint32_t)
         {
             EXPECT_EQ(1049620, sde.orderbookID());
@@ -186,6 +207,7 @@ TEST(OMDD_TEST, SeriesDefinitionExtended)
             EXPECT_EQ(0, sde.priceQuotationFactor());
             EXPECT_EQ("20170928", sde.getEffectiveExpDateAsString());
             EXPECT_EQ(1506585600000000000, sde.dateTimeLastTrading());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -198,12 +220,14 @@ TEST(OMDD_TEST, CombinationDefinition)
         "\x01\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::CombinationDefinition const& cd, uint32_t)
         {
             EXPECT_EQ(5379053, cd.comboOrderbookID());
             EXPECT_EQ(725997, cd.legOrderbookID());
             EXPECT_EQ(66, cd.legSide());
             EXPECT_EQ(1, cd.legRatio());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -219,6 +243,7 @@ TEST(OMDD_TEST, MarketStatus)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::MarketStatus const& ms, uint32_t)
         {
             EXPECT_EQ(1, ms.stateLevel());
@@ -233,6 +258,7 @@ TEST(OMDD_TEST, MarketStatus)
             EXPECT_EQ(0, ms.secondsToStateChange());
             EXPECT_EQ(2, ms.state());
             EXPECT_EQ(115, ms.priority());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -245,10 +271,12 @@ TEST(OMDD_TEST, SeriesStatus)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::SeriesStatus const& ss, uint32_t)
         {
             EXPECT_EQ(16976142, ss.orderbookID());
             EXPECT_EQ(78, ss.suspended());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -261,10 +289,12 @@ TEST(OMDD_TEST, CommodityStatus)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::CommodityStatus const& cs, uint32_t)
         {
             EXPECT_EQ(2003, cs.commodityCode());
             EXPECT_EQ('N', cs.suspended());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -277,6 +307,7 @@ TEST(OMDD_TEST, AddOrder)
         "\x20\x4e\x00\x00\x01\x00\x00\x00\x00\x02\x00\x00\x01\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::AddOrder const& ao, uint32_t)
         {
             EXPECT_EQ(2559908, ao.orderbookID());
@@ -287,6 +318,7 @@ TEST(OMDD_TEST, AddOrder)
             EXPECT_EQ(2, ao.lotType());
             EXPECT_EQ(0, ao.orderType());
             EXPECT_EQ(1, ao.orderBookPosition());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -300,6 +332,7 @@ TEST(OMDD_TEST, ModifyOrder)
         "\x20\x4e\x00\x00\x01\x00\x00\x00\x00\x02\x00\x00\x01\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::ModifyOrder const& mo, uint32_t)
         {
             EXPECT_EQ(2559908, mo.orderbookID());
@@ -309,6 +342,7 @@ TEST(OMDD_TEST, ModifyOrder)
             EXPECT_EQ(0, mo.side());
             EXPECT_EQ(0, mo.orderType());
             EXPECT_EQ(1, mo.orderBookPosition());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -322,11 +356,13 @@ TEST(OMDD_TEST, DeleteOrder)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::DeleteOrder const& dl, uint32_t)
         {
             EXPECT_EQ(27003150, dl.orderbookID());
             EXPECT_EQ(6738016441394313329, dl.orderID());
             EXPECT_EQ(0, dl.side());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -351,6 +387,7 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::AggregateOrderBookUpdate& aob, uint32_t)
         {
             EXPECT_EQ(29689813, aob.orderbookID());
@@ -380,6 +417,7 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
             EXPECT_EQ(0, entries.side());
             EXPECT_EQ(255, entries.priceLevel());
             EXPECT_EQ(0, entries.updateAction());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -393,9 +431,11 @@ TEST(OMDD_TEST, OrderbookClear)
         "\x08\x00\x4f\x01\x0e\x09\x9c\x01";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::OrderbookClear const& obc, uint32_t)
         {
             EXPECT_EQ(27003150, obc.orderbookID());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -408,11 +448,13 @@ TEST(OMDD_TEST, QuoteRequest)
 
     struct Processor : public OMDDP
     {
-        void onmessage(sbe::QuoteRequest const& qr, uint32_t)
+        using OMDDP::OMDDP;
+        void onMessage(sbe::QuoteRequest const& qr, uint32_t)
         {
             EXPECT_EQ(22415940, qr.orderbookID());
             EXPECT_EQ(0, qr.numberOfLots());
             EXPECT_EQ(2, qr.bidAskFlag());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -428,6 +470,7 @@ TEST(OMDD_TEST, Trade)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::Trade const& t, uint32_t)
         {
             EXPECT_EQ(266148, t.orderbookID());
@@ -441,6 +484,7 @@ TEST(OMDD_TEST, Trade)
             EXPECT_EQ(0, t.dealInfo());
             EXPECT_EQ(1, t.quantity());
             EXPECT_EQ(1470842515420000000, t.tradeTime());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -455,6 +499,7 @@ TEST(OMDD_TEST, TradeAmendment)
         "\x79\x7b\x69\x14\x01\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::TradeAmendment const& ta, uint32_t)
         {
             EXPECT_EQ(673801620517078627, ta.tradeID());
@@ -463,6 +508,7 @@ TEST(OMDD_TEST, TradeAmendment)
             EXPECT_EQ(1, ta.quantity());
             EXPECT_EQ(1470842515420000000, ta.tradeTime());
             EXPECT_EQ(1, ta.tradeState());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -478,6 +524,7 @@ TEST(OMDD_TEST, TradeStatistics)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::TradeStatistics const& ts, uint32_t)
         {
             EXPECT_EQ(19073304, ts.orderbookID());
@@ -491,6 +538,7 @@ TEST(OMDD_TEST, TradeStatistics)
             EXPECT_EQ(0, ts.tradeReportVolume());
             EXPECT_EQ(0, ts.dealCount());
             EXPECT_EQ(0, ts.turnover());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -505,6 +553,7 @@ TEST(OMDD_TEST, SeriesStatistics)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::SeriesStatistics const& ss, uint32_t)
         {
             EXPECT_EQ(17696786, ss.orderbookID());
@@ -516,6 +565,7 @@ TEST(OMDD_TEST, SeriesStatistics)
             EXPECT_EQ(0, ss.dealCount());
             EXPECT_EQ(INT_MIN, ss.price());
             EXPECT_EQ(0, ss.turnover());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -528,11 +578,13 @@ TEST(OMDD_TEST, CalculatedOpeningPrice)
         "\x00\x00\x00\x00\x00\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::CalculatedOpeningPrice const& cop, uint32_t)
         {
             EXPECT_EQ(135073, cop.orderbookID());
             EXPECT_EQ(INT_MIN, cop.calculatedOpeningPrice());
             EXPECT_EQ(0, cop.quantity());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -546,11 +598,13 @@ TEST(OMDD_TEST, EstimatedAverageSettlementPrice)
         "\x00\x00\x00\x00";
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::EstimatedAverageSettlementPrice const& eas, uint32_t)
         {
             EXPECT_EQ(69, eas.easType());
             EXPECT_EQ("1211                ", eas.getInstrumentCodeAsString());
             EXPECT_EQ(3363, eas.eas());
+            _tc =true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -645,6 +699,7 @@ TEST(OMDD_TEST, MarketAlert)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::MarketAlert& ma, uint32_t)
         {
             EXPECT_EQ(1, ma.alertID());
@@ -662,6 +717,7 @@ TEST(OMDD_TEST, MarketAlert)
             EXPECT_EQ(4, ma.priority());
             auto &lines = ma.noLines();
             EXPECT_EQ(3, lines.count());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -677,6 +733,7 @@ TEST(OMDD_TEST, OpenInterest)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::OpenInterest const& oi, uint32_t)
         {
             EXPECT_EQ(1, oi.dayIndicator());
@@ -686,6 +743,7 @@ TEST(OMDD_TEST, OpenInterest)
             EXPECT_EQ(30, oi.grossOI());
             EXPECT_EQ(30, oi.netOI());
             EXPECT_EQ(0, oi.turnover());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
@@ -699,10 +757,12 @@ TEST(OMDD_TEST, ImpliedVolatility)
 
     struct Processor : public OMDDP
     {
+        using OMDDP::OMDDP;
         void onMessage(sbe::ImpliedVolatility const& iv, uint32_t)
         {
             EXPECT_EQ(36637565, iv.orderbookID());
             EXPECT_EQ(230000, iv.impliedVolatility());
+            _tc = true;
         }
         using OMDDProcessor::onMessage;
     };
