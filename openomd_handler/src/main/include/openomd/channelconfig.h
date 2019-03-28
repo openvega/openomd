@@ -2,6 +2,7 @@
 #pragma once
 #include <vector>
 #include <boost/tokenizer.hpp>
+#include <fstream>
 
 namespace openomd
 {
@@ -41,6 +42,22 @@ struct ChannelConfig
             vs[i++]                 // refresh ip
         };
         return config;
+    }
+
+    static inline std::vector<ChannelConfig> getChannelConfig(std::string const& filename)
+    {
+        std::ifstream istrm(filename);
+        if (istrm.is_open())
+        {
+            std::vector<ChannelConfig> channels;
+            std::string line;
+            while (std::getline(istrm, line) && !line.empty())
+            {
+                channels.emplace_back(openomd::ChannelConfig::convert(line));
+            }
+            return channels;
+        }
+        throw std::runtime_error("Fail to open config file");
     }
 };
 }
