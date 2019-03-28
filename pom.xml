@@ -120,7 +120,6 @@
               <cpp>
                 <options>
                   <option>/FS</option>
-                  <option>/Zc:__cplusplus</option>
                 </options>
                 <defines>
                   <define>_ENABLE_ATOMIC_ALIGNMENT_FIX</define>
