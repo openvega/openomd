@@ -99,7 +99,6 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\src\main\include;$(ProjectDir)\target\nar\include;$(SolutionDir)\thirdparty\target\nar\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -122,7 +121,6 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\src\main\include;$(ProjectDir)\target\nar\include;$(SolutionDir)\thirdparty\target\nar\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -147,7 +145,6 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\src\main\include;$(ProjectDir)\target\nar\include;$(SolutionDir)\thirdparty\target\nar\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -174,7 +171,6 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\openomd_handler\src\main\include;$(ProjectDir)\src\main\include;$(ProjectDir)\target\nar\include;$(SolutionDir)\thirdparty\target\nar\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
