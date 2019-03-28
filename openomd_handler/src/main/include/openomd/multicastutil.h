@@ -46,7 +46,7 @@ public:
         , _bindIp{bindIp}
         , _outboundIp{outboundIp}
     {
-        _name.append("MulticastReceiver-").append(std::to_string(_port)).append("-").append(_multicastIp);
+        _name.append("MulticastReceiver-").append(std::to_string(_channel)).append("-").append(std::to_string(_port)).append("-").append(_multicastIp);
         //LOG_INFO(_log) << _name << " listening on " << listenIp;
     }
 
@@ -70,6 +70,10 @@ public:
             boost::bind(f, o, placeholders::error, placeholders::bytes_transferred, _data, maxLength));
     }
 
+    int32_t channel() const
+    {
+        return _channel;
+    }
 private:
     void joinGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp);
     void leaveGroup(boost::asio::ip::udp::socket& socket, std::string const& listenIp, std::string const& multicastIp);

@@ -24,6 +24,7 @@ public:
               _refreshReceiver{ c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService },
               _processor{ _refreshReceiver }
         {
+            _refreshProcessor.channel(c.channel);
         }
 
         void init()
@@ -75,6 +76,10 @@ public:
         }
         void processRefresh(const boost::system::error_code& error, size_t bytesRecvd, char* data, size_t maxLength)
         {
+            if (_refreshProcessor.refreshEnded())
+            {
+                return;
+            }
             if (error)
             {
                 std::cout << "processRefresh error: " << error.message();
@@ -91,8 +96,8 @@ public:
                     _processor.resetSeqNum(_refreshProcessor.nextSeqNum());
                     // process stored realtime msg
                     _parser.processCachedMsg(_processor);
-                    _refreshProcessor.reset();
                     _refreshReceiver.stop();
+                    _refreshProcessor.end();
                 }
                 _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
             }

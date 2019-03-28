@@ -13,14 +13,15 @@ public:
     {
         Init,
         Refreshing,
-        RefreshCompleted
+        RefreshCompleted,
+        RefreshEnded
     };
     inline void onHeartbeat()
     {
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << "Start refresh" << std::endl;
+            std::cout << _channel << " Start refresh" << std::endl;
         }
     }
     inline void onRefreshComplete(uint32_t lastSeqNum)
@@ -28,24 +29,28 @@ public:
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << "Start refresh" << std::endl;
+            std::cout << _channel << " Start refresh" << std::endl;
         }
         else if (_state == State::Refreshing)
         {
             _state = State::RefreshCompleted;
             _lastSeqNum = lastSeqNum;
-            std::cout << "Refresh completed " << _lastSeqNum << std::endl;
+            std::cout << _channel << " Refresh completed " << _lastSeqNum << std::endl;
         }
     }
-    inline void reset()
+    inline void end()
     {
-        _state = State::Init;
+        _state = State::RefreshEnded;
         _lastSeqNum = 0;
         MapBasedCache::_buffer.clear();
     }
     inline bool refreshCompleted() const
     {
         return _state == State::RefreshCompleted;
+    }
+    inline bool refreshEnded() const
+    {
+        return _state == State::RefreshEnded;
     }
 
     template <typename _F>
@@ -79,9 +84,14 @@ public:
     {
         return _lastSeqNum+1;
     }
+    inline void channel(int32_t channel)
+    {
+        _channel = channel;
+    }
 protected:
     State _state = State::Init;
     uint32_t _lastSeqNum = 0;
+    int32_t _channel = 0;
 };
 
 template <typename _F>
