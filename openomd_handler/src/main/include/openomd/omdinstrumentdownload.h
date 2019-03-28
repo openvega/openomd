@@ -18,7 +18,7 @@ public:
 
         Runner(IOServiceLC& ioService, _Processor& processor, ChannelConfig const& c)
             : _processor{processor},
-              _refreshReceiver{c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService }
+              _refreshReceiver{c.channel, c.refreshPort, c.refreshListenIp, c.refreshIp, ioService }
         {
         }
 

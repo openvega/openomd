@@ -21,7 +21,7 @@ public:
         Runner(IOServiceLC& ioService, ChannelConfig const& c)
             : _receiverA{ c.channel, c.port, c.listenIpA, c.ipA, ioService }, 
               _receiverB{ c.channel, c.port, c.listenIpB, c.ipB, ioService },
-              _refreshReceiver{ c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService },
+              _refreshReceiver{ c.channel, c.refreshPort, c.refreshListenIp, c.refreshIp, ioService },
               _processor{ _refreshReceiver }
         {
             _processor.channel(c.channel);

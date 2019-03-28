@@ -16,6 +16,7 @@ struct ChannelConfig
     std::string listenIpB;
     std::string ipB;
 
+    uint16_t refreshPort;
     std::string refreshListenIp;
     std::string refreshIp;
 
@@ -35,6 +36,7 @@ struct ChannelConfig
             vs[i++],                // ipA
             vs[i++],                // listen ipB
             vs[i++],                // ipB
+            (uint16_t)atol(vs[i++].c_str()),  // refresh port
             vs[i++],                // refresh listen ip
             vs[i++]                 // refresh ip
         };
