@@ -108,31 +108,34 @@ template <typename _Logger>
 class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor<_Logger>>
 {
 public:
+    using Base=OMDCProcessor<BaseRefreshProcessor<_Logger>>;
+
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor::onHeartbeat(channel());
+        BaseRefreshProcessor<_Logger>::onHeartbeat(Base::channel());
     }
 
     inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
     {
-        onRefreshComplete(channel(), m.lastSeqNum());
+        BaseRefreshProcessor<_Logger>::onRefreshComplete(Base::channel(), m.lastSeqNum());
     }
-    using OMDCProcessor<BaseRefreshProcessor<_Logger>>::onMessage;
+    using Base::onMessage;
 };
 
 template <typename _Logger>
 class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor<_Logger>>
 {
 public:
+    using Base=OMDDProcessor<BaseRefreshProcessor<_Logger>>;
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor::onHeartbeat(channel());
+        BaseRefreshProcessor<_Logger>::onHeartbeat(Base::channel());
     }
 
     inline void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
     {
-        onRefreshComplete(channel(), m.lastSeqNum());
+        BaseRefreshProcessor<_Logger>::onRefreshComplete(Base::channel(), m.lastSeqNum());
     }
-    using OMDDProcessor<BaseRefreshProcessor<_Logger>>::onMessage;
+    using Base::onMessage;
 };
 }
