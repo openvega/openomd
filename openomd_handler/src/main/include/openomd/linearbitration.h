@@ -11,10 +11,9 @@ class LineArbitration : public _RecoveryPolicy, protected _Cache
 public:
     using _RecoveryPolicy::_RecoveryPolicy;
 
-    bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos);
-    bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos);
+    bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos);
+    bool checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos);
     bool checkMsgSeq(uint32_t);
-    bool checkRefreshMsgSeq(uint32_t);
     void resetSeqNum(uint32_t newSeqNum);
 
     template <typename _Func>
@@ -23,15 +22,15 @@ public:
     uint32_t nextSeqNum() const;
 private:
     template <typename _RecoveryFunc>
-    bool checkPktSeqInternal(openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func);
+    bool checkPktSeqInternal(int32_t channel, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func);
 
     uint32_t _nextSeqNum = 1;
 };
 
 template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(openomd::PktHdr const& pktHdr, char* pos)
+bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
 {
-    return checkPktSeqInternal(pktHdr, pos, [&]()
+    return checkPktSeqInternal(channel, pktHdr, pos, [&]()
     {
         _RecoveryPolicy::recover(pktHdr, _nextSeqNum);
         _Cache::cache(pktHdr, pos);
@@ -39,14 +38,14 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(openomd::PktHdr const
 }
 
 template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos)
+bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
 {
-    return checkPktSeqInternal(pktHdr, pos, []() {});
+    return checkPktSeqInternal(channel, pktHdr, pos, []() {});
 }
 
 template <typename _Cache, typename _RecoveryPolicy>
 template <typename _RecoveryFunc>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
+bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(int32_t channel, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
 {
     if ((pktHdr.seqNum + pktHdr.msgCnt - 1) < _nextSeqNum)  // duplicated
     {
@@ -54,7 +53,7 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktH
     }
     if (pktHdr.seqNum > _nextSeqNum)   // gap
     {
-        std::cout << "checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum <<std::endl;
+        std::cout << "channel " << channel << " checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum <<std::endl;
         func();
         return false;
     }
@@ -67,20 +66,6 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkMsgSeq(uint32_t seqNum)
     if (seqNum == _nextSeqNum)
     {
         _nextSeqNum++;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-template <typename _Cache, typename _RecoveryPolicy>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkRefreshMsgSeq(uint32_t seqNum)
-{
-    if (seqNum >= _nextSeqNum)
-    {
-        _nextSeqNum = seqNum + 1;
         return true;
     }
     else

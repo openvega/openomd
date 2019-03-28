@@ -7,11 +7,11 @@ namespace openomd
 class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache
 {
 public:
-    inline bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos)
+    inline bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
-    inline bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos)
+    inline bool checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }

@@ -5,7 +5,7 @@
 namespace openomd
 {
 template <typename _LineArbitration>
-class OMDCProcessor : public _LineArbitration
+class OMDCProcessor : public _LineArbitration, public BaseProcessor
 {
 public:
     ONMESSAGE(omdc::sbe::AddOddLotOrder)

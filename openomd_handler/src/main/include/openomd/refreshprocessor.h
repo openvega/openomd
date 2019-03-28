@@ -16,26 +16,26 @@ public:
         RefreshCompleted,
         RefreshEnded
     };
-    inline void onHeartbeat()
+    inline void onHeartbeat(int32_t channel)
     {
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << _channel << " Start refresh" << std::endl;
+            std::cout << channel << " Start refresh" << std::endl;
         }
     }
-    inline void onRefreshComplete(uint32_t lastSeqNum)
+    inline void onRefreshComplete(int32_t channel, uint32_t lastSeqNum)
     {
         if (_state == State::Init)
         {
             _state = State::Refreshing;
-            std::cout << _channel << " Start refresh" << std::endl;
+            std::cout << channel << " Start refresh" << std::endl;
         }
         else if (_state == State::Refreshing)
         {
             _state = State::RefreshCompleted;
             _lastSeqNum = lastSeqNum;
-            std::cout << _channel << " Refresh completed " << _lastSeqNum << std::endl;
+            std::cout << channel << " Refresh completed " << _lastSeqNum << std::endl;
         }
     }
     inline void end()
@@ -56,7 +56,7 @@ public:
     template <typename _F>
     void consumeAll(_F f);
 
-    inline bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos)
+    inline bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
     {
         if (_state == State::Refreshing)
         {
@@ -64,7 +64,7 @@ public:
         }
         return true;
     }
-    inline bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos)
+    inline bool checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
@@ -84,14 +84,9 @@ public:
     {
         return _lastSeqNum+1;
     }
-    inline void channel(int32_t channel)
-    {
-        _channel = channel;
-    }
 protected:
     State _state = State::Init;
     uint32_t _lastSeqNum = 0;
-    int32_t _channel = 0;
 };
 
 template <typename _F>
@@ -107,12 +102,12 @@ class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor>
 public:
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor::onHeartbeat();
+        BaseRefreshProcessor::onHeartbeat(channel());
     }
 
     inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
     {
-        onRefreshComplete(m.lastSeqNum());
+        onRefreshComplete(channel(), m.lastSeqNum());
     }
     using OMDCProcessor<BaseRefreshProcessor>::onMessage;
 };
@@ -122,12 +117,12 @@ class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor>
 public:
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor::onHeartbeat();
+        BaseRefreshProcessor::onHeartbeat(channel());
     }
 
     inline void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
     {
-        onRefreshComplete(m.lastSeqNum());
+        onRefreshComplete(channel(), m.lastSeqNum());
     }
     using OMDDProcessor<BaseRefreshProcessor>::onMessage;
 };

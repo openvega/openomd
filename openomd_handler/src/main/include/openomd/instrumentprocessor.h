@@ -42,7 +42,7 @@ public:
             try
             {
                 mdid = stol(indexCode);
-            } catch (std::invalid_argument const& e)
+            } catch (std::invalid_argument const&)
             {
             }
             std::stringstream ss;
@@ -395,7 +395,7 @@ public:
                     std::stringstream ss;
                     ss << underlyingCode;
                     underlyingStr = ss.str();
-                } catch (std::invalid_argument const& e)
+                } catch (std::invalid_argument const&)
                 {
                     // try replace HSE with HSCEI
                     if (underlyingStr == "HSE")

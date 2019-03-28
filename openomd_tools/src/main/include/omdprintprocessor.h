@@ -1,5 +1,6 @@
 #pragma once
 #include <set>
+#include "openomd/omddef.h"
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
 #include "openomd/omdcostream.h"
@@ -8,7 +9,7 @@
 namespace openomd
 {
 template <typename _LineArbitration>
-class BasePrintProcessor : public _LineArbitration
+class BasePrintProcessor : public _LineArbitration, public BaseProcessor
 {
 public:
     using _LineArbitration::_LineArbitration;

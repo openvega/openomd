@@ -24,6 +24,7 @@ public:
               _refreshReceiver{ c.channel, c.port, c.refreshListenIp, c.refreshIp, ioService },
               _processor{ _refreshReceiver }
         {
+            _processor.channel(c.channel);
             _refreshProcessor.channel(c.channel);
         }
 

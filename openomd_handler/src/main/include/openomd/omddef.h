@@ -41,4 +41,16 @@ static inline void trim(std::string& s)
 #define ONMESSAGE(_MSG) void onMessage(_MSG const&, uint32_t){}
 #endif
 
+class BaseProcessor
+{
+public:
+    int32_t channel() const {
+        return _channel;
+    }
+    void channel(int32_t channel) {
+        _channel = channel;
+    }
+private:
+    int32_t _channel;
+};
 }
