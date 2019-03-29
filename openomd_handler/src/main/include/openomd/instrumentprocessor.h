@@ -1,4 +1,5 @@
 #pragma once
+#include <sstream>
 #include "openomd/nooplinearbitration.h"
 #include "openomd/omdcprocessor.h"
 #include "openomd/omddprocessor.h"
@@ -182,7 +183,7 @@ private:
 };
 
 template <typename TranslatePolicy, typename _Logger, typename _LineArbitration = NoopLineArbitration>
-class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected TranslatePolicy, protected _Logger
+class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected _Logger, protected TranslatePolicy
 {
 public:
     static const uint8_t OMDD_STOCK_INDEX = 7;

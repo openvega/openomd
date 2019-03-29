@@ -1,4 +1,5 @@
 #pragma once
+#include <sstream>
 #include "openomd/nooplinearbitration.h"
 #include "openomd/omdcprocessor.h"
 #include "openomd/omddprocessor.h"
