@@ -5,14 +5,16 @@
 
 namespace openomd
 {
-class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache, protected NoopLogger
+class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache
 {
 public:
-    inline bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeq(_Processor&, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
-    inline bool checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeqWithtouRecovery(_Processor&, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }

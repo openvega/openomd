@@ -1,11 +1,10 @@
 #pragma once
 #include "openomd/omddparser.h"
-#include "openomd/omddef.h"
 
 namespace openomd
 {
-template <typename _LineArbitration>
-class OMDDProcessor : public _LineArbitration, public BaseProcessor
+template <typename _LineArbitration, typename _BaseProcessor>
+class OMDDProcessor : public _LineArbitration, public _BaseProcessor
 {
 public:
     ONMESSAGE(omdd::sbe::AddOrder)
@@ -41,10 +40,6 @@ public:
     }
     void onUnknownMessage(uint16_t, uint16_t)
     {
-    }
-    void onError(std::exception const& ex)
-    {
-        _LineArbitration::error(ex.what());
     }
 };
 }

@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "openomd/omdcprocessor.h"
 #include "openomd/nooplinearbitration.h"
+#include "openomd/omdbaseprocessor.h"
 
 namespace omdc
 {
@@ -14,7 +15,7 @@ void processMsg(char* msg, size_t size)
     EXPECT_EQ(true, tc);
 }
 
-class OMDCP : public openomd::OMDCProcessor<openomd::NoopLineArbitration>
+class OMDCP : public openomd::OMDCProcessor<openomd::NoopLineArbitration, openomd::BaseProcessor>
 {
 public:
     OMDCP(bool& tc) : _tc{tc}{}

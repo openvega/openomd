@@ -6,8 +6,8 @@
 
 namespace openomd
 {
-template <typename TranslatePolicy, typename _Logger, typename _LineArbitration = NoopLineArbitration>
-class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration>, protected _Logger, protected TranslatePolicy
+template <typename TranslatePolicy, typename _BaseProcessor, typename _LineArbitration = NoopLineArbitration>
+class OMDCInstrumentProcessor : public OMDCProcessor<_LineArbitration, _BaseProcessor>, protected TranslatePolicy
 {
 public:
     OMDCInstrumentProcessor(std::ostream& ostream)
@@ -63,7 +63,7 @@ public:
         {
             std::stringstream ss;
             ss << s.securityCode() << " unsupported instrumentType " << (int32_t)s.productType();
-            _Logger::warn(ss.str());
+            _BaseProcessor::warn(ss.str());
             return;
         }
 
@@ -166,7 +166,7 @@ public:
     void onMessage(omdc::sbe::LiquidityProvider const& lp, uint32_t seqNum)
     {
     }
-    using OMDCProcessor<_LineArbitration>::onMessage;
+    using OMDCProcessor<_LineArbitration, _BaseProcessor>::onMessage;
     void dump()
     {
         for (auto &pos : _secDefs)
@@ -182,8 +182,8 @@ private:
     std::multimap<int32_t, std::string> _secDefs;
 };
 
-template <typename TranslatePolicy, typename _Logger, typename _LineArbitration = NoopLineArbitration>
-class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration>, protected _Logger, protected TranslatePolicy
+template <typename TranslatePolicy, typename _BaseProcessor, typename _LineArbitration = NoopLineArbitration>
+class OMDDInstrumentProcessor : public OMDDProcessor<_LineArbitration, _BaseProcessor>, protected TranslatePolicy
 {
 public:
     static const uint8_t OMDD_STOCK_INDEX = 7;
@@ -342,7 +342,7 @@ public:
     void onMessage(omdd::sbe::CombinationDefinition& combDef, uint32_t seqNum)
     {
     }
-    using OMDDProcessor<_LineArbitration>::onMessage;
+    using OMDDProcessor<_LineArbitration, _BaseProcessor>::onMessage;
 
     void dump() const
     {
@@ -360,7 +360,7 @@ public:
             {
                 std::stringstream ss;
                 ss << s.symbol << " commodity not found " << (int32_t)s.ck.market << " " << (int32_t)s.ck.instrumentGroup << " " << s.ck.commodityCode;
-                _Logger::warn(ss.str());
+                _BaseProcessor::warn(ss.str());
                 continue;
             }
             auto const& comm = commPos->second;
@@ -369,7 +369,7 @@ public:
             {
                 std::stringstream ss;
                 ss << s.symbol << " class not found " << s.ck.market << " " << s.ck.instrumentGroup << " " << s.ck.commodityCode;
-                _Logger::warn(ss.str());
+                _BaseProcessor::warn(ss.str());
                 continue;
             }
             auto const& clsDef = clsPos->second;
@@ -378,7 +378,7 @@ public:
             {
                 std::stringstream ss;
                 ss << s.symbol << " unsupported instrumentGroup " << (int32_t)s.ck.instrumentGroup;
-                _Logger::warn(ss.str());
+                _BaseProcessor::warn(ss.str());
                 continue;
             }
 

@@ -4,6 +4,7 @@
 #endif
 #include "openomd/omddprocessor.h"
 #include "openomd/nooplinearbitration.h"
+#include "openomd/omdbaseprocessor.h"
 
 namespace omdd
 {
@@ -17,7 +18,7 @@ void processMsg(char* msg, size_t size)
     EXPECT_EQ(true, tc);
 }
 
-class OMDDP : public openomd::OMDDProcessor<openomd::NoopLineArbitration>
+class OMDDP : public openomd::OMDDProcessor<openomd::NoopLineArbitration, openomd::BaseProcessor>
 {
 public:
     OMDDP(bool& tc) :_tc{tc}{}

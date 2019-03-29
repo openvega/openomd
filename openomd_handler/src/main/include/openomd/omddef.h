@@ -40,30 +40,4 @@ static inline void trim(std::string& s)
 #ifndef ONMESSAGE
 #define ONMESSAGE(_MSG) void onMessage(_MSG const&, uint32_t){}
 #endif
-
-class BaseProcessor
-{
-public:
-    inline int32_t channel() const {
-        return _channel;
-    }
-    inline void channel(int32_t channel) {
-        _channel = channel;
-    }
-private:
-    int32_t _channel;
-};
-
-struct NoopLogger
-{
-    inline void info(std::string const& str) const
-    {
-    }
-    inline void warn(std::string const& str) const
-    {
-    }
-    inline void error(std::string const& str) const
-    {
-    }
-};
 }

@@ -9,7 +9,7 @@
 namespace openomd
 {
 template <typename _LineArbitration>
-class BasePrintProcessor : public _LineArbitration, public BaseProcessor
+class BasePrintProcessor : public _LineArbitration
 {
 public:
     using _LineArbitration::_LineArbitration;
@@ -28,6 +28,26 @@ public:
     {
         std::cout << "PrintProcessor onError " << ex.what() << std::endl;
     }
+
+    inline int32_t channel() const {
+        return _channel;
+    }
+    inline void channel(int32_t channel) {
+        _channel = channel;
+    }
+    void info(std::string const& log) const
+    {
+        std::cout << log << std::endl;
+    }
+    void warn(std::string const& log) const
+    {
+        std::cout << log << std::endl;
+    }
+    void error(std::string const& log) const
+    {
+        std::err << log << std::endl;
+    }
+
 protected:
     
     template <typename _Msg>
@@ -39,6 +59,7 @@ protected:
         }
     }
     std::set<int32_t> _msgIds;
+    int32_t _channel;
 };
 
 template <typename _LineArbitration>

@@ -20,7 +20,7 @@ protected:
         parseHelperInternal(data, bytesRecvd, processor, func, 
             [&](PktHdr const& pktHdr, char* fData)
             {
-                return processor.checkPktSeq(processor.channel(), pktHdr, fData);
+                return processor.checkPktSeq(processor, pktHdr, fData);
             }, 
             [&](uint32_t msgSeq)
             {
@@ -32,7 +32,7 @@ protected:
                     parseHelperInternal(data, bytesRecvd, processor, func, 
                     [&](PktHdr const& pktHdr, char* fData)
                     {
-                        return processor.checkPktSeqWithtouRecovery(processor.channel(), pktHdr, fData);
+                        return processor.checkPktSeqWithtouRecovery(processor, pktHdr, fData);
                     },
                     [&](uint32_t msgSeq)
                     {
@@ -66,7 +66,7 @@ protected:
             parseHelperInternal(data, bytesRecvd, processor, func,
                 [&](PktHdr const& pktHdr, char* fData)
                 {
-                    return processor.checkPktSeqWithtouRecovery(processor.channel(), pktHdr, fData);
+                    return processor.checkPktSeqWithtouRecovery(processor, pktHdr, fData);
                 },
                 [&](uint32_t msgSeq)
                 {

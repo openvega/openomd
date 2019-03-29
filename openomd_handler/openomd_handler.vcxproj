@@ -209,6 +209,7 @@
     <ClInclude Include="src\main\include\openomd\fulltick.h" />
     <ClInclude Include="src\main\include\openomd\instrumentprocessor.h" />
     <ClInclude Include="src\main\include\openomd\multicastrunner.h" />
+    <ClInclude Include="src\main\include\openomd\omdbaseprocessor.h" />
     <ClInclude Include="src\main\include\openomd\omdinstrumentdownload.h" />
     <ClInclude Include="src\main\include\openomd\linearbitration.h" />
     <ClInclude Include="src\main\include\openomd\multicastutil.h" />

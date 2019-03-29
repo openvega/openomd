@@ -26,6 +26,9 @@ public:
         {
             _refreshReceiver.init();
             _refreshReceiver.registerAsyncReceive(&Runner::processRefresh, this);
+            std::stringstream ss;
+            ss << _refreshReceiver.name() << " init successfully";
+            _processor.info(ss.str());
         }
 
         void start()
@@ -44,7 +47,7 @@ public:
             {
                 std::stringstream ss;
                 ss << _processor.channel() << " processRefresh error: " << error.message();
-                _processor.onError(std::runtime_error(ss.str()));
+                _processor.error(ss.str());
             }
             else
             {

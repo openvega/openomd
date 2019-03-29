@@ -7,8 +7,7 @@
 
 namespace openomd
 {
-template <typename _Logger>
-class BaseRefreshProcessor : public MapBasedCache, protected _Logger
+class BaseRefreshProcessor : public MapBasedCache
 {
 public:
     enum class State
@@ -18,34 +17,13 @@ public:
         RefreshCompleted,
         RefreshEnded
     };
-    inline void onHeartbeat(int32_t channel)
-    {
-        if (_state == State::Init)
-        {
-            _state = State::Refreshing;
-            std::stringstream ss;
-            ss << channel << " Start refresh";
-            _Logger::info(ss.str());
-        }
-    }
-    inline void onRefreshComplete(int32_t channel, uint32_t lastSeqNum)
-    {
-        if (_state == State::Init)
-        {
-            _state = State::Refreshing;
-            std::stringstream ss;
-            ss << channel << " Start refresh";
-            _Logger::info(ss.str());
-        }
-        else if (_state == State::Refreshing)
-        {
-            _state = State::RefreshCompleted;
-            _lastSeqNum = lastSeqNum;
-            std::stringstream ss;
-            ss << channel << " Refresh completed " << _lastSeqNum;
-            _Logger::info(ss.str());
-        }
-    }
+
+    template <typename _Log>
+    void onHeartbeat(_Log log);
+
+    template <typename _Log>
+    void onRefreshComplete(_Log log, uint32_t lastSeqNum);
+
     inline void end()
     {
         _state = State::RefreshEnded;
@@ -64,7 +42,8 @@ public:
     template <typename _F>
     void consumeAll(_F f);
 
-    inline bool checkPktSeq(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeq(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos)
     {
         if (_state == State::Refreshing)
         {
@@ -72,7 +51,8 @@ public:
         }
         return true;
     }
-    inline bool checkPktSeqWithtouRecovery(int32_t channel, openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeqWithtouRecovery(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
@@ -97,45 +77,88 @@ protected:
     uint32_t _lastSeqNum = 0;
 };
 
-template <typename _Logger>
+template <typename _Log>
+void BaseRefreshProcessor::onHeartbeat(_Log log)
+{
+    if (_state == State::Init)
+    {
+        _state = State::Refreshing;
+        log("Start refresh");
+    }
+}
+
+template <typename _Log>
+void BaseRefreshProcessor::onRefreshComplete(_Log log, uint32_t lastSeqNum)
+{
+    if (_state == State::Init)
+    {
+        _state = State::Refreshing;
+        log("Start refresh");
+    }
+    else if (_state == State::Refreshing)
+    {
+        _state = State::RefreshCompleted;
+        _lastSeqNum = lastSeqNum;
+        std::stringstream ss;
+        ss << " Refresh completed " << _lastSeqNum;
+        log("Refresh completed");
+    }
+}
+
 template <typename _F>
-void BaseRefreshProcessor<_Logger>::consumeAll(_F f)
+void BaseRefreshProcessor::consumeAll(_F f)
 {
     for_each(MapBasedCache::_buffer.begin(), MapBasedCache::_buffer.end(), [&](auto& pos) {
         f(&pos.second[0], pos.second.size());
     });
 }
-template <typename _Logger>
-class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor<_Logger>>
+template <typename _BaseProcessor>
+class OmdcRefreshProcessor : public OMDCProcessor<BaseRefreshProcessor, _BaseProcessor>
 {
 public:
-    using Base=OMDCProcessor<BaseRefreshProcessor<_Logger>>;
+    using Base=OMDCProcessor<BaseRefreshProcessor, _BaseProcessor>;
 
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor<_Logger>::onHeartbeat(Base::channel());
+        BaseRefreshProcessor::onHeartbeat([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+        });
     }
 
     inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
     {
-        BaseRefreshProcessor<_Logger>::onRefreshComplete(Base::channel(), m.lastSeqNum());
+        BaseRefreshProcessor::onRefreshComplete([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+        }, m.lastSeqNum());
     }
     using Base::onMessage;
 };
 
-template <typename _Logger>
-class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor<_Logger>>
+template <typename _BaseProcessor>
+class OmddRefreshProcessor : public OMDDProcessor<BaseRefreshProcessor, _BaseProcessor>
 {
 public:
-    using Base=OMDDProcessor<BaseRefreshProcessor<_Logger>>;
+    using Base=OMDDProcessor<BaseRefreshProcessor, _BaseProcessor>;
     inline void onHeartbeat()
     {
-        BaseRefreshProcessor<_Logger>::onHeartbeat(Base::channel());
+        BaseRefreshProcessor::onHeartbeat([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+        });
     }
 
     inline void onMessage(omdd::sbe::RefreshComplete const& m, uint32_t s)
     {
-        BaseRefreshProcessor<_Logger>::onRefreshComplete(Base::channel(), m.lastSeqNum());
+        BaseRefreshProcessor::onRefreshComplete([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+        }, m.lastSeqNum());
     }
     using Base::onMessage;
 };
