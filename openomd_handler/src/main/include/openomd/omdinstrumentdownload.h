@@ -20,6 +20,7 @@ public:
             : _processor{processor},
               _refreshReceiver{c.channel, c.refreshPort, c.refreshListenIp, c.refreshIp, ioService }
         {
+            _refreshProcessor.channel(c.channel);
         }
 
         void init()
@@ -84,10 +85,6 @@ public:
     {
         _ioServiceLC.start();
         for_each(_runner.begin(), _runner.end(), [](auto& r) { r->start(); });
-    }
-
-    void run()
-    {
         for (;;)
         {
             _ioServiceLC.ioService().poll();
@@ -100,6 +97,10 @@ public:
         }
     }
 
+    void run()
+    {
+    }
+
     void stop()
     {
         for_each(_runner.begin(), _runner.end(), [](auto& r) { r->stop(); });
@@ -108,7 +109,7 @@ public:
         _processor.dump();
     }
 
-private:
+protected:
     IOServiceLC _ioServiceLC;
     std::vector<std::unique_ptr<Runner>> _runner;
     _Processor _processor;
