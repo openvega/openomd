@@ -1,5 +1,6 @@
 #pragma once
 #include <set>
+#include <iostream>
 #include "openomd/omddef.h"
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
@@ -45,7 +46,7 @@ public:
     }
     void error(std::string const& log) const
     {
-        std::err << log << std::endl;
+        std::cerr << log << std::endl;
     }
 
 protected:
