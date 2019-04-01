@@ -187,7 +187,7 @@ inline void MulticastReceiver::leaveGroup(boost::asio::ip::udp::socket& socket, 
     }
 }
 
-void MulticastReceiver::do_close()
+inline void MulticastReceiver::do_close()
 {
     _socket.close();
 }
