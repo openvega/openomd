@@ -20,6 +20,13 @@ struct MsgHdr
     uint16_t type;
 };
 
+enum class AOBAction
+{
+    New = 0,
+    Change,
+    Delete,
+    Clear = 74
+};
 static inline void ltrim(std::string& s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
         return !std::isspace(ch);
