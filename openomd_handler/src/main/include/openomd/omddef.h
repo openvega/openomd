@@ -20,7 +20,7 @@ struct MsgHdr
     uint16_t type;
 };
 
-enum class AOBAction
+enum AOBAction
 {
     New = 0,
     Change,
