@@ -1,5 +1,4 @@
 #pragma once
-#include <unordered_map>
 #include "openomd/recoverypolicy.h"
 #include "openomd/msgcache.h"
 
@@ -23,8 +22,8 @@ public:
 
     uint32_t nextSeqNum() const;
 private:
-    template <typename _Processor, typename _RecoveryFunc>
-    bool checkPktSeqInternal(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func);
+    template <typename _RecoveryFunc>
+    bool checkPktSeqInternal(openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc recoveryFunc);
 
     uint32_t _nextSeqNum = 1;
 };
@@ -33,8 +32,11 @@ template <typename _Cache, typename _RecoveryPolicy>
 template <typename _Processor>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeq(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos)
 {
-    return checkPktSeqInternal(processor, pktHdr, pos, [&]()
+    return checkPktSeqInternal(pktHdr, pos, [&]()
     {
+        std::stringstream ss;
+        ss << "channel " << processor.channel() << " checkPktSeq gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum;
+        processor.warn(ss.str());
         _RecoveryPolicy::recover(pktHdr, _nextSeqNum);
         _Cache::cache(pktHdr, pos);
     });
@@ -44,12 +46,12 @@ template <typename _Cache, typename _RecoveryPolicy>
 template <typename _Processor>
 bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqWithtouRecovery(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos)
 {
-    return checkPktSeqInternal(processor, pktHdr, pos, []() {});
+    return checkPktSeqInternal(pktHdr, pos, []() {});
 }
 
 template <typename _Cache, typename _RecoveryPolicy>
-template <typename _Processor, typename _RecoveryFunc>
-bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(_Processor& processor, openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc func)
+template <typename _RecoveryFunc>
+bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(openomd::PktHdr const& pktHdr, char* pos, _RecoveryFunc recoveryFunc)
 {
     if ((pktHdr.seqNum + pktHdr.msgCnt - 1) < _nextSeqNum)  // duplicated
     {
@@ -57,10 +59,7 @@ bool LineArbitration<_Cache, _RecoveryPolicy>::checkPktSeqInternal(_Processor& p
     }
     if (pktHdr.seqNum > _nextSeqNum)   // gap
     {
-        std::stringstream ss;
-        ss << "channel " << processor.channel() << " checkPktSeqInternal gap detected nextSeq=" << _nextSeqNum << " pktseq=" << pktHdr.seqNum;
-        processor.warn(ss.str());
-        func();
+        recoveryFunc();
         return false;
     }
     return true;
