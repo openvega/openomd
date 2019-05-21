@@ -1,4 +1,5 @@
 #pragma once
+#include "openomd/omddef.h"
 #include "openomd/recoverypolicy.h"
 #include "openomd/msgcache.h"
 
@@ -7,11 +8,13 @@ namespace openomd
 class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache
 {
 public:
-    inline bool checkPktSeq(openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeq(_Processor&, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
-    inline bool checkPktSeqWithtouRecovery(openomd::PktHdr const& pktHdr, char* pos)
+    template <typename _Processor>
+    inline bool checkPktSeqWithtouRecovery(_Processor&, openomd::PktHdr const& pktHdr, char* pos)
     {
         return true;
     }
@@ -25,6 +28,10 @@ public:
     template <typename _Func>
     inline void processCache(_Func func)
     {
+    }
+    inline uint32_t nextSeqNum() const
+    {
+        return 0;
     }
 };
 }

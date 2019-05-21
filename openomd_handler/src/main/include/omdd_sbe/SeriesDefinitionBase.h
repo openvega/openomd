@@ -641,19 +641,19 @@ public:
         return "";
     }
 
-    static SBE_CONSTEXPR std::uint32_t strikePriceNullValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int32_t strikePriceNullValue() SBE_NOEXCEPT
     {
-        return SBE_NULLVALUE_UINT32;
+        return SBE_NULLVALUE_INT32;
     }
 
-    static SBE_CONSTEXPR std::uint32_t strikePriceMinValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int32_t strikePriceMinValue() SBE_NOEXCEPT
     {
-        return 0;
+        return -2147483647;
     }
 
-    static SBE_CONSTEXPR std::uint32_t strikePriceMaxValue() SBE_NOEXCEPT
+    static SBE_CONSTEXPR std::int32_t strikePriceMaxValue() SBE_NOEXCEPT
     {
-        return 4294967294;
+        return 2147483647;
     }
 
     static SBE_CONSTEXPR std::size_t strikePriceEncodingLength() SBE_NOEXCEPT
@@ -661,14 +661,14 @@ public:
         return 4;
     }
 
-    std::uint32_t strikePrice() const
+    std::int32_t strikePrice() const
     {
-        return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::uint32_t *)(m_buffer + m_offset + 40)));
+        return SBE_LITTLE_ENDIAN_ENCODE_32(*((std::int32_t *)(m_buffer + m_offset + 40)));
     }
 
-    SeriesDefinitionBase &strikePrice(const std::uint32_t value)
+    SeriesDefinitionBase &strikePrice(const std::int32_t value)
     {
-        *((std::uint32_t *)(m_buffer + m_offset + 40)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
+        *((std::int32_t *)(m_buffer + m_offset + 40)) = SBE_LITTLE_ENDIAN_ENCODE_32(value);
         return *this;
     }
 

@@ -16,6 +16,11 @@ public:
         }
     }
 
+    inline void clear()
+    {
+        _buffer.clear();
+    }
+
 protected:
     std::map<uint32_t, std::vector<char>> _buffer;  // SeqNum -> packet
 };

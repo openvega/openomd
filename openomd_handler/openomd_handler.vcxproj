@@ -204,8 +204,13 @@
     <ClInclude Include="src\main\include\omdd_sbe\Trade.h" />
     <ClInclude Include="src\main\include\omdd_sbe\TradeAmendment.h" />
     <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h" />
+    <ClInclude Include="src\main\include\openomd\channelconfig.h" />
     <ClInclude Include="src\main\include\openomd\ethernet.h" />
     <ClInclude Include="src\main\include\openomd\fulltick.h" />
+    <ClInclude Include="src\main\include\openomd\instrumentprocessor.h" />
+    <ClInclude Include="src\main\include\openomd\multicastrunner.h" />
+    <ClInclude Include="src\main\include\openomd\omdbaseprocessor.h" />
+    <ClInclude Include="src\main\include\openomd\omdinstrumentdownload.h" />
     <ClInclude Include="src\main\include\openomd\linearbitration.h" />
     <ClInclude Include="src\main\include\openomd\multicastutil.h" />
     <ClInclude Include="src\main\include\openomd\nooplinearbitration.h" />
@@ -218,9 +223,11 @@
     <ClInclude Include="src\main\include\openomd\omddparser.h" />
     <ClInclude Include="src\main\include\openomd\omddprocessor.h" />
     <ClInclude Include="src\main\include\openomd\orderbookdef.h" />
+    <ClInclude Include="src\main\include\openomd\pcaprunner.h" />
     <ClInclude Include="src\main\include\openomd\pcaputil.h" />
     <ClInclude Include="src\main\include\openomd\recoverypolicy.h" />
     <ClInclude Include="src\main\include\openomd\msgcache.h" />
+    <ClInclude Include="src\main\include\openomd\refreshprocessor.h" />
     <ClInclude Include="src\main\include\sbe\sbe.h" />
   </ItemGroup>
   <ItemGroup>
@@ -239,7 +246,9 @@
     <Xml Include="pom-gen.xml" />
     <Xml Include="pom.xml" />
     <Xml Include="src\nar\resources\noarch\omdc-sbe.xml" />
-    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml" />
+    <Xml Include="src\nar\resources\noarch\omdd-sbe.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

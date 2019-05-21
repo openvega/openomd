@@ -110,7 +110,7 @@
     <field name="financialProduct" id="103" type="uint8"/>
     <field name="numberOfDecimalsPrice" id="104" type="uint16"/>
     <field name="numberOfLegs" id="105" type="uint8"/>
-    <field name="strikePrice" id="106" type="uint32"/>
+    <field name="strikePrice" id="106" type="int32"/>
     <field name="expirationDate" id="107" type="date"/>
     <field name="decimalInStrikePrice" id="108" type="uint16"/>
     <field name="putOrCall" id="109" type="uint8"/>

@@ -44,41 +44,41 @@ namespace openomd
 class OmdcParser : public OmdBaseParser
 {
 #ifndef _OMDC_MSG_SWITCH_
-#define _OMDC_MSG_SWITCH_ OMD_SWITCH_CASE(AddOddLotOrder); \
-    OMD_SWITCH_CASE(AddOrder); \
-    OMD_SWITCH_CASE(AggregateOrderBookUpdate); \
-    OMD_SWITCH_CASE(BrokerQueue); \
-    OMD_SWITCH_CASE(ClosingPrice); \
-    OMD_SWITCH_CASE(CurrencyRate); \
-    OMD_SWITCH_CASE(DeleteOddLotOrder); \
-    OMD_SWITCH_CASE(DeleteOrder); \
-    OMD_SWITCH_CASE(DisasterRecoverySignal); \
-    OMD_SWITCH_CASE(IndexData); \
-    OMD_SWITCH_CASE(IndexDefinition); \
-    OMD_SWITCH_CASE(IndicativeEquilibriumPrice); \
-    OMD_SWITCH_CASE(LiquidityProvider); \
-    OMD_SWITCH_CASE(LogonResponse); \
-    OMD_SWITCH_CASE(MarketDefinition); \
-    OMD_SWITCH_CASE(MarketTurnover); \
-    OMD_SWITCH_CASE(ModifyOrder); \
-    OMD_SWITCH_CASE(News); \
-    OMD_SWITCH_CASE(NominalPrice); \
-    OMD_SWITCH_CASE(OrderImbalance); \
-    OMD_SWITCH_CASE(ReferencePrice); \
-    OMD_SWITCH_CASE(RefreshComplete); \
-    OMD_SWITCH_CASE(RetransmissionResp); \
-    OMD_SWITCH_CASE(SecurityDefinition); \
-    OMD_SWITCH_CASE(SecurityStatus); \
-    OMD_SWITCH_CASE(SequenceReset); \
-    OMD_SWITCH_CASE(Statistics); \
-    OMD_SWITCH_CASE(StockConnectDailyQuotaBalance); \
-    OMD_SWITCH_CASE(StockConnectMarketTurnover); \
-    OMD_SWITCH_CASE(Trade); \
-    OMD_SWITCH_CASE(TradeCancel); \
-    OMD_SWITCH_CASE(TradeTicker); \
-    OMD_SWITCH_CASE(TradingSessionStatus); \
-    OMD_SWITCH_CASE(VCMTrigger); \
-    OMD_SWITCH_CASE(Yield); \
+#define _OMDC_MSG_SWITCH_ OMD_SWITCH_CASE(AddOddLotOrder, 33); \
+    OMD_SWITCH_CASE(AddOrder, 30); \
+    OMD_SWITCH_CASE(AggregateOrderBookUpdate, 53); \
+    OMD_SWITCH_CASE(BrokerQueue, 54); \
+    OMD_SWITCH_CASE(ClosingPrice, 62); \
+    OMD_SWITCH_CASE(CurrencyRate, 14); \
+    OMD_SWITCH_CASE(DeleteOddLotOrder, 34); \
+    OMD_SWITCH_CASE(DeleteOrder, 32); \
+    OMD_SWITCH_CASE(DisasterRecoverySignal, 105); \
+    OMD_SWITCH_CASE(IndexData, 71); \
+    OMD_SWITCH_CASE(IndexDefinition, 70); \
+    OMD_SWITCH_CASE(IndicativeEquilibriumPrice, 41); \
+    OMD_SWITCH_CASE(LiquidityProvider, 13); \
+    OMD_SWITCH_CASE(LogonResponse, 102); \
+    OMD_SWITCH_CASE(MarketDefinition, 10); \
+    OMD_SWITCH_CASE(MarketTurnover, 61); \
+    OMD_SWITCH_CASE(ModifyOrder, 31); \
+    OMD_SWITCH_CASE(News, 22); \
+    OMD_SWITCH_CASE(NominalPrice, 40); \
+    OMD_SWITCH_CASE(OrderImbalance, 56); \
+    OMD_SWITCH_CASE(ReferencePrice, 43); \
+    OMD_SWITCH_CASE(RefreshComplete, 203); \
+    OMD_SWITCH_CASE(RetransmissionResp, 202); \
+    OMD_SWITCH_CASE(SecurityDefinition, 11); \
+    OMD_SWITCH_CASE(SecurityStatus, 21); \
+    OMD_SWITCH_CASE(SequenceReset, 100); \
+    OMD_SWITCH_CASE(Statistics, 60); \
+    OMD_SWITCH_CASE(StockConnectDailyQuotaBalance, 80); \
+    OMD_SWITCH_CASE(StockConnectMarketTurnover, 81); \
+    OMD_SWITCH_CASE(Trade, 50); \
+    OMD_SWITCH_CASE(TradeCancel, 51); \
+    OMD_SWITCH_CASE(TradeTicker, 52); \
+    OMD_SWITCH_CASE(TradingSessionStatus, 20); \
+    OMD_SWITCH_CASE(VCMTrigger, 23); \
+    OMD_SWITCH_CASE(Yield, 44); \
 default: \
     processor.onUnknownMessage(type, msgSize); \
     break;
@@ -103,6 +103,19 @@ public:
     {
         using namespace omdc::sbe;
         parseRefreshHelper(data, bytesRecvd, processor,
+            [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
+            switch (type)
+            {
+                _OMDC_MSG_SWITCH_
+            }
+        });
+    }
+
+    template <typename _Processor>
+    static void processCachedMsg(_Processor& processor)
+    {
+        using namespace omdc::sbe;
+        processCachedMsgHelper(processor,
             [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
             switch (type)
             {

@@ -1,5 +1,7 @@
 #pragma once
 #include <set>
+#include <iostream>
+#include "openomd/omddef.h"
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
 #include "openomd/omdcostream.h"
@@ -14,6 +16,9 @@ public:
     using _LineArbitration::_LineArbitration;
 
     //BasePrintProcessor(std::set<int32_t> const& msgIds);
+    void onHeartbeat()
+    {
+    }
 
     void onUnknownMessage(uint16_t type, uint16_t msgSize)
     {
@@ -24,6 +29,26 @@ public:
     {
         std::cout << "PrintProcessor onError " << ex.what() << std::endl;
     }
+
+    inline int32_t channel() const {
+        return _channel;
+    }
+    inline void channel(int32_t channel) {
+        _channel = channel;
+    }
+    void info(std::string const& log) const
+    {
+        std::cout << log << std::endl;
+    }
+    void warn(std::string const& log) const
+    {
+        std::cout << log << std::endl;
+    }
+    void error(std::string const& log) const
+    {
+        std::cerr << log << std::endl;
+    }
+
 protected:
     
     template <typename _Msg>
@@ -35,6 +60,7 @@ protected:
         }
     }
     std::set<int32_t> _msgIds;
+    int32_t _channel;
 };
 
 template <typename _LineArbitration>
