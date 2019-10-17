@@ -140,6 +140,7 @@ int main(int32_t argc, char* argv[])
         ("p,protocol", "omdc,omdd", cxxopts::value<string>())
         ("c,pcap", "Pcap file", cxxopts::value<string>())
         ("n,networkconf", "network configuration file", cxxopts::value<string>())
+        ("r,recovery", "perform recovery:1,0", cxxopts::value<int32_t>())
         ("s,sll","1,0", cxxopts::value<int32_t>());
     try
     {
@@ -181,16 +182,37 @@ int main(int32_t argc, char* argv[])
             }
             auto protocol = result["p"].as<string>();
             auto networkCfg = result["n"].as<string>();
-            cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << endl;
+            bool recovery = true;
+            if (result.count("r") == 1 && result["r"].as<int32_t>() == 0)
+            {
+                recovery = false;
+            }
+            cout << "function=" << function << " p=" << protocol << " netconf=" << networkCfg << " recovery=" << recovery << endl;
             if (protocol == "omdc")
             {
-                OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor<CoutBaseProcessor>, OmdcParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
-                run(runner);
+                if (recovery)
+                {
+                    OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor<CoutBaseProcessor>, OmdcParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    run(runner);
+                }
+                else
+                {
+                    OmdMulticastRunner<OmdcPrintProcessor<NoopLineArbitration>, OmdcRefreshProcessor<CoutBaseProcessor>, OmdcParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    run(runner);
+                }
             }
             else if (protocol == "omdd")
             {
-                OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg)};
-                run(runner);
+                if (recovery)
+                {
+                    OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    run(runner);
+                }
+                else
+                {
+                    OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    run(runner);
+                }
             }
         }
         else if (function == "instrument")

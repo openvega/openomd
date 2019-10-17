@@ -8,6 +8,12 @@ namespace openomd
 class NoopLineArbitration : public NoopRecoveryPolicy, protected MapBasedCache
 {
 public:
+    NoopLineArbitration()
+    {
+    }
+
+    using NoopRecoveryPolicy::NoopRecoveryPolicy;
+
     template <typename _Processor>
     inline bool checkPktSeq(_Processor&, openomd::PktHdr const& pktHdr, char* pos)
     {

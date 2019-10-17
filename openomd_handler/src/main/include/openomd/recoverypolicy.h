@@ -5,6 +5,15 @@ namespace openomd
 {
 struct NoopRecoveryPolicy
 {
+    NoopRecoveryPolicy()
+    {
+    }
+
+    template <typename _MulticastHandler>
+    NoopRecoveryPolicy(_MulticastHandler& multicastHandler)
+    {
+    }
+
     void recover(PktHdr const& pktHdr, uint32_t& nextSeqNum)
     {
     }
