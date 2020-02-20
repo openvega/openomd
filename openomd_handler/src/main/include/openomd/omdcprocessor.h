@@ -7,6 +7,8 @@ template <typename _LineArbitration, typename _BaseProcessor>
 class OMDCProcessor : public _LineArbitration, public _BaseProcessor
 {
 public:
+    using _LineArbitration::_LineArbitration;
+
     ONMESSAGE(omdc::sbe::AddOddLotOrder)
     ONMESSAGE(omdc::sbe::AddOrder)
     ONMESSAGE(omdc::sbe::AggregateOrderBookUpdate)

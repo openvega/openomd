@@ -12,7 +12,7 @@ uint32_t convertIp(std::string const& ip)
     auto address = boost::asio::ip::make_address_v4(ip.c_str(), ec);
     if (!ec)
     {
-        return address.to_uint();
+        return htonl(address.to_uint());
     }
     throw std::runtime_error("wrong ip");
 }

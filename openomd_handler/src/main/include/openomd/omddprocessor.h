@@ -7,6 +7,8 @@ template <typename _LineArbitration, typename _BaseProcessor>
 class OMDDProcessor : public _LineArbitration, public _BaseProcessor
 {
 public:
+    using _LineArbitration::_LineArbitration;
+
     ONMESSAGE(omdd::sbe::AddOrder)
     ONMESSAGE(omdd::sbe::AggregateOrderBookUpdate)
     ONMESSAGE(omdd::sbe::CalculatedOpeningPrice)
