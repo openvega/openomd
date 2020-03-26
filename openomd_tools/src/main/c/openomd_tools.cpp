@@ -99,8 +99,6 @@ const std::string OMDDTranslatePolicy::Option{"Option"};
 const std::string OMDDTranslatePolicy::Future{"Future"};
 const std::string OMDDTranslatePolicy::FX{"FX"};
 
-using RefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver>>;
-
 class CoutBaseProcessor
 {
 public:
@@ -129,6 +127,9 @@ public:
 private:
     int32_t _channel;
 };
+
+using OmdcRefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver, openomd::OmdcRefreshProcessor<CoutBaseProcessor>>>;
+using OmddRefreshLineArbitration = openomd::LineArbitration<openomd::MapBasedCache, openomd::RefreshChannelRecoveryPolicy<openomd::MulticastReceiver, openomd::OmddRefreshProcessor<CoutBaseProcessor>>>;
 
 int main(int32_t argc, char* argv[])
 {
@@ -192,7 +193,7 @@ int main(int32_t argc, char* argv[])
             {
                 if (recovery)
                 {
-                    OmdMulticastRunner<OmdcPrintProcessor<RefreshLineArbitration>, OmdcRefreshProcessor<CoutBaseProcessor>, OmdcParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    OmdMulticastRunner<OmdcPrintProcessor<OmdcRefreshLineArbitration>, OmdcRefreshProcessor<CoutBaseProcessor>, OmdcParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
                     run(runner);
                 }
                 else
@@ -205,7 +206,7 @@ int main(int32_t argc, char* argv[])
             {
                 if (recovery)
                 {
-                    OmdMulticastRunner<OmddPrintProcessor<RefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                    OmdMulticastRunner<OmddPrintProcessor<OmddRefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
                     run(runner);
                 }
                 else

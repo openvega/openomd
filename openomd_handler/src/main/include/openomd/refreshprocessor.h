@@ -24,6 +24,10 @@ public:
     template <typename _Log>
     void onRefreshComplete(_Log log, uint32_t lastSeqNum);
 
+    inline void start()
+    {
+        _state = State::Init;
+    }
     inline void end()
     {
         _state = State::RefreshEnded;
@@ -100,8 +104,8 @@ void BaseRefreshProcessor::onRefreshComplete(_Log log, uint32_t lastSeqNum)
         _state = State::RefreshCompleted;
         _lastSeqNum = lastSeqNum;
         std::stringstream ss;
-        ss << " Refresh completed " << _lastSeqNum;
-        log("Refresh completed");
+        ss << "refresh completed " << _lastSeqNum;
+        log(ss.str());
     }
 }
 

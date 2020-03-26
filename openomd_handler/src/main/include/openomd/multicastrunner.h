@@ -14,15 +14,15 @@ public:
         MulticastReceiver _receiverA;
         MulticastReceiver _receiverB;
         MulticastReceiver _refreshReceiver;
-        _Processor _processor;
         _RefreshProcessor _refreshProcessor;
+        _Processor _processor;
         _Parser _parser;
 
         Runner(IOServiceLC& ioService, ChannelConfig const& c)
             : _receiverA{ c.channel, c.port, c.listenIpA, c.ipA, ioService }, 
               _receiverB{ c.channel, c.port, c.listenIpB, c.ipB, ioService },
               _refreshReceiver{ c.channel, c.refreshPort, c.refreshListenIp, c.refreshIp, ioService },
-              _processor{ _refreshReceiver }
+              _processor{ _refreshReceiver, _refreshProcessor }
         {
             _processor.channel(c.channel);
             _refreshProcessor.channel(c.channel);

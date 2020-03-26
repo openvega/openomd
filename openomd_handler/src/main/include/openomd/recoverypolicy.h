@@ -9,8 +9,8 @@ struct NoopRecoveryPolicy
     {
     }
 
-    template <typename _MulticastHandler>
-    NoopRecoveryPolicy(_MulticastHandler& multicastHandler)
+    template <typename _MulticastHandler, typename _RefreshProcessor>
+    NoopRecoveryPolicy(_MulticastHandler&, _RefreshProcessor&)
     {
     }
 
@@ -37,15 +37,23 @@ struct PcapRecoveryPolicy
     }
 };
 
-template <typename _MulticastHandler>
+template <typename _MulticastHandler, typename _RefreshProcessor>
 struct RefreshChannelRecoveryPolicy
 {
 public:
-    RefreshChannelRecoveryPolicy(_MulticastHandler& multicastHandler) : _multicastHandler{multicastHandler}{}
+    RefreshChannelRecoveryPolicy(_MulticastHandler& multicastHandler, _RefreshProcessor& refreshProcessor) 
+        : _multicastHandler{ multicastHandler }
+        , _refreshProcessor{ refreshProcessor }
+    {
+    }
 
     void recover(PktHdr const& pktHdr, uint32_t nextSeqNum)
     {
-        _multicastHandler.start();
+        if (_refreshProcessor.refreshEnded())
+        {
+            _refreshProcessor.start();
+            _multicastHandler.start();
+        }
     }
     void stopRecovery()
     {
@@ -54,5 +62,6 @@ public:
 
 private:
     _MulticastHandler& _multicastHandler;
+    _RefreshProcessor& _refreshProcessor;
 };
 }

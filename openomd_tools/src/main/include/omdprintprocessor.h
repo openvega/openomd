@@ -15,7 +15,6 @@ class BasePrintProcessor : public _LineArbitration
 public:
     using _LineArbitration::_LineArbitration;
 
-    //BasePrintProcessor(std::set<int32_t> const& msgIds);
     void onHeartbeat()
     {
     }
