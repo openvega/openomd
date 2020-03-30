@@ -11,7 +11,7 @@
 
   <!-- More Project Information -->
   <name>Open OMD</name>
-  <description>The Internet Communications Engine ICE</description>
+  <description>Open OMD client side library</description>
   <url>https://github.com/openvega/openomd</url>
 
   <distributionManagement>
