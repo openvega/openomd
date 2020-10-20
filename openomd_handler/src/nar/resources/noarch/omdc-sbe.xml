@@ -6,9 +6,9 @@
     <type name="str4" primitiveType="char" length="4" semanticType="String"/>
     <type name="str160" primitiveType="char" length="160" semanticType="String"/>
     <type name="str320" primitiveType="char" length="320" semanticType="String"/>
-    <type name="filler31" length="31" primitiveType="char" semanticType="String"/>
-    <type name="filler42" length="42" primitiveType="char" semanticType="String"/>
-    <type name="filler82" length="82" primitiveType="char" semanticType="String"/>
+    <type name="filler41" length="41" primitiveType="char" semanticType="String"/>
+    <type name="filler61" length="61" primitiveType="char" semanticType="String"/>
+    <type name="filler62" length="62" primitiveType="char" semanticType="String"/>
     <type name="username" primitiveType="char" length="12" semanticType="String"/>
     <type name="securitycode" primitiveType="uint32"/>
     <type name="marketname" primitiveType="char" length="25" semanticType="String"/>
@@ -112,28 +112,32 @@
     <field name="listingDate" id="119" type="uint32"/>
     <field name="delistingDate" id="120" type="uint32"/>
     <field name="freeText" id="121" type="freetext" semanticType="String"/>
-    <field name="filler5" id="205" type="filler82" semanticType="String"/>
-    <field name="efnFlag" id="122" type="char" semanticType="char"/>
-    <field name="accruedInterest" id="123" type="uint32"/>
-    <field name="couponRate" id="124" type="uint32"/>
-    <field name="filler6" id="205" type="filler42" semanticType="String"/>
-    <field name="conversionRatio" id="125" type="uint32"/>
-    <field name="strikePrice1" id="126" type="int32"/>
-    <field name="strikePrice2" id="127" type="int32"/>
-    <field name="maturityDate" id="128" type="uint32"/>
-    <field name="callPutFlag" id="129" type="char" semanticType="char"/>
-    <field name="style" id="130" type="char" semanticType="char"/>
-    <field name="filler7" id="207" type="uint16"/>
-    <field name="warrantType" id="131" type="char" semanticType="char"/>
-    <field name="callPrice" id="132" type="int32"/>
-    <field name="decimalsInCallPrice" id="133" type="uint8"/>
-    <field name="entitlement" id="134" type="int32"/>
-    <field name="decimalsInEntitlement" id="135" type="uint8"/>
-    <field name="noWarrantsPerEntitlement" id="136" type="uint32"/>
-    <field name="filler8" id="208" type="filler31" semanticType="String"/>
-    <group name="noUnderlyingSecurities" id="137" dimensionType="groupSize16Reverse">
-      <field name="underlyingSecurityCode" id="138" type="securitycode"/>
-      <field name="filler9" id="209" type="int32"/>
+    <field name="filler5" id="205" type="filler62" semanticType="String"/>
+    <field name="posFlag" id="122" type="char"/>
+    <field name="posUpperLimit" id="123" type="int32"/>
+    <field name="posLowerLimit" id="124" type="int32"/>
+    <field name="filler6" id="206" type="filler41" semanticType="String"/>
+    <field name="efnFlag" id="125" type="char" semanticType="char"/>
+    <field name="accruedInterest" id="126" type="uint32"/>
+    <field name="couponRate" id="127" type="uint32"/>
+    <field name="filler7" id="207" type="filler62" semanticType="String"/>
+    <field name="conversionRatio" id="128" type="uint32"/>
+    <field name="strikePrice1" id="129" type="int32"/>
+    <field name="strikePrice2" id="130" type="int32"/>
+    <field name="maturityDate" id="131" type="uint32"/>
+    <field name="callPutFlag" id="132" type="char" semanticType="char"/>
+    <field name="style" id="133" type="char" semanticType="char"/>
+    <field name="filler8" id="208" type="uint16"/>
+    <field name="warrantType" id="134" type="char" semanticType="char"/>
+    <field name="callPrice" id="135" type="int32"/>
+    <field name="decimalsInCallPrice" id="136" type="uint8"/>
+    <field name="entitlement" id="137" type="int32"/>
+    <field name="decimalsInEntitlement" id="138" type="uint8"/>
+    <field name="noWarrantsPerEntitlement" id="139" type="uint32"/>
+    <field name="filler9" id="209" type="filler61" semanticType="String"/>
+    <group name="noUnderlyingSecurities" id="140" dimensionType="groupSize16Reverse">
+      <field name="underlyingSecurityCode" id="141" type="securitycode"/>
+      <field name="filler10" id="210" type="int32"/>
     </group>
   </message>
   <message name="LiquidityProvider" id="13" semanticType="4">

@@ -47,8 +47,8 @@ public:
             {
             }
             std::stringstream ss;
-            TranslatePolicy::write(ss, pos->second, "", pos->second, TranslatePolicy::Index.first, "HKD", "XHKG", 1, "XHKG",
-                    1, 1, mdid, "", "", "", "", "", 0, "", "", 0, 0, 0, 0, 0, 0);
+            TranslatePolicy::write(ss, pos->second, "", pos->second, TranslatePolicy::Index.first, "", 0, "HKD", "XHKG", 1, "XHKG",
+                    1, 1, "", "", "", "", "", "", 0, "", "", "", 0, 0, 0, 0, 0, 0);
             _secDefs.emplace(TranslatePolicy::Index.second, ss.str());
         }
     }
@@ -81,9 +81,11 @@ public:
         double callPrice = 0;
         std::string optionType;
         std::string exerciseStyle;
+        std::string payoffStyle = "S";
         int64_t mNum = 0;
-        int64_t mDenom = 0;
+        int64_t mDenom = 1;
         uint32_t maturity = 0;
+        std::string issuer;
 
         if (secType == TranslatePolicy::Warrant.first || secType == TranslatePolicy::Cbbc.first)
         {
@@ -118,8 +120,9 @@ public:
             {
                 if (s.entitlement() > 0)
                 {
-                    mNum = pow(10, s.decimalsInEntitlement());
-                    mDenom = s.entitlement();
+                    // TODO: whats the rule for warrant entitlement
+                    //mNum = s.noWarrantsPerEntitlement();
+                    //mDenom = s.entitlement()/pow(10, s.decimalsInEntitlement());
                 }
             }
 
@@ -133,6 +136,10 @@ public:
                     ss << underlyings.underlyingSecurityCode();
                     underlying = ss.str();
                     underlyingExchange = "XHKG";
+                    if (!underlying.empty() && secType == TranslatePolicy::Warrant.first)
+                    {
+                        payoffStyle = "P";
+                    }
                 }
             } else
             {
@@ -156,11 +163,12 @@ public:
                 underlyingExchange = "XHKG";
             }
             maturity = s.maturityDate();
+            issuer = shortname.substr(0, 2);
         }
 
         std::stringstream ss;
-        TranslatePolicy::write(ss, s.securityCode(), "", shortname, secType, currency, "XHKG", s.lotSize(), "XHKG", 1, 1, s.securityCode(),
-                underlying, underlyingExchange, s.listingDate(), maturity, "", strike, optionType, exerciseStyle, mNum, mDenom, 1, 1, callPrice, strike2);
+        TranslatePolicy::write(ss, s.securityCode(), s.securityCode(), shortname, secType, "MAIN", 1, currency, "XHKG", s.lotSize(), "XHKG", 1, 1, issuer,
+            underlying, underlyingExchange, s.listingDate(), maturity, "", strike, optionType, exerciseStyle, payoffStyle, mNum, mDenom, 1, 1, callPrice, strike2);
         _secDefs.emplace(ordering, ss.str());
     }
     void onMessage(omdc::sbe::LiquidityProvider const& lp, uint32_t seqNum)
@@ -448,8 +456,8 @@ public:
                 csDenom = pow(10, clsDef.decimalInContractSize);
             }
             TranslatePolicy::write(_ostream, s.symbol, TranslatePolicy::code(s.ck.country, s.ck.market, s.ck.instrumentGroup, s.modifier, s.ck.commodityCode, s.expirationDateN, s.strikePrice),
-                    s.symbol, groupPos->second, clsDef.baseCurrency, "XHKF", 1, tickRule.str(), unitValue, pow(10, clsDef.decimalInPremium), s.orderbookID,
-                    underlyingStr, "XHKG", listingDate, (s.effectiveExpDate.empty() ? s.expirationDate : s.effectiveExpDate), optionClass, strike, optionType, exerciseStyle, 1, 1, csNum, csDenom, 0, 0);
+                s.symbol, groupPos->second, "", 0, clsDef.baseCurrency, "XHKF", 1, tickRule.str(), unitValue, pow(10, clsDef.decimalInPremium), "",
+                underlyingStr, "XHKG", listingDate, (s.effectiveExpDate.empty() ? s.expirationDate : s.effectiveExpDate), optionClass, strike, optionType, exerciseStyle, "S", 1, 1, csNum, csDenom, 0, 0);
             _ostream << endl;
         }
     }

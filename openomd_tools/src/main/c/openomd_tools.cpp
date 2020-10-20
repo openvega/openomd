@@ -30,37 +30,41 @@ struct BaseTranslatePolicy
     static const std::string HSI;
     static const std::string HSCEI;
 
-    template <typename _Symbol, typename _Date>
-    void write(std::ostream& os, _Symbol const& symbol, std::string const& code, std::string const& name, std::string const& secType, std::string const& currency,
-            std::string const& exchange, uint32_t lotSize, std::string const& tickRule, int32_t unitValue, int32_t priceDenom, uint32_t mdid, std::string const& underlying, std::string const& underlyingExchange,
-            _Date const& listing, _Date const& expiry, std::string const& optionClass, double strike, std::string const& optionType, std::string const& exerciseStyle,
-            int64_t mNum, int64_t mDenom, int64_t contractSize, int64_t decimalInContractSize, double callPrice, double strike2) const
+    template <typename _Symbol, typename _Code, typename _Date>
+    void write(std::ostream& os, _Symbol const& symbol, _Code const& code, std::string const& name, std::string const& secType,
+        std::string const& market, int32_t marketCode, std::string const& currency,
+        std::string const& exchange, uint32_t lotSize, std::string const& tickRule, int32_t unitValue, int32_t priceDenom, std::string const& issuer, std::string const& underlying, std::string const& underlyingExchange,
+        _Date const& listing, _Date const& expiry, std::string const& optionClass, double strike, std::string const& optionType, std::string const& exerciseStyle, std::string const& payoffStyle,
+        int64_t mNum, int64_t mDenom, int64_t contractSize, int64_t decimalInContractSize, double callPrice, double strike2) const
     {
-        os << symbol << ","
-            << code << ","
-            << name << ","
-            << secType << ","
-            << currency << ","
-            << exchange << ","
-            << lotSize << ","
-            << tickRule << ","
-            << unitValue << ","
-            << priceDenom << ","
-            << mdid << ","
-            << underlying << ","
-            << underlyingExchange << ","
-            << listing << ","
-            << expiry << ","
-            << optionClass << ","
-            << strike << ","
-            << optionType << ","
-            << exerciseStyle << ","
-            << mNum << ","
-            << mDenom << ","
-            << contractSize << ","
-            << decimalInContractSize << ","
-            << callPrice << ","
-            << strike2;
+        os << "\"" << symbol << "\","
+            << "\"" << code << "\","
+            << "\"" << name << "\","
+            << "\"" << secType << "\","
+            << "\"" << market << "\","
+            << "\"" << marketCode << "\","
+            << "\"" << currency << "\","
+            << "\"" << exchange << "\","
+            << "\"" << lotSize << "\","
+            << "\"" << tickRule << "\","
+            << "\"" << unitValue << "\","
+            << "\"" << priceDenom << "\","
+            << "\"" << issuer << "\","
+            << "\"" << underlying << "\","
+            << "\"" << underlyingExchange << "\","
+            << "\"" << listing << "\","
+            << "\"" << expiry << "\","
+            << "\"" << optionClass << "\","
+            << "\"" << strike << "\","
+            << "\"" << optionType << "\","
+            << "\"" << exerciseStyle << "\","
+            << "\"" << payoffStyle << "\","
+            << "\"" << mNum << "\","
+            << "\"" << mDenom << "\","
+            << "\"" << contractSize << "\","
+            << "\"" << decimalInContractSize << "\","
+            << "\"" << callPrice << "\","
+            << "\"" << strike2 << "\"";
     }
 };
 const std::string BaseTranslatePolicy::Call{"C"};
@@ -81,8 +85,8 @@ struct OMDCTranslatePolicy : public BaseTranslatePolicy
 const std::pair<std::string, int32_t> OMDCTranslatePolicy::Index{"Index", 0};
 const std::pair<std::string, int32_t> OMDCTranslatePolicy::Equity{"Equity", 1};
 const std::pair<std::string, int32_t> OMDCTranslatePolicy::ETF{"Equity", 2};
-const std::pair<std::string, int32_t> OMDCTranslatePolicy::Warrant{"Equity", 3};
-const std::pair<std::string, int32_t> OMDCTranslatePolicy::Cbbc{"Equity", 4};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Warrant{"Warrant", 3};
+const std::pair<std::string, int32_t> OMDCTranslatePolicy::Cbbc{"CBBC", 4};
 
 struct OMDDTranslatePolicy : public BaseTranslatePolicy
 {
