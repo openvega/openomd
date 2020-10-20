@@ -31,7 +31,7 @@ TEST(OMDCHandler, pcap)
         openomd::OmdcParser _parser;
 
     public:
-        void onReceive(int32_t byteRecvd, uint8_t* data, int32_t max, uint32_t, uint16_t)
+        void onReceive(struct timeval& ts, int32_t byteRecvd, uint8_t* data, int32_t max, uint32_t, uint16_t)
         {
             _parser.parse((char*)data, byteRecvd, _processor);
         }

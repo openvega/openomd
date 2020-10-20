@@ -133,7 +133,7 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
         {
             auto * udpPacket = reinterpret_cast<UdpFrame<> const*>(pos);
             uint32_t byteRecvd = pkthdr->len - sizeof(UdpHdr);
-            _callback.onReceive(byteRecvd, const_cast<uint8_t*>(&udpPacket->_payload[0]), ETHERNET_MAX_PAYLOAD, 
+            _callback.onReceive(pkthdr->ts, byteRecvd, const_cast<uint8_t*>(&udpPacket->_payload[0]), ETHERNET_MAX_PAYLOAD, 
                 udpPacket->_hdr.ip_dst.s_addr, ntohs(udpPacket->_hdr.uh_dport));
         }
         }

@@ -36,7 +36,7 @@ public:
             });
         }
 
-        void onReceive(int32_t byteRecvd, uint8_t* data, int32_t max, uint32_t ip, uint16_t port)
+        void onReceive(struct timeval& ts, int32_t byteRecvd, uint8_t* data, int32_t max, uint32_t ip, uint16_t port)
         {
             auto pos = _addressToChannel.find({ ip, port });
             if (pos != _addressToChannel.end())
