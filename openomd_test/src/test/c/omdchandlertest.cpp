@@ -21,9 +21,9 @@ struct PrintProcessor : openomd::OMDCProcessor<openomd::PcapLineArbitration, ope
 TEST(OMDCHandler, pcap)
 {
     EXPECT_EQ(14, sizeof(openomd::EthernetHdr));
-    EXPECT_EQ(34, sizeof(openomd::IpHdr));
-    EXPECT_EQ(42, sizeof(openomd::UdpHdr));
-    EXPECT_EQ(54, sizeof(openomd::TcpHdr));
+    EXPECT_EQ(20, sizeof(openomd::IpHdr));
+    EXPECT_EQ(28, sizeof(openomd::UdpHdr));
+    EXPECT_EQ(40, sizeof(openomd::TcpHdr));
     
     struct Callback
     {

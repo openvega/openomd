@@ -46,7 +46,7 @@ struct EthernetHdr
 END_PACK
 
 BEGIN_PACK
-struct IpHdr : public EthernetHdr
+struct IpHdr
 {
     uint8_t ip_vhl; // header length, version
 #define IP_V(ip) (((ip)->ip_vhl & 0xf0) >> 4)

@@ -122,17 +122,21 @@ inline void PcapUtil<_CB, _PBPolicy>::run()
     {
         wait(pkthdr->ts);
         const uint8_t* pos = pktData + (_sll ? 2:0);
+        auto* ethernetHdr = reinterpret_cast<EthernetHdr const*>(pos);
+        auto EthernetHdrSize = sizeof(EthernetHdr) + (ntohs(ethernetHdr->ether_type) == ETHERTYPE_VLAN ? 4 : 0);
+        pos += EthernetHdrSize;
         auto *ipPacket = reinterpret_cast<IpHdr const*>(pos);
         switch (ipPacket->ip_p)
         {
         case IPPROTO_TCP:
         {
-            throw std::runtime_error("TCP pcap replay is not support");
+            //throw std::runtime_error("TCP pcap replay is not support");
+            break;
         }
         case IPPROTO_UDP:
         {
             auto * udpPacket = reinterpret_cast<UdpFrame<> const*>(pos);
-            uint32_t byteRecvd = pkthdr->len - sizeof(UdpHdr);
+            uint32_t byteRecvd = pkthdr->len - static_cast<uint32_t>(sizeof(UdpHdr) + EthernetHdrSize);
             _callback.onReceive(pkthdr->ts, byteRecvd, const_cast<uint8_t*>(&udpPacket->_payload[0]), ETHERNET_MAX_PAYLOAD, 
                 udpPacket->_hdr.ip_dst.s_addr, ntohs(udpPacket->_hdr.uh_dport));
         }
