@@ -28,6 +28,7 @@
             <configuration>
               <executable>java</executable>
               <arguments>
+                <argument>-Dsbe.java.generate.interfaces=true</argument>
                 <argument>-Dsbe.target.language=cpp</argument>
                 <argument>-Dsbe.output.dir=src/main/include</argument>
                 <argument>-classpath</argument>
@@ -46,6 +47,7 @@
             <configuration>
               <executable>java</executable>
               <arguments>
+                <argument>-Dsbe.java.generate.interfaces=true</argument>
                 <argument>-Dsbe.target.language=cpp</argument>
                 <argument>-Dsbe.output.dir=src/main/include</argument>
                 <argument>-classpath</argument>
