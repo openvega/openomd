@@ -50,6 +50,15 @@
       <type name="sendTime" primitiveType="uint64"/>
     </composite>
   </types>
+  <message name="PkgMsgHeader" id="1" semanticType="4">
+    <field name="pktSize" id="101" type="uint16"/>
+    <field name="msgCount" id="102" type="uint8"/>
+    <field name="filler" id="103" type="uint8"/>
+    <field name="seqNum" id="104" type="uint32"/>
+    <field name="sendTime" id="105" type="uint64"/>
+    <field name="msgSize" id="106" type="uint16" description="Length of entire message, including binary header in number of bytes"/>
+    <field name="msgType" id="107" type="uint16" description="message id, example 100 means SequenceReset"/>
+  </message>
   <message name="Heartbeat" id="0" semanticType="4">
   </message>
   <message name="SequenceReset" id="100" semanticType="4">
