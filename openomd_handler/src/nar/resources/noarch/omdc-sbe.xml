@@ -116,7 +116,7 @@
     <field name="efnFlag" id="122" type="char" semanticType="char"/>
     <field name="accruedInterest" id="123" type="uint32"/>
     <field name="couponRate" id="124" type="uint32"/>
-    <field name="filler6" id="205" type="filler42" semanticType="String"/>
+    <field name="filler6" id="206" type="filler42" semanticType="String"/>
     <field name="conversionRatio" id="125" type="uint32"/>
     <field name="strikePrice1" id="126" type="int32"/>
     <field name="strikePrice2" id="127" type="int32"/>
