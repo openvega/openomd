@@ -102,7 +102,7 @@ inline std::ostream& operator<<(std::ostream& os, DisasterRecoverySignal const& 
 }
 inline std::ostream& operator<<(std::ostream& os, IndexData const& m)
 {
-    os << "id";
+    os << "id" << m.getIndexCodeAsString() << " v=" << m.indexValue() << " sts=" << m.indexStatus() << " o=" << m.openingValue() << " h=" << m.highValue() << " l=" << m.lowValue() << " eas=" << m.easValue() << " c=" << m.closingValue() << " pc=" << m.previousSesClose();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, IndexDefinition const& m)
@@ -172,7 +172,7 @@ inline std::ostream& operator<<(std::ostream& os, SecurityDefinition const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, SecurityStatus const& m)
 {
-    os << "ss";
+    os << "ss: " << m.securityCode() << " Si=" << (int32_t)m.suspensionIndicator();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SequenceReset const& m)

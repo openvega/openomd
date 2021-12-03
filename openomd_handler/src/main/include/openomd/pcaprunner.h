@@ -41,6 +41,7 @@ public:
             auto pos = _addressToChannel.find({ ip, port });
             if (pos != _addressToChannel.end())
             {
+                _processors[pos->second].timestamp(ts);
                 _parser.parse((char*)data, byteRecvd, _processors[pos->second]);
             }
         }

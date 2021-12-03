@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>io.github.openvega</groupId>
   <artifactId>openomd</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>pom</packaging>
 
   <!-- More Project Information -->
@@ -55,7 +55,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <dummyversion>1.0-dummy</dummyversion>
-    <gmock.version>1.8.1</gmock.version>
+    <gmock.version>1.11.1</gmock.version>
     <boost.version>1.68.0</boost.version>
     <sbe.version>1.7.4</sbe.version>
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->

@@ -19,6 +19,11 @@ public:
     {
     }
 
+    void timestamp(struct timeval& ts)
+    {
+        _ts = ts;
+    }
+
     void onUnknownMessage(uint16_t type, uint16_t msgSize)
     {
         std::cout << "PrintProcessor onUnknownMessage type=" << type << " msgSize=" << msgSize << std::endl;
@@ -55,11 +60,12 @@ protected:
     {
         //if (_msgIds.find(_Msg::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
         {
-            std::cout << seqNum << " " << m << std::endl;
+            std::cout << _ts.tv_sec << "." << _ts.tv_usec << " " << seqNum << " " << m << std::endl;
         }
     }
     std::set<int32_t> _msgIds;
     int32_t _channel;
+    struct timeval _ts;
 };
 
 template <typename _LineArbitration>
