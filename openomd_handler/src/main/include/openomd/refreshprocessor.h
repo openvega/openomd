@@ -84,11 +84,6 @@ protected:
 template <typename _Log>
 void BaseRefreshProcessor::onHeartbeat(_Log log)
 {
-    if (_state == State::Init)
-    {
-        _state = State::Refreshing;
-        log("Start refresh");
-    }
 }
 
 template <typename _Log>
