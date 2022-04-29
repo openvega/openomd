@@ -102,6 +102,7 @@ inline void PcapUtil<_CB, _PBPolicy>::start()
             timeMultiplier(1);
         }
     }
+    fclose(pcapFile);
 
     char errMsg[PCAP_ERRBUF_SIZE];
     _pcapt = pcap_open_offline(_pcapFile.c_str(), errMsg);
