@@ -29,7 +29,7 @@ struct PcapRecoveryPolicy
         // special case for first message in Pcap
         if (nextSeqNum == 1)
         {
-            nextSeqNum = pktHdr.seqNum + 1;
+            nextSeqNum = pktHdr.seqNum + std::max(1U, static_cast<uint32_t>(pktHdr.msgCnt));
         }
     }
     void stopRecovery()
