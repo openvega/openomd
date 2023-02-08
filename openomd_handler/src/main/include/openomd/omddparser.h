@@ -1,5 +1,6 @@
 #pragma once
 #include "openomd/omdbaseparser.h"
+#include "openomd/compressionpolicy.h"
 #include <omdd_sbe/AddOrder.h>
 #include <omdd_sbe/AggregateOrderBookUpdate.h>
 #include <omdd_sbe/CalculatedOpeningPrice.h>
@@ -32,7 +33,7 @@
 
 namespace openomd
 {
-class OmddParser : public OmdBaseParser
+class OmddParser : public OmdBaseParser<ZLibCompressionPolicy>
 {
 #ifndef _OMDD_MSG_SWITCH_
 #define _OMDD_MSG_SWITCH_ OMD_SWITCH_CASE(AddOrder, 330); \

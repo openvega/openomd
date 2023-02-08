@@ -4,7 +4,8 @@
 namespace openomd
 {
 #define OMD_SWITCH_CASE(MESSAGE, ID) case ID: process<MESSAGE>(pos, msgSize, processor, seqNum); break;
-class OmdBaseParser
+template <typename _CompressionPolicy>
+class OmdBaseParser : private _CompressionPolicy
 {
 protected:
     template <typename _Msg, typename _Processor>
@@ -91,6 +92,8 @@ private:
             {
                 if (checkPktSeq(*pktHdr, data))
                 {
+                    char uncompressedBuffer[65535];
+                    _CompressionPolicy::process(pktHdr, data, bytesRecvd, uncompressedBuffer, sizeof(uncompressedBuffer));
                     auto byteProcess = sizeof(PktHdr);
                     int64_t byteLeft = 0;
                     uint16_t msgCnt = 0;
