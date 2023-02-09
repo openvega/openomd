@@ -4,7 +4,8 @@
 namespace openomd
 {
 #define OMD_SWITCH_CASE(MESSAGE, ID) case ID: process<MESSAGE>(pos, msgSize, processor, seqNum); break;
-class OmdBaseParser
+template <typename _CompressionPolicy>
+class OmdBaseParser : private _CompressionPolicy
 {
 protected:
     template <typename _Msg, typename _Processor>
@@ -91,32 +92,41 @@ private:
             {
                 if (checkPktSeq(*pktHdr, data))
                 {
-                    auto byteProcess = sizeof(PktHdr);
-                    int64_t byteLeft = 0;
-                    uint16_t msgCnt = 0;
-                    while ((byteLeft = bytesRecvd - byteProcess) > MSG_HDR_SIZE)
+                    char uncompressedBuffer[65535];
+                    if (_CompressionPolicy::process(pktHdr, data, bytesRecvd, uncompressedBuffer, sizeof(uncompressedBuffer)))
                     {
-                        auto* pos = data + byteProcess;
-                        MsgHdr* msgHdr = (MsgHdr*)(pos);
-                        if (msgHdr->size == 0 || msgHdr->size > byteLeft)
+                        auto byteProcess = sizeof(PktHdr);
+                        int64_t byteLeft = 0;
+                        uint16_t msgCnt = 0;
+                        while ((byteLeft = bytesRecvd - byteProcess) > MSG_HDR_SIZE)
                         {
-                            processor.onError(std::runtime_error("Invalid message size"));
-                            break;
-                        }
-                        try
-                        {
-                            uint32_t msgSeq = pktHdr->seqNum + msgCnt;
-                            if (checkMsgSeq(msgSeq))
+                            auto* pos = data + byteProcess;
+                            MsgHdr* msgHdr = (MsgHdr*)(pos);
+                            if (msgHdr->size == 0 || msgHdr->size > byteLeft)
                             {
-                                func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
+                                processor.onError(std::runtime_error("Invalid message size"));
+                                break;
                             }
+                            try
+                            {
+                                uint32_t msgSeq = pktHdr->seqNum + msgCnt;
+                                if (checkMsgSeq(msgSeq))
+                                {
+                                    func(msgHdr->type, pos + MSG_HDR_SIZE, msgHdr->size - MSG_HDR_SIZE, processor, msgSeq);
+                                }
+                            }
+                            catch (std::exception const& ex)
+                            {
+                                processor.onError(ex);
+                            }
+                            byteProcess += msgHdr->size;
+                            ++msgCnt;
                         }
-                        catch (std::exception const& ex)
-                        {
-                            processor.onError(ex);
-                        }
-                        byteProcess += msgHdr->size;
-                        ++msgCnt;
+                    }
+                    else
+                    {
+                        std::runtime_error ex("Uncompress failed");
+                        processor.onError(ex);
                     }
                     // Try consume cached packet
                     processCache();

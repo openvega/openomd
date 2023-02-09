@@ -10,7 +10,7 @@ struct PktHdr
 {
     uint16_t size;
     uint8_t msgCnt;
-    uint8_t filler;
+    uint8_t compressionMode;
     uint32_t seqNum;
     uint64_t sendTime;
 };

@@ -97,7 +97,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(SolutionDir)\thirdparty\target\nar\include;$(ProjectDir)\target\test-nar\gmock-$(GmockVersion)-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -118,7 +118,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;_DEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(SolutionDir)\thirdparty\target\nar\include;$(ProjectDir)\target\test-nar\gmock-$(GmockVersion)-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -141,7 +141,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(SolutionDir)\thirdparty\target\nar\include;$(ProjectDir)\target\test-nar\gmock-$(GmockVersion)-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -166,7 +166,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_ENABLE_ATOMIC_ALIGNMENT_FIX;WIN32;NDEBUG;_WINDOWS;_USRDLL;parser_exports;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)\src\test\include;$(SolutionDir)\openomd_handler\src\main\include;$(SolutionDir)\thirdparty\target\nar\include;$(ProjectDir)\target\test-nar\gmock-$(GmockVersion)-noarch\include;$(ProjectDir)\target\nar\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275;4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

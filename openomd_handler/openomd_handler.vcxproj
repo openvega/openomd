@@ -205,6 +205,7 @@
     <ClInclude Include="src\main\include\omdd_sbe\TradeAmendment.h" />
     <ClInclude Include="src\main\include\omdd_sbe\TradeStatistics.h" />
     <ClInclude Include="src\main\include\openomd\channelconfig.h" />
+    <ClInclude Include="src\main\include\openomd\compressionpolicy.h" />
     <ClInclude Include="src\main\include\openomd\ethernet.h" />
     <ClInclude Include="src\main\include\openomd\fulltick.h" />
     <ClInclude Include="src\main\include\openomd\instrumentprocessor.h" />

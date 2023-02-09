@@ -28,7 +28,7 @@ protected:
 
 TEST(OMDD_TEST, SequenceReset)
 {
-    char msg[] = "\x18\x00\x01\x01\x01\x00\x00\x00\x00\xae\x43\x78\xa6\x3f\x69\x14" \
+    char msg[] = "\x18\x00\x01\x00\x01\x00\x00\x00\x00\xae\x43\x78\xa6\x3f\x69\x14" \
         "\x08\x00\x64\x00\x01\x00\x00\x00";
 
     struct Processor : public OMDDP
@@ -429,6 +429,53 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
     };
     processMsg<Processor>(msg, sizeof(msg) - 1);
 
+}
+TEST(OMDD_TEST, CompressedAggregateOrderBookUpdate)
+{
+    char msg[] = "\x69\x00\x02\x01\xf7\x14\x00\x00\x00\x8f\x49\x78\xda\xfd\x23\x17"
+        "\x78\xda\x7b\xc2\x90\xc8\x78\x95\xdd\x80\x81\x8b\x81\x81\x13\x88"
+        "\xc1\xc0\x44\x91\x81\x81\x11\xc4\x50\x62\x64\x02\xd1\x30\xf1\x04"
+        "\x25\x88\x38\x23\x03\x23\x13\x03\x92\xf8\x05\x05\xa8\x7a\x34\xf1"
+        "\x23\x38\xd4\xe7\xe0\x50\xaf\xa1\x8c\x5d\x3d\x07\x0e\xf5\x4b\xe4"
+        "\xb1\x8b\x3b\xa0\x89\xab\x80\xfd\xa8\x03\x92\x67\x84\xa9\xe1\x62"
+        "\x40\xa8\x01\xd1\x00\xf9\x61\x09\x8a";
+
+    struct Processor : public OMDDP
+    {
+        using OMDDP::OMDDP;
+        void onMessage(sbe::AggregateOrderBookUpdate& aob, uint32_t)
+        {
+            if (!_tc)   // first msg
+            {
+                auto& entries = aob.noEntries();
+                EXPECT_EQ(3147733, aob.orderbookID());
+                EXPECT_EQ(9, entries.count());
+                entries.next();
+                EXPECT_EQ(10, entries.aggregateQuantity());
+                EXPECT_EQ(8500, entries.price());
+                EXPECT_EQ(1, entries.numberOfOrders());
+                EXPECT_EQ(0, entries.side());
+                EXPECT_EQ(1, entries.priceLevel());
+                EXPECT_EQ(2, entries.updateAction());
+
+                entries.next();
+                EXPECT_EQ(10, entries.aggregateQuantity());
+                EXPECT_EQ(8800, entries.price());
+                EXPECT_EQ(1, entries.numberOfOrders());
+                EXPECT_EQ(1, entries.side());
+                EXPECT_EQ(1, entries.priceLevel());
+                EXPECT_EQ(2, entries.updateAction());
+
+                _tc = true;
+            }
+        }
+        using OMDDProcessor::onMessage;
+    };
+    bool tc = false;
+    Processor processor{ tc };
+    openomd::OmddCompressParser parser;
+    parser.parse(msg, sizeof(msg) - 1, processor);
+    EXPECT_EQ(true, tc);
 }
 TEST(OMDD_TEST, OrderbookClear)
 {
