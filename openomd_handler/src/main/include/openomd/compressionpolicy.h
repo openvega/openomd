@@ -20,7 +20,7 @@ struct ZLibCompressionPolicy
         if (pktHdr->compressionMode == 1)
         {
             size_t uncompressedSize = cbSize - sizeof(PktHdr);
-            memcpy(uncompressedBuffer, pkgHdr, sizeof(PktHdr));
+            memcpy(uncompressedBuffer, pktHdr, sizeof(PktHdr));
             auto ucresult = uncompress((unsigned char*)(uncompressedBuffer + sizeof(PktHdr)), &uncompressedSize, (unsigned char*)(data + sizeof(PktHdr)), dataSize - sizeof(PktHdr));
             switch (ucresult)
             {
