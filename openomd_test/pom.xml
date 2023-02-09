@@ -27,6 +27,7 @@
             <sysLibs combine.children="append">
               <sysLib><name>pcap</name></sysLib>
               <sysLib><name>gomp</name></sysLib>
+              <sysLib><name>z</name></sysLib>
             </sysLibs>
           </linker>
           <libraries>
