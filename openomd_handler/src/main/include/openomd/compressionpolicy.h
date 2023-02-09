@@ -1,5 +1,7 @@
 #pragma once
+#ifndef _MSC_VER
 #include <zlib.h>
+#endif
 #include "openomd/omddef.h"
 
 namespace openomd
@@ -19,6 +21,7 @@ struct ZLibCompressionPolicy
         bool rtn = true;
         if (pktHdr->compressionMode == 1)
         {
+#ifndef _MSC_VER
             size_t uncompressedSize = cbSize - sizeof(PktHdr);
             memcpy(uncompressedBuffer, pktHdr, sizeof(PktHdr));
             auto ucresult = uncompress((unsigned char*)(uncompressedBuffer + sizeof(PktHdr)), &uncompressedSize, (unsigned char*)(data + sizeof(PktHdr)), dataSize - sizeof(PktHdr));
@@ -35,6 +38,9 @@ struct ZLibCompressionPolicy
                 rtn = false;
                 break;
             }
+#else
+            rtn = false;
+#endif
         }
         return rtn;
     }

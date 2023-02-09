@@ -430,6 +430,7 @@ TEST(OMDD_TEST, AggregateOrderBookUpdate)
     processMsg<Processor>(msg, sizeof(msg) - 1);
 
 }
+#ifndef _MSC_VER
 TEST(OMDD_TEST, CompressedAggregateOrderBookUpdate)
 {
     char msg[] = "\x69\x00\x02\x01\xf7\x14\x00\x00\x00\x8f\x49\x78\xda\xfd\x23\x17"
@@ -477,6 +478,7 @@ TEST(OMDD_TEST, CompressedAggregateOrderBookUpdate)
     parser.parse(msg, sizeof(msg) - 1, processor);
     EXPECT_EQ(true, tc);
 }
+#endif
 TEST(OMDD_TEST, OrderbookClear)
 {
     // handcraft
