@@ -5,6 +5,7 @@
     <BoostVersion>1.68.0</BoostVersion>
     <GmockVersion>1.11.1</GmockVersion>
     <WpcapVersion>4.1.2</WpcapVersion>
+    <ZlibVersion>1.2.13</ZlibVersion>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -17,6 +18,9 @@
     </BuildMacro>
     <BuildMacro Include="WpcapVersion">
       <Value>$(WpcapVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ZlibVersion">
+      <Value>$(ZlibVersion)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

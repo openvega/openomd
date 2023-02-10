@@ -104,8 +104,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>boost_system-$(BoostVersion)d.lib;wpcap-$(WpcapVersion).lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;$(SolutionDir)\thirdparty\target\nar\lib\amd64-Windows-msvc\static</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;zlib-$(ZlibVersion).lib;Ws2_32.lib;boost_system-$(BoostVersion)d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\nar\lib\amd64-Windows-msvc\static;$(SolutionDir)\thirdparty\target\nar\lib\amd64-Windows-msvc\static</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -178,8 +178,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>boost_system-$(BoostVersion).lib;wpcap-$(WpcapVersion).lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;$(SolutionDir)\thirdparty\target\nar\lib\amd64-Windows-msvc\static</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap-$(WpcapVersion).lib;zlib-$(ZlibVersion).lib;Ws2_32.lib;boost_system-$(BoostVersion).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>target\nar\lib\amd64-Windows-msvc\shared;target\nar\lib\amd64-Windows-msvc\static;$(SolutionDir)\thirdparty\target\nar\lib\amd64-Windows-msvc\static</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

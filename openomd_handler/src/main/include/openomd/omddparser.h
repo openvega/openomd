@@ -113,8 +113,8 @@ public:
 
 class OmddCompressParser : public OmdBaseParser<ZLibCompressionPolicy>
 {
-#ifndef _OMDD_MSG_SWITCH_
-#define _OMDD_MSG_SWITCH_ OMD_SWITCH_CASE(AddOrder, 330); \
+#ifndef _OMDDCOMP_MSG_SWITCH_
+#define _OMDDCOMP_MSG_SWITCH_ OMD_SWITCH_CASE(AddOrder, 330); \
     OMD_SWITCH_CASE(AggregateOrderBookUpdate, 353); \
     OMD_SWITCH_CASE(CalculatedOpeningPrice, 364); \
     OMD_SWITCH_CASE(ClassDefinition, 302); \
@@ -156,7 +156,7 @@ public:
             [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
                 switch (type)
                 {
-                    _OMDD_MSG_SWITCH_
+                    _OMDDCOMP_MSG_SWITCH_
                 }
             });
     }
@@ -169,7 +169,7 @@ public:
             [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
                 switch (type)
                 {
-                    _OMDD_MSG_SWITCH_
+                    _OMDDCOMP_MSG_SWITCH_
                 }
             });
     }
@@ -182,7 +182,7 @@ public:
             [](uint16_t type, char* pos, uint16_t msgSize, _Processor& processor, uint32_t seqNum) {
                 switch (type)
                 {
-                    _OMDD_MSG_SWITCH_
+                    _OMDDCOMP_MSG_SWITCH_
                 }
             });
     }

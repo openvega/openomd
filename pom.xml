@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>io.github.openvega</groupId>
   <artifactId>openomd</artifactId>
-  <version>1.0.9</version>
+  <version>1.1.0</version>
   <packaging>pom</packaging>
 
   <!-- More Project Information -->
@@ -60,6 +60,8 @@
     <sbe.version>1.7.4</sbe.version>
     <wpcap.version>${dummyversion}</wpcap.version>      <!-- Linux default dummy -->
     <wpcap.win.version>4.1.2</wpcap.win.version>
+    <zlib.version>${dummyversion}</zlib.version>      <!-- Linux default dummy -->
+    <zlib.win.version>1.2.13</zlib.win.version>
   </properties>
   <profiles>
     <profile>
@@ -150,6 +152,7 @@
       </activation>
       <properties>
         <wpcap.version>${wpcap.win.version}</wpcap.version>
+        <zlib.version>${zlib.win.version}</zlib.version>
       </properties>
       <build>
         <plugins>
@@ -274,7 +277,12 @@
         <artifactId>sbe-all</artifactId>
         <version>${sbe.version}</version>
       </dependency>
-      
+      <dependency>
+        <groupId>io.github.openvega</groupId>
+        <artifactId>zlib</artifactId>
+        <version>${zlib.version}</version>
+        <type>nar</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>

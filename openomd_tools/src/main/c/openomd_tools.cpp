@@ -146,11 +146,13 @@ int main(int32_t argc, char* argv[])
         ("c,pcap", "Pcap file", cxxopts::value<string>())
         ("n,networkconf", "network configuration file", cxxopts::value<string>())
         ("r,recovery", "perform recovery:1,0", cxxopts::value<int32_t>())
-        ("s,sll","1,0", cxxopts::value<int32_t>());
+        ("s,sll","1,0", cxxopts::value<int32_t>())
+        ("m,compress","Support Compression:1,0", cxxopts::value<int32_t>());
     try
     {
         auto result = options.parse(argc, argv);
         auto function = result["f"].as<string>();
+        bool compression = (result.count("m") == 1 && result["m"].as<int32_t>() == 1);
         if (function == "pcapdump")
         {
             if (result.count("p") == 0 || result.count("c") == 0 || result.count("n") == 0)
@@ -174,8 +176,16 @@ int main(int32_t argc, char* argv[])
             }
             else if (protocol == "omdd")
             {
-                OmdPcapRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg), pcapFile, sll };
-                run(runner);
+                if (compression)
+                {
+                    OmdPcapRunner<OmddPrintProcessor<NoopLineArbitration>, OmddCompressParser> runner{ ChannelConfig::getChannelConfig(networkCfg), pcapFile, sll };
+                    run(runner);
+                }
+                else
+                {
+                    OmdPcapRunner<OmddPrintProcessor<NoopLineArbitration>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg), pcapFile, sll };
+                    run(runner);
+                }
             }
         }
         else if (function == "udpdump")
@@ -210,13 +220,29 @@ int main(int32_t argc, char* argv[])
             {
                 if (recovery)
                 {
-                    OmdMulticastRunner<OmddPrintProcessor<OmddRefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
-                    run(runner);
+                    if (compression)
+                    {
+                        OmdMulticastRunner<OmddPrintProcessor<OmddRefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddCompressParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                        run(runner);
+                    }
+                    else
+                    {
+                        OmdMulticastRunner<OmddPrintProcessor<OmddRefreshLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                        run(runner);
+                    }
                 }
                 else
                 {
-                    OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
-                    run(runner);
+                    if (compression)
+                    {
+                        OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddCompressParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                        run(runner);
+                    }
+                    else
+                    {
+                        OmdMulticastRunner<OmddPrintProcessor<NoopLineArbitration>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg) };
+                        run(runner);
+                    }
                 }
             }
         }
@@ -237,8 +263,16 @@ int main(int32_t argc, char* argv[])
             }
             else if (protocol == "omdd")
             {
-                OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy, CoutBaseProcessor>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg), std::cout };
-                run(runner);
+                if (compression)
+                {
+                    OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy, CoutBaseProcessor>, OmddRefreshProcessor<CoutBaseProcessor>, OmddCompressParser> runner{ ChannelConfig::getChannelConfig(networkCfg), std::cout };
+                    run(runner);
+                }
+                else
+                {
+                    OmdInstrumentDownload<OMDDInstrumentProcessor<OMDDTranslatePolicy, CoutBaseProcessor>, OmddRefreshProcessor<CoutBaseProcessor>, OmddParser> runner{ ChannelConfig::getChannelConfig(networkCfg), std::cout };
+                    run(runner);
+                }
             }
         }
         else
