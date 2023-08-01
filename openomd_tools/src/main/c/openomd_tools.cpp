@@ -11,6 +11,8 @@
 #include "openomd/multicastrunner.h"
 #include "omdprintprocessor.h"
 
+static const std::string VERSION{ "2023.4" };
+
 template <typename _Runner>
 void run(_Runner& runner)
 {
@@ -139,7 +141,7 @@ int main(int32_t argc, char* argv[])
 {
     using namespace std;
     using namespace openomd;
-    cxxopts::Options options("openomd_tools", "Openomd Tools");
+    cxxopts::Options options("openomd_tools", "Openomd Tools v" + VERSION);
     options.add_options()
         ("f,function", "pcapdump,udpdump,instrument", cxxopts::value<string>())
         ("p,protocol", "omdc,omdd", cxxopts::value<string>())

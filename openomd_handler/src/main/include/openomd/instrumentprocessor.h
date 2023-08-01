@@ -39,13 +39,6 @@ public:
         if (pos != _indexMap.end())
         {
             std::string currency = indexDef.getCurrencyCodeAsString();
-            uint32_t mdid = 0;
-            try
-            {
-                mdid = stol(indexCode);
-            } catch (std::invalid_argument const&)
-            {
-            }
             std::stringstream ss;
             TranslatePolicy::write(ss, pos->second, "", pos->second, TranslatePolicy::Index.first, "", 0, "HKD", "XHKG", 1, "XHKG",
                     1, 1, "", "", "", "", "", "", 0, "", "", "", 0, 0, 0, 0, 0, 0);

@@ -77,7 +77,14 @@ inline std::ostream& operator<<(std::ostream& os, AddOddLotOrder const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, BrokerQueue const& m)
 {
-    os << "bq";
+    auto& bq = const_cast<BrokerQueue&>(m);
+    auto& items = bq.items();
+    os << "bq " << bq.securityCode() << " side:" << items.side();
+    while (items.hasNext())
+    {
+        items.next();
+        os << (items.itemType() == 'S' ? " S:" : " ") << items.item();
+    }
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, ClosingPrice const& m)
@@ -87,7 +94,7 @@ inline std::ostream& operator<<(std::ostream& os, ClosingPrice const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, CurrencyRate const& m)
 {
-    os << "cr";
+    os << "cr " << m.currencyCode() << " f:" << m.currencyFactor() << " r:" << m.currencyRate();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, DeleteOddLotOrder const& m)
@@ -112,7 +119,7 @@ inline std::ostream& operator<<(std::ostream& os, IndexDefinition const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, IndicativeEquilibriumPrice const& m)
 {
-    os << "iep";
+    os << "iep " << m.securityCode() << " p=" << m.price() << " aQ=" << m.aggregateQuantity();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, LiquidityProvider const& m)
