@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<messageSchema xmlns:ns2="http://www.fixprotocol.org/ns/simple/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" package="omdcc.sbe" id="1" version="1" semanticVersion="FIX5SP2" description="OMDCC sbe" byteOrder="littleEndian">
+  <types>
+    <type name="str3" primitiveType="char" length="3" semanticType="String"/>
+    <type name="str4" primitiveType="char" length="4" semanticType="String"/>
+    <type name="str6" primitiveType="char" length="6" semanticType="String"/>
+    <type name="str7" primitiveType="char" length="7" semanticType="String"/>
+    <type name="str8" primitiveType="char" length="8" semanticType="String"/>
+    <type name="str12" primitiveType="char" length="12" semanticType="String"/>
+    <type name="username" primitiveType="char" length="12" semanticType="String"/>
+    <type name="securitycode" primitiveType="uint32"/>
+    <type name="marketname" primitiveType="char" length="25" semanticType="String"/>
+    <type name="isincode" primitiveType="char" length="12" semanticType="String"/>
+    <type name="securityshortname" primitiveType="char" length="40" semanticType="String"/>
+    <type name="securitynamestr" primitiveType="char" length="60" semanticType="String"/>
+    <composite name="messageHeader" description="Template ID and length of message root">
+      <type name="msgSize" primitiveType="uint16" description="Length of entire message, including binary header in number of bytes"/>
+      <type name="blockLength" primitiveType="uint16" description="Number of message"/>
+      <type name="templateId" primitiveType="uint16" description="filler"/>
+      <type name="schemaId" primitiveType="uint16" description="Message Seq Num"/>
+      <type name="version" primitiveType="uint16" description="Send time"/>
+    </composite>
+    <composite name="packageHeader">
+      <type name="pktSize" primitiveType="uint16"/>
+      <type name="msgCount" primitiveType="uint8"/>
+      <type name="filler" primitiveType="uint8"/>
+      <type name="seqNum" primitiveType="uint32"/>
+      <type name="sendTime" primitiveType="uint64"/>
+    </composite>
+  </types>
+  <message name="Heartbeat" id="0" semanticType="4">
+  </message>
+  <message name="SequenceReset" id="100" semanticType="4">
+    <field name="newSeqNo" id="101" type="uint32"/>
+  </message>
+  <message name="Logon" id="101" semanticType="4">
+    <field name="username" id="101" type="username" semanticType="String"/>
+  </message>
+  <message name="LogonResponse" id="102" semanticType="4">
+    <field name="sessionStatus" id="101" type="uint8"/>
+  </message>
+  <message name="DisasterRecoverySignal" id="105" semanticType="4">
+    <field name="drStatus" id="101" type="uint32"/>
+  </message>
+  <message name="RetransmissionReq" id="201" semanticType="4">
+    <field name="channelID" id="101" type="uint16"/>
+    <field name="filler" id="201" type="uint16"/>
+    <field name="beginSeqNum" id="102" type="uint32"/>
+    <field name="endSeqNum" id="103" type="uint32"/>
+  </message>
+  <message name="RetransmissionResp" id="202" semanticType="4">
+    <field name="channelID" id="101" type="uint16"/>
+    <field name="retransStatus" id="102" type="uint8"/>
+    <field name="filler" id="201" type="char"/>
+    <field name="beginSeqNum" id="103" type="uint32"/>
+    <field name="endSeqNum" id="104" type="uint32"/>
+  </message>
+  <message name="RefreshComplete" id="203" semanticType="4">
+    <field name="lastSeqNum" id="101" type="uint32"/>
+  </message>
+  <message name="MarketDefinition" id="610" semanticType="4">
+    <field name="marketCode" id="101" type="str4" semanticType="String"/>
+    <field name="marketName" id="102" type="marketname" semanticType="String"/>
+    <field name="currencyCode" id="103" type="str3" semanticType="String"/>
+    <field name="numberOfSecurities" id="104" type="uint32"/>
+  </message>
+  <message name="SecurityDefinition" id="611" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="marketCode" id="102" type="str4" semanticType="String"/>
+    <field name="isinCode" id="103" type="isincode" semanticType="String"/>
+    <field name="instrumentType" id="104" type="str4" semanticType="String"/>
+    <field name="filler" id="201" type="uint16"/>
+    <field name="securityShortName" id="105" type="securityshortname" semanticType="String"/>
+    <field name="currencyCode" id="106" type="str3" semanticType="String"/>
+    <field name="filler2" id="202" type="securitynamestr" semanticType="String"/>
+    <field name="securityNameGB" id="107" type="securitynamestr" semanticType="String"/>
+    <field name="lotSize" id="108" type="uint32"/>
+    <field name="previousClosingPrice" id="109" type="int32"/>
+    <field name="filler3" id="203" type="char" semanticType="char"/>
+    <field name="shortSellFlag" id="110" type="char" semanticType="char"/>
+    <field name="filler4" id="204" type="str6"/>
+    <field name="listingDate" id="111" type="uint32"/>
+    <field name="filler5" id="205" type="str7" semanticType="String"/>
+  </message>
+  <message name="SecurityStatus" id="621" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="securityTradingStatus" id="102" type="uint8"/>
+    <field name="filler" id="201" type="str3"/>
+    <field name="tradingPhaseCode" id="103" type="str8"/>
+  </message>
+  <message name="TopOfBook" id="655" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="aggregateBidQuantity" id="102" type="uint64"/>
+    <field name="aggregateAskQuantity" id="103" type="uint64"/>
+    <field name="bidPrice" id="104" type="int32"/>
+    <field name="askPrice" id="105" type="int32"/>
+    <field name="filler" id="201" type="uint64"/>
+  </message>
+  <message name="Statistics" id="660" semanticType="4">
+    <field name="securityCode" id="101" type="securitycode"/>
+    <field name="sharesTraded" id="102" type="uint64"/>
+    <field name="turnover" id="103" type="int64"/>
+    <field name="highPrice" id="104" type="int32"/>
+    <field name="lowPrice" id="105" type="int32"/>
+    <field name="lastPrice" id="106" type="int32"/>
+    <field name="openingPrice" id="107" type="int32"/>
+    <field name="filler" id="201" type="str12"/>
+  </message>
+</messageSchema>

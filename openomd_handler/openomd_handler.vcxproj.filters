@@ -34,6 +34,9 @@
     <Filter Include="Header Files\parser\processor">
       <UniqueIdentifier>{181e5194-b3fd-40e9-8412-ce4bcc51423b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\parser\omdcc">
+      <UniqueIdentifier>{1db28a4e-89a4-4e92-bbce-0d2a1eeae60e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\include\openomd\omdbaseparser.h">
@@ -309,9 +312,6 @@
     <ClInclude Include="src\main\include\openomd\recoverypolicy.h">
       <Filter>Header Files\recovery</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\include\openomd\omdinstrumentdownload.h">
-      <Filter>Header Files\parser</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\openomd\channelconfig.h">
       <Filter>Header Files\net</Filter>
     </ClInclude>
@@ -327,9 +327,6 @@
     <ClInclude Include="src\main\include\openomd\refreshprocessor.h">
       <Filter>Header Files\recovery</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\include\openomd\instrumentprocessor.h">
-      <Filter>Header Files\parser\processor</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\include\openomd\omdcprocessor.h">
       <Filter>Header Files\parser\processor</Filter>
     </ClInclude>
@@ -340,6 +337,57 @@
       <Filter>Header Files\parser\processor</Filter>
     </ClInclude>
     <ClInclude Include="src\main\include\openomd\compressionpolicy.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\DisasterRecoverySignal.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\Heartbeat.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\Logon.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\LogonResponse.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\MarketDefinition.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\MessageHeader.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\RefreshComplete.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\RetransmissionReq.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\RetransmissionResp.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\SecurityDefinition.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\SecurityStatus.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\SequenceReset.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\Statistics.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\omdcc_sbe\TopOfBook.h">
+      <Filter>Header Files\parser\omdcc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdccprocessor.h">
+      <Filter>Header Files\parser\processor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdccparser.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdccostream.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
   </ItemGroup>
@@ -386,6 +434,9 @@
       <Filter>Resource Files</Filter>
     </Xml>
     <Xml Include="pom-gen.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="src\nar\resources\noarch\omdcc-sbe.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

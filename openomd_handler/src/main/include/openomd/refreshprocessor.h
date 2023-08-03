@@ -3,6 +3,7 @@
 #include "openomd/nooplinearbitration.h"
 #include "openomd/omdcprocessor.h"
 #include "openomd/omddprocessor.h"
+#include "openomd/omdccprocessor.h"
 #include "openomd/msgcache.h"
 
 namespace openomd
@@ -158,6 +159,33 @@ public:
             ss << Base::channel() << " " << msg;
             _BaseProcessor::info(ss.str());
         }, m.lastSeqNum());
+    }
+    using Base::onMessage;
+};
+
+
+template <typename _BaseProcessor>
+class OmdccRefreshProcessor : public OMDCCProcessor<BaseRefreshProcessor, _BaseProcessor>
+{
+public:
+    using Base = OMDCCProcessor<BaseRefreshProcessor, _BaseProcessor>;
+
+    inline void onHeartbeat()
+    {
+        BaseRefreshProcessor::onHeartbeat([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+            });
+    }
+
+    inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
+    {
+        BaseRefreshProcessor::onRefreshComplete([&](std::string const& msg) {
+            std::stringstream ss;
+            ss << Base::channel() << " " << msg;
+            _BaseProcessor::info(ss.str());
+            }, m.lastSeqNum());
     }
     using Base::onMessage;
 };

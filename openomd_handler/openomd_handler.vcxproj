@@ -128,6 +128,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\main\include\omdcc_sbe\DisasterRecoverySignal.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\Heartbeat.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\Logon.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\LogonResponse.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\MarketDefinition.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\MessageHeader.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\RefreshComplete.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\RetransmissionReq.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\RetransmissionResp.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\SecurityDefinition.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\SecurityStatus.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\SequenceReset.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\Statistics.h" />
+    <ClInclude Include="src\main\include\omdcc_sbe\TopOfBook.h" />
     <ClInclude Include="src\main\include\omdc_sbe\AddOddLotOrder.h" />
     <ClInclude Include="src\main\include\omdc_sbe\AddOrder.h" />
     <ClInclude Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h" />
@@ -208,10 +222,11 @@
     <ClInclude Include="src\main\include\openomd\compressionpolicy.h" />
     <ClInclude Include="src\main\include\openomd\ethernet.h" />
     <ClInclude Include="src\main\include\openomd\fulltick.h" />
-    <ClInclude Include="src\main\include\openomd\instrumentprocessor.h" />
     <ClInclude Include="src\main\include\openomd\multicastrunner.h" />
     <ClInclude Include="src\main\include\openomd\omdbaseprocessor.h" />
-    <ClInclude Include="src\main\include\openomd\omdinstrumentdownload.h" />
+    <ClInclude Include="src\main\include\openomd\omdccostream.h" />
+    <ClInclude Include="src\main\include\openomd\omdccparser.h" />
+    <ClInclude Include="src\main\include\openomd\omdccprocessor.h" />
     <ClInclude Include="src\main\include\openomd\linearbitration.h" />
     <ClInclude Include="src\main\include\openomd\multicastutil.h" />
     <ClInclude Include="src\main\include\openomd\nooplinearbitration.h" />
@@ -247,6 +262,7 @@
     <Xml Include="pom-gen.xml" />
     <Xml Include="pom.xml" />
     <Xml Include="src\nar\resources\noarch\omdc-sbe.xml" />
+    <Xml Include="src\nar\resources\noarch\omdcc-sbe.xml" />
     <Xml Include="src\nar\resources\noarch\omdd-sbe.xml">
       <SubType>Designer</SubType>
     </Xml>

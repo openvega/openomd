@@ -27,6 +27,9 @@
     <ClCompile Include="src\test\c\orderbooktest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\test\c\omdccparsertest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pom.xml">

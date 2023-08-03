@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\test\c\omdccparsertest.cpp" />
     <ClCompile Include="src\test\c\omdcparsertest.cpp" />
     <ClCompile Include="src\test\c\omdchandlertest.cpp" />
     <ClCompile Include="src\test\c\omddparsertest.cpp" />

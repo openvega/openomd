@@ -55,6 +55,24 @@
               </arguments>
             </configuration>
           </execution>
+          <execution>
+            <id>omdcc sbe</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-Dsbe.target.language=cpp</argument>
+                <argument>-Dsbe.output.dir=src/main/include</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>uk.co.real_logic.sbe.SbeTool</argument>
+                <argument>src/nar/resources/noarch/omdcc-sbe.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>

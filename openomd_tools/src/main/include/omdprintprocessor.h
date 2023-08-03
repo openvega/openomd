@@ -4,8 +4,10 @@
 #include "openomd/omddef.h"
 #include "openomd/omdcparser.h"
 #include "openomd/omddparser.h"
+#include "openomd/omdccparser.h"
 #include "openomd/omdcostream.h"
 #include "openomd/omddostream.h"
+#include "openomd/omdccostream.h"
 
 namespace openomd
 {
@@ -151,5 +153,28 @@ public:
     void onMessage(omdd::sbe::TradeAmendment const& m, uint32_t s) { onPrintMessage(m, s); }
     void onMessage(omdd::sbe::TradeStatistics const& m, uint32_t s) { onPrintMessage(m, s); }
     void onMessage(omdd::sbe::MarketStatus const& m, uint32_t s) { onPrintMessage(m, s); }
+};
+
+template <typename _LineArbitration>
+class OmdccPrintProcessor : public BasePrintProcessor<_LineArbitration>
+{
+public:
+    using Base = BasePrintProcessor<_LineArbitration>;
+    using Base::BasePrintProcessor;
+    using Base::onPrintMessage;
+
+    void onMessage(omdcc::sbe::DisasterRecoverySignal const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::Logon const& m, uint32_t s) { }
+    void onMessage(omdcc::sbe::LogonResponse const& m, uint32_t s) { }
+    void onMessage(omdcc::sbe::MarketDefinition const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::RefreshComplete const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::RetransmissionReq const& m, uint32_t s) { }
+    void onMessage(omdcc::sbe::RetransmissionResp const& m, uint32_t s) { }
+    void onMessage(omdcc::sbe::SecurityDefinition const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::SecurityStatus const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::SequenceReset const& m, uint32_t s) { onPrintMessage(m, s); Base::resetSeqNum(m.newSeqNo()); }
+    void onMessage(omdcc::sbe::Statistics const& m, uint32_t s) { onPrintMessage(m, s); }
+    void onMessage(omdcc::sbe::TopOfBook const& m, uint32_t s) { onPrintMessage(m, s); }
+
 };
 }
