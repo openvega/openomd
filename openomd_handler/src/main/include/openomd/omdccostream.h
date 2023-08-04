@@ -20,7 +20,7 @@ inline std::ostream& operator<<(std::ostream& os, DisasterRecoverySignal const& 
 }
 inline std::ostream& operator<<(std::ostream& os, MarketDefinition const& m)
 {
-    os << "md c=" << m.marketCode() << " cur=" << m.currencyCode() << " num=" << m.numberOfSecurities();
+    os << "md c=" << m.marketCode() << " cur=" << m.getCurrencyCodeAsString() << " num=" << m.numberOfSecurities();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, RefreshComplete const& m)
@@ -30,12 +30,12 @@ inline std::ostream& operator<<(std::ostream& os, RefreshComplete const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, SecurityDefinition const& m)
 {
-    os << "sd s=" << m.securityCode() << " m=" << m.marketCode() << " t=" << m.instrumentType() << " cur=" << m.currencyCode() << " l=" << m.lotSize() << " ss=" << m.shortSellFlag();
+    os << "sd s=" << m.securityCode() << " m=" << m.getMarketCodeAsString() << " t=" << m.instrumentType() << " cur=" << m.getCurrencyCodeAsString() << " l=" << m.lotSize() << " ss=" << m.shortSellFlag();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SecurityStatus const& m)
 {
-    os << "ss: " << m.securityCode() << " Sts=" << (int32_t)m.securityTradingStatus() << " tpc=" << m.tradingPhaseCode();
+    os << "ss: " << m.securityCode() << " Sts=" << (int32_t)m.securityTradingStatus() << " tpc=" << m.getTradingPhaseCodeAsString();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, SequenceReset const& m)

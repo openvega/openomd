@@ -179,7 +179,7 @@ public:
             });
     }
 
-    inline void onMessage(omdc::sbe::RefreshComplete const& m, uint32_t s)
+    inline void onMessage(omdcc::sbe::RefreshComplete const& m, uint32_t s)
     {
         BaseRefreshProcessor::onRefreshComplete([&](std::string const& msg) {
             std::stringstream ss;
