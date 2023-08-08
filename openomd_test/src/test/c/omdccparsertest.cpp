@@ -87,11 +87,21 @@ TEST(OMDCC_TEST, MarketSecurityDefinitionRefreshComplete)
         void onMessage(sbe::SecurityDefinition& sd, uint32_t)
         {
             EXPECT_EQ(300114, sd.securityCode());
-            EXPECT_EQ("ASZR", sd.getMarketCodeAsString());
-            EXPECT_EQ(0, strcmp("CNE100000T08", sd.getIsinCodeAsString().c_str()));
-            EXPECT_EQ("EQTY", sd.getInstrumentTypeAsString());
-            EXPECT_EQ(0, strcmp("ZEMIC", sd.getSecurityShortNameAsString().c_str()));
-            EXPECT_EQ("CNY", sd.getCurrencyCodeAsString());
+            auto marketCode = sd.getMarketCodeAsString();
+            openomd::trim(marketCode);
+            EXPECT_EQ("ASZR", marketCode);
+            auto isin = sd.getIsinCodeAsString();
+            openomd::trim(isin);
+            EXPECT_EQ("CNE100000T08", isin);
+            auto instType = sd.getInstrumentTypeAsString();
+            openomd::trim(instType);
+            EXPECT_EQ("EQTY", instType);
+            auto shortName = sd.getSecurityShortNameAsString();
+            openomd::trim(shortName);
+            EXPECT_EQ("ZEMIC", shortName);
+            auto currency = sd.getCurrencyCodeAsString();
+            openomd::trim(currency);
+            EXPECT_EQ("CNY", currency);
             EXPECT_EQ(100, sd.lotSize());
             EXPECT_EQ(52440, sd.previousClosingPrice());
             EXPECT_EQ(89, sd.shortSellFlag());
@@ -100,9 +110,15 @@ TEST(OMDCC_TEST, MarketSecurityDefinitionRefreshComplete)
         }
         void onMessage(sbe::MarketDefinition const& md, uint32_t)
         {
-            EXPECT_EQ("ASZR", md.getMarketCodeAsString());
-            EXPECT_EQ(0, strcmp("XSHE SHENZHEN SEGMENT", md.getMarketNameAsString().c_str()));
-            EXPECT_EQ("CNY", md.getCurrencyCodeAsString());
+            auto marketCode = md.getMarketCodeAsString();
+            openomd::trim(marketCode);
+            EXPECT_EQ("ASZR", marketCode);
+            auto marketName = md.getMarketNameAsString();
+            openomd::trim(marketName);
+            EXPECT_EQ("XSHE SHENZHEN SEGMENT", marketName);
+            auto currency = md.getCurrencyCodeAsString();
+            openomd::trim(currency);
+            EXPECT_EQ("CNY", currency);
             EXPECT_EQ(91, md.numberOfSecurities());
             _count++;
         }
@@ -129,7 +145,9 @@ TEST(OMDCC_TEST, SecurityStatus)
         {
             EXPECT_EQ(159996, ss.securityCode());
             EXPECT_EQ(3, ss.securityTradingStatus());
-            EXPECT_EQ(0, strcmp("T0      ", ss.getTradingPhaseCodeAsString().c_str()));
+            auto tradingPhase = ss.getTradingPhaseCodeAsString();
+            openomd::trim(tradingPhase);
+            EXPECT_EQ("T0", tradingPhase);
             _count++;
         }
         void onMessage(sbe::RefreshComplete const& rc, uint32_t)

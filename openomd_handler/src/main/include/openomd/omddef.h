@@ -37,6 +37,11 @@ static inline void rtrim(std::string& s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
         return !std::isspace(ch);
     }).base(), s.end());
+    auto pos = s.find('\0');
+    if (pos != std::string::npos)
+    {
+        s.erase(pos);
+    }
 }
 
 static inline void trim(std::string& s)
