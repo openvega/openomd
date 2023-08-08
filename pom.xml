@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>io.github.openvega</groupId>
   <artifactId>openomd</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <packaging>pom</packaging>
 
   <!-- More Project Information -->

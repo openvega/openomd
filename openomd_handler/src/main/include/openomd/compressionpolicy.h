@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 #include <zlib.h>
 #include "openomd/omddef.h"
 
