@@ -1,5 +1,6 @@
 #pragma once
 #include <set>
+#include <iomanip>
 #include <iostream>
 #include "openomd/omddef.h"
 #include "openomd/omdcparser.h"
@@ -62,7 +63,7 @@ protected:
     {
         //if (_msgIds.find(_Msg::sbeTemplateId()) != _msgIds.end() || _msgIds.find(0) != _msgIds.end())
         {
-            std::cout << _ts.tv_sec << "." << _ts.tv_usec << " " << seqNum << " " << m << std::endl;
+            std::cout << _ts.tv_sec << "." << std::setfill('0') <<std::setw(6) << _ts.tv_usec << " " << seqNum << " " << m << std::endl;
         }
     }
     std::set<int32_t> _msgIds;
