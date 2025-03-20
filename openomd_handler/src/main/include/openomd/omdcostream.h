@@ -204,7 +204,7 @@ inline std::ostream& operator<<(std::ostream& os, StockConnectMarketTurnover con
 }
 inline std::ostream& operator<<(std::ostream& os, Trade const& m)
 {
-    os << "t";
+    os << "trd: " << m.securityCode() << " id=" << m.tradeID() << " px=" << m.price() << " qty=" << m.quantity() << " type=" << m.trdType() << " time=" << m.tradeTime();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, TradeCancel const& m)
