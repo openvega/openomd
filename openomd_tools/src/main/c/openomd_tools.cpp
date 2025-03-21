@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include "cxxopts.hpp"
 #include "openomd/linearbitration.h"
 #include "openomd/nooplinearbitration.h"
