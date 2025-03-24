@@ -30,8 +30,20 @@ public:
         Callback(std::vector<ChannelConfig> const& channelConfig)
         {
             for_each(channelConfig.begin(), channelConfig.end(), [&](auto const& c) {
-                _addressToChannel.emplace(std::make_pair(convertIp(c.ipA), c.port), c.channel);
-                _addressToChannel.emplace(std::make_pair(convertIp(c.ipB), c.port), c.channel);
+                try
+                {
+                    _addressToChannel.emplace(std::make_pair(convertIp(c.ipA), c.port), c.channel);
+                }
+                catch (std::exception const&)
+                {
+                }
+                try
+                {
+                    _addressToChannel.emplace(std::make_pair(convertIp(c.ipB), c.port), c.channel);
+                }
+                catch (std::exception const&)
+                {
+                }
                 _processors.emplace(c.channel, _Processor{});
             });
         }
