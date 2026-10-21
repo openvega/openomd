@@ -12,7 +12,7 @@
 #include "openomd/multicastrunner.h"
 #include "omdprintprocessor.h"
 
-static const std::string VERSION{ "2025.11" };
+static const std::string VERSION{ "2026.10" };
 
 template <typename _Runner>
 void run(_Runner& runner)
