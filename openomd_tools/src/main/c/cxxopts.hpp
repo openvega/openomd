@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <limits>
 
 #ifdef __cpp_lib_optional
 #include <optional>
@@ -560,11 +561,11 @@ namespace cxxopts
 
       auto value_match = match[3];
 
-      US result = 0;
+      US result = 0U;
 
       for (auto iter = value_match.first; iter != value_match.second; ++iter)
       {
-        US digit = 0;
+        US digit = 0U;
 
         if (*iter >= '0' && *iter <= '9')
         {

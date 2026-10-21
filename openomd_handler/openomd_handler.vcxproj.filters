@@ -390,6 +390,12 @@
     <ClInclude Include="src\main\include\openomd\omdccostream.h">
       <Filter>Header Files\parser</Filter>
     </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdprocessor.h">
+      <Filter>Header Files\parser\processor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\include\openomd\omdparser.h">
+      <Filter>Header Files\parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main\include\omdc_sbe\AggregateOrderBookUpdate.h.sbeomdhack">

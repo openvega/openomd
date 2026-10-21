@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
 #include "cxxopts.hpp"
+#pragma GCC diagnostic pop
 #include "openomd/linearbitration.h"
 #include "openomd/nooplinearbitration.h"
 #include "openomd/recoverypolicy.h"
@@ -9,7 +12,7 @@
 #include "openomd/multicastrunner.h"
 #include "omdprintprocessor.h"
 
-static const std::string VERSION{ "2023.5" };
+static const std::string VERSION{ "2025.11" };
 
 template <typename _Runner>
 void run(_Runner& runner)
@@ -60,7 +63,7 @@ int main(int32_t argc, char* argv[])
     cxxopts::Options options("openomd_tools", "Openomd Tools v" + VERSION);
     options.add_options()
         ("f,function", "pcapdump,udpdump", cxxopts::value<string>())
-        ("p,protocol", "omdc,omdd,omdcc", cxxopts::value<string>())
+        ("p,protocol", "omdc,omdd,omdcc,joint", cxxopts::value<string>())
         ("c,pcap", "Pcap file", cxxopts::value<string>())
         ("n,networkconf", "network configuration file", cxxopts::value<string>())
         ("r,recovery", "perform recovery:1,0", cxxopts::value<int32_t>())
@@ -98,6 +101,11 @@ int main(int32_t argc, char* argv[])
             else if (protocol == "omdcc")
             {
                 OmdPcapRunner<OmdccPrintProcessor<NoopLineArbitration>, OmdccParser> runner{ ChannelConfig::getChannelConfig(networkCfg), pcapFile, sll };
+                run(runner);
+            }
+            else if (protocol == "joint")
+            {
+                OmdPcapRunner<OmdPrintProcessor<NoopLineArbitration>, OmdParser> runner{ ChannelConfig::getChannelConfig(networkCfg), pcapFile, sll };
                 run(runner);
             }
         }

@@ -238,6 +238,8 @@
     <ClInclude Include="src\main\include\openomd\omddostream.h" />
     <ClInclude Include="src\main\include\openomd\omddparser.h" />
     <ClInclude Include="src\main\include\openomd\omddprocessor.h" />
+    <ClInclude Include="src\main\include\openomd\omdparser.h" />
+    <ClInclude Include="src\main\include\openomd\omdprocessor.h" />
     <ClInclude Include="src\main\include\openomd\orderbookdef.h" />
     <ClInclude Include="src\main\include\openomd\pcaprunner.h" />
     <ClInclude Include="src\main\include\openomd\pcaputil.h" />

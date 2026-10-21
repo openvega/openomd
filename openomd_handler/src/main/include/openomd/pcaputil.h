@@ -86,7 +86,7 @@ template <typename _CB, typename _PBPolicy>
 inline void PcapUtil<_CB, _PBPolicy>::start()
 {
     // Retrive the magic in pcapHdr
-    static const int32_t NSEC_TCPDUMP_MAGIC = 0xa1b23c4d;
+    static const uint32_t NSEC_TCPDUMP_MAGIC = 0xa1b23c4d;
     
     struct pcap_file_header hdr;
     FILE* pcapFile = fopen(_pcapFile.c_str(), "rb");
