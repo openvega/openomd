@@ -1,4 +1,7 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-compare"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
 #include "openomd/omdccprocessor.h"
 #include "openomd/nooplinearbitration.h"
 #include "openomd/omdbaseprocessor.h"

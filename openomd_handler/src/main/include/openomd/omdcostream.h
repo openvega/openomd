@@ -43,19 +43,23 @@ namespace omdc
 {
 namespace sbe
 {
+//"SecurityCode,OrderId,Side,Quantity,Price,OrderType,orderBookPosition"
 inline std::ostream& operator<<(std::ostream& os, const AddOrder& m)
 {
-    os << "ao s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << "@" << m.price() << " t=" << m.orderType() << " p=" << m.orderBookPosition();
+    //os << "ao s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << "@" << m.price() << " t=" << m.orderType() << " p=" << m.orderBookPosition();
+    os << "ao," << m.securityCode() << "," << m.orderID() << "," << m.side() << "," << m.quantity() << "," << m.price() << "," << m.orderType() << "," << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, const ModifyOrder& m)
 {
-    os << "mo s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << " p=" << m.orderBookPosition();
+    //os << "mo s=" << m.securityCode() << " id=" << m.orderID() << " " << m.side() << " " << m.quantity() << " p=" << m.orderBookPosition();
+    os << "mo," << m.securityCode() << "," << m.orderID() << "," << m.side() << "," << m.quantity() << ",,," << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, const DeleteOrder& m)
 {
-    os << "do s=" << m.securityCode() << " id=" << m.orderID() << " s=" << m.side();
+    //os << "do s=" << m.securityCode() << " id=" << m.orderID() << " s=" << m.side();
+    os << "do," << m.securityCode() << "," << m.orderID() << "," << m.side();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
@@ -204,7 +208,8 @@ inline std::ostream& operator<<(std::ostream& os, StockConnectMarketTurnover con
 }
 inline std::ostream& operator<<(std::ostream& os, Trade const& m)
 {
-    os << "t";
+    //os << "trd: " << m.securityCode() << " id=" << m.tradeID() << " px=" << m.price() << " qty=" << m.quantity() << " type=" << m.trdType() << " time=" << m.tradeTime();
+    os << "trd," << m.securityCode() << "," << m.tradeID() << ",," << m.quantity() << "," << m.price() << "," << m.trdType() << ",," << m.tradeTime();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, TradeCancel const& m)

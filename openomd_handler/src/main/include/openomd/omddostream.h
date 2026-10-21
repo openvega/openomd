@@ -35,7 +35,8 @@ namespace sbe
 {
 inline std::ostream& operator<<(std::ostream& os, AddOrder const& m)
 {
-    os << "ao ob=" << m.orderbookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << (int16_t)m.side() << " t=" << (int16_t)m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    //os << "ao ob=" << m.orderbookID() << " oid=" << m.orderID() << " px=" << m.price() << " qty=" << m.quantity() << " s=" << (int16_t)m.side() << " t=" << (int16_t)m.lotType() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    os << "ao," << m.orderbookID() << "," << m.orderID() << "," << (int16_t)m.side() << "," << m.quantity() << "," << m.price() << "," << m.orderType() << "," << m.orderBookPosition() << "," << (int16_t)m.lotType();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, AggregateOrderBookUpdate const& cm)
@@ -78,7 +79,8 @@ inline std::ostream& operator<<(std::ostream& os, CommodityStatus const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, DeleteOrder const& m)
 {
-    os <<"do ob=" << m.orderbookID() << " oid=" << m.orderID() << " s=" << (int16_t)m.side();
+    //os <<"do ob=" << m.orderbookID() << " oid=" << m.orderID() << " s=" << (int16_t)m.side();
+    os << "do," << m.orderbookID() << "," << m.orderID() << "," << (int16_t)m.side();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, DisasterRecoverySignal const& m)
@@ -113,7 +115,8 @@ inline std::ostream& operator<<(std::ostream& os, MarketStatus const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, ModifyOrder const& m)
 {
-    os <<"mo ob=" << m.orderbookID() << " oid=" << m.orderID() << " p=" << m.price() << " qty=" << m.quantity() << " s=" << (uint16_t)m.side() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    //os <<"mo ob=" << m.orderbookID() << " oid=" << m.orderID() << " p=" << m.price() << " qty=" << m.quantity() << " s=" << (uint16_t)m.side() << " ot=" << m.orderType() << " obp=" << m.orderBookPosition();
+    os << "mo," << m.orderbookID() << "," << m.orderID() << "," << (uint16_t)m.side() << "," << m.quantity() << "," << m.price() << "," << m.orderType() << " obp=" << m.orderBookPosition();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, OpenInterest const& m)
@@ -169,7 +172,7 @@ inline std::ostream& operator<<(std::ostream& os, SeriesStatus const& m)
 }
 inline std::ostream& operator<<(std::ostream& os, Trade const& m)
 {
-    os << "trd ob=" << m.orderbookID() << " oid=" << m.orderID() << " p=" << m.price() << " tid=" << m.tradeID() << " cgid=" << m.comboGroupID() << " sd=" << (int16_t)m.side() << " dt=" << (int16_t)m.dealType() << " tc=" << m.tradeCondition() << " di=" << m.dealInfo() << " qty=" << m.quantity() << " tt=" << m.tradeTime();
+    os << "trd," << m.orderbookID() << "," << m.orderID() << "," << (int16_t)m.side() << "," << m.quantity() << "," << m.price() << "," << m.tradeID() << "," << m.comboGroupID() << "," << (int16_t)m.dealType() << "," << m.tradeCondition() << "," << m.dealInfo() << "," << m.tradeTime();
     return os;
 }
 inline std::ostream& operator<<(std::ostream& os, TradeAmendment const& m)

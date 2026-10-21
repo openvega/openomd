@@ -104,7 +104,9 @@ private:
                             MsgHdr* msgHdr = (MsgHdr*)(pos);
                             if (msgHdr->size == 0 || msgHdr->size > byteLeft)
                             {
-                                processor.onError(std::runtime_error("Invalid message size"));
+                                std::stringstream ss;
+                                ss << "Invalid message size: Seq=" << pktHdr->seqNum << " msgCnt=" << msgCnt;
+                                processor.onError(std::runtime_error(ss.str()));
                                 break;
                             }
                             try
